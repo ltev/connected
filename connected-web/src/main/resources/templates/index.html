@@ -31,7 +31,46 @@
                 <button type="submit" class="btn btn-info mb-2">Log out</button>
             </form>
 
-        </div>
+            <div class="accordion" id="ownPosts">      <!-- self posts -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#ownPostsCollapse" aria-expanded="true" aria-controls="collapseOne">
+                            See your own posts
+                        </button>
+                    </h2>
+                </div>
+                <div id="ownPostsCollapse" class="accordion-collapse collapse show" data-bs-parent="#ownPosts">
+                    <div class="accordion-body">                        <!-- list own posts -->
+                        <ul th:each="post : ${ownPosts}">
+                            <p th:text="${#temporals.format(post.created, 'dd/MMM/yyyy HH:mm', #locale)}">Date</p>
+                            <p th:text="${post.text}">Text</p>
+                            <hr>
+                        </ul>
+                    </div>
+                </div>
+            </div>      <!-- self posts END -->
+
+            <div class="accordion" id="friendsPosts">      <!-- friends posts -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#friendsPostsCollapse" aria-expanded="true" aria-controls="collapseOne">
+                            See your friends' posts
+                        </button>
+                    </h2>
+                </div>
+                <div id="friendsPostsCollapse" class="accordion-collapse collapse show" data-bs-parent="#friendsPosts">
+                    <div class="accordion-body">                        <!-- list own posts -->
+                        <ul th:each="post : ${ownPosts}">
+                            <p th:text="${#temporals.format(post.created, 'dd/MMM/yyyy HH:mm', #locale)}">Date</p>
+                            <p th:text="${post.text}">Text</p>
+                            <hr>
+                        </ul>
+                    </div>
+                </div>
+            </div>      <!-- friends posts END -->
+
+
+        </div>  <!-- body for logged users END -->
 
     </div>
 

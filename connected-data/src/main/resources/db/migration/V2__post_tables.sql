@@ -1,5 +1,6 @@
 create table posts (
         id bigint not null auto_increment,
+        created timestamp not null,
         user_id bigint not null,
         visibility tinyint not null check (visibility between 0 and 3),
         text varchar(1000) not null,

@@ -1,7 +1,7 @@
 package com.ltev.connected.controller;
 
 import com.ltev.connected.domain.Post;
-import com.ltev.connected.service.PostService;
+import com.ltev.connected.service.impl.PostServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @AllArgsConstructor
 public class PostController {
 
-    private final PostService postService;
+    private final PostServiceImpl postService;
 
     @PostMapping(params = "action=post-form")
     public String showPostForm(Model model) {

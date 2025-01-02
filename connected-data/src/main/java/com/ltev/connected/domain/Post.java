@@ -3,13 +3,15 @@ package com.ltev.connected.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
+
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "posts")
 @Getter
 @Setter
-@ToString
 public class Post {
 
     /**
@@ -26,11 +28,26 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @CreationTimestamp(source = SourceType.VM)
+    private ZonedDateTime created;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Enumerated(EnumType.ORDINAL)
     private Visibility visibility;
 
     private String text;
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", created=" + created +
+                ", user=" + (user != null ? user.getUsername() : null) +
+                ", visibility=" + visibility +
+                ", text='" + text + '\'' +
+                '}';
+    }
 }
