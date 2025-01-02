@@ -5,6 +5,7 @@ create table friend_requests (
 		sent date not null,
         accepted date,
         primary key (id),
+        unique key (from_user_id, to_user_id),
         constraint `friend_request_from_user_fk` FOREIGN KEY (from_user_id) REFERENCES users (id),
         constraint `friend_request_to_user_fk` FOREIGN KEY (to_user_id) REFERENCES users (id)
 ) engine=InnoDB default charset=latin1;

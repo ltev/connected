@@ -42,7 +42,9 @@
                 <div id="ownPostsCollapse" class="accordion-collapse collapse show" data-bs-parent="#ownPosts">
                     <div class="accordion-body">                        <!-- list own posts -->
                         <ul th:each="post : ${ownPosts}">
-                            <p th:text="${#temporals.format(post.created, 'dd/MMM/yyyy HH:mm', #locale)}">Date</p>
+                            <p th:text="${#temporals.format(post.created, 'dd-MMM-yyyy HH:mm', #locale)}">Date
+
+                            </p>
                             <p th:text="${post.text}">Text</p>
                             <hr>
                         </ul>
@@ -60,8 +62,9 @@
                 </div>
                 <div id="friendsPostsCollapse" class="accordion-collapse collapse show" data-bs-parent="#friendsPosts">
                     <div class="accordion-body">                        <!-- list own posts -->
-                        <ul th:each="post : ${ownPosts}">
-                            <p th:text="${#temporals.format(post.created, 'dd/MMM/yyyy HH:mm', #locale)}">Date</p>
+                        <ul th:each="post : ${friendsPosts}">
+                            <p th:text="${#temporals.format(post.created, 'dd-MMM-yyyy HH:mm', #locale) + ' '
+                            + post.user.username + ' (' + post.visibility.displayName() + ')'}">Date</p>
                             <p th:text="${post.text}">Text</p>
                             <hr>
                         </ul>

@@ -21,7 +21,20 @@ public class Post {
         MYSELF,
         FRIENDS,
         LOGGED_USERS,
-        EVERYONE
+        EVERYONE;
+
+        public String displayName() {
+            return this.toString().toLowerCase();
+        }
+
+        public static Visibility ofOrdinal(byte visibility) {
+            for (Visibility temp : Visibility.values()) {
+                if (temp.ordinal() == visibility) {
+                    return temp;
+                }
+            }
+            throw new RuntimeException("No visibility of ordinal: " + visibility);
+        }
     }
 
     @Id
