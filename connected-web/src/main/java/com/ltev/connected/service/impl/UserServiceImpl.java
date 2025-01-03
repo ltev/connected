@@ -69,11 +69,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<FriendRequest> findAllReceivedFriendshipRequests() {
+    public List<FriendRequest> findAllReceivedNotAcceptedFriendshipRequests() {
         Authentication authentication = AuthenticationUtils.checkAuthenticationOrThrow();
 
         User user = userDao.findByUsername(authentication.getName()).get();
-        return friendRequestRepository.findAllByToUser(user);
+        return friendRequestRepository.findAllByToUserAndAccepted(user, null);
     }
 
     @Override

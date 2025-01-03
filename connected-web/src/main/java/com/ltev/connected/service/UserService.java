@@ -21,7 +21,7 @@ public interface UserService {
 
     List<User> findAllFriends();
 
-    List<FriendRequest> findAllReceivedFriendshipRequests();
+    List<FriendRequest> findAllReceivedNotAcceptedFriendshipRequests();
 
     void createNewUser(String username, String password);
 
