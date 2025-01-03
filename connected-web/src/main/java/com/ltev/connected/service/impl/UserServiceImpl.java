@@ -4,7 +4,9 @@ import com.ltev.connected.dao.UserDao;
 import com.ltev.connected.domain.FriendRequest;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.repository.FriendRequestRepository;
+import com.ltev.connected.repository.UserRepository;
 import com.ltev.connected.service.UserService;
+import com.ltev.connected.service.support.ProfileInfo;
 import com.ltev.connected.utils.AuthenticationUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -20,6 +22,7 @@ public class UserServiceImpl implements UserService {
 
     private UserDao userDao;
     private FriendRequestRepository friendRequestRepository;
+    private final UserRepository userRepository;
 
     @Override
     public User findByUsernameJoinFetchPosts(String username) {
@@ -37,14 +40,7 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = AuthenticationUtils.checkAuthenticationOrThrow();
 
         User loggedUser = userDao.findByUsername(authentication.getName()).get();
-        Optional<FriendRequest> foundRequest = friendRequestRepository.findByFromUserAndToUser(loggedUser, user);
-
-        // found or change users order and try again
-        if (foundRequest.isPresent()) {
-            return foundRequest;
-        } else {
-            return friendRequestRepository.findByFromUserAndToUser(user, loggedUser);
-        }
+        return getFriendRequest(loggedUser, user);
     }
 
     @Override
@@ -83,5 +79,40 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createNewUser(String username, String password) {
         userDao.createNewUser(username, password);
+    }
+
+    public Optional<ProfileInfo> getInformationForShowingProfile(String profileUsername) {
+
+        // check if profileUser exists
+        Optional<User> profileUser = userRepository.findByUsername(profileUsername);
+        if (profileUser.isEmpty()) {
+            return Optional.empty();
+        }
+
+        ProfileInfo profileInfo = new ProfileInfo(profileUser.get());
+
+        if (AuthenticationUtils.isAuthenticated()) {
+            User loggedUser = userDao.findByUsername(AuthenticationUtils.getAuthentication().getName()).get();
+            profileInfo.setLoggedUsername(Optional.of(loggedUser.getUsername()));
+
+            // check for friend request and status
+            Optional<FriendRequest> friendRequest = getFriendRequest(loggedUser, profileUser.get());
+            profileInfo.setFriendRequest(friendRequest);
+
+        }
+        return Optional.of(profileInfo);
+    }
+
+    // == PRIVATE HELPER METHODS ==
+
+    public Optional<FriendRequest> getFriendRequest(User user1, User user2) {
+        Optional<FriendRequest> foundRequest = friendRequestRepository.findByFromUserAndToUser(user1, user2);
+
+        // found or change users order and try again
+        if (foundRequest.isPresent()) {
+            return foundRequest;
+        } else {
+            return friendRequestRepository.findByFromUserAndToUser(user2, user1);
+        }
     }
 }

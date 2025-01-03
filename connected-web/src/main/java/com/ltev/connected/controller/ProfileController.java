@@ -1,8 +1,8 @@
 package com.ltev.connected.controller;
 
 import com.ltev.connected.domain.FriendRequest;
-import com.ltev.connected.domain.User;
-import com.ltev.connected.service.impl.UserServiceImpl;
+import com.ltev.connected.service.UserService;
+import com.ltev.connected.service.support.ProfileInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -19,32 +19,35 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ProfileController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @GetMapping("/{username}")
     public String showUserProfile(@PathVariable("username") String username, Authentication authentication, Model model) {
 
+        // is logged user profile
         if (authentication != null && authentication.getName().equals(username)) {
             return "redirect:/";
         }
 
+        Optional<ProfileInfo> optionalProfileInfo = userService.getInformationForShowingProfile(username);
+
         // check if profile exists
-        Optional<User> profile = userService.findByUsername(username);
-        if (profile.isEmpty()) {
+        if (optionalProfileInfo.isEmpty()) {
             return "redirect:/";
         }
-        model.addAttribute("profileId", profile.get().getId());
 
-        if (authentication != null) {
-            // check for friend request
-            Optional<FriendRequest> friendRequest = userService.getFriendRequest(profile.get());
-            FriendRequest.Status status = FriendRequest.Status.NOT_SENT;
-            if (friendRequest.isPresent()) {
-                status = friendRequest.get().getStatus(authentication.getName());
-                model.addAttribute("friendRequestId", friendRequest.get().getId());
-            }
+        ProfileInfo profileInfo = optionalProfileInfo.get();
+
+        // is logged
+        if (profileInfo.getLoggedUsername().isPresent()) {
+            profileInfo.getFriendRequest().ifPresent(request ->
+                    model.addAttribute("friendRequestId", request.getId()));
+            FriendRequest.Status status = profileInfo.getFriendRequest().isPresent()
+                    ? profileInfo.getFriendRequest().get().getStatus(profileInfo.getLoggedUsername().get())
+                    : FriendRequest.Status.NOT_SENT;
             model.addAttribute("friendRequestStatus", status);
         }
+        model.addAttribute("profileId", profileInfo.getProfileUser().getId());
 
         return "profile/profile";
     }

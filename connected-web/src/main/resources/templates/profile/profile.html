@@ -34,10 +34,10 @@
                     <button type="submit" disabled name="action" value="#" class="btn btn-primary">Friend request has been sent</button>
                 </div>
                 <div th:if="${friendRequestStatus.name() == 'RECEIVED'}">
+                    <input type="hidden" name="friendRequestId" th:value="${friendRequestId}">
                     <button type="submit" name="action" value="accept-friend-request" class="btn btn-primary">Accept friend request</button>
                 </div>
                 <div th:if="${friendRequestStatus.name() == 'ACCEPTED'}">
-                    <input type="hidden" name="friendRequestId" th:value="${friendRequestId}">
                     <button type="submit" disabled name="action" value="#" class="btn btn-primary">You are friends already</button>
                 </div>
 

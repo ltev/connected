@@ -21,9 +21,10 @@ public class SecurityConfig {
         http.authorizeHttpRequests(
                         configurer -> configurer
                                 .requestMatchers("/").permitAll()
+                                .requestMatchers("/login").permitAll()
                                 .requestMatchers("/signup").permitAll()
                                 .requestMatchers("/profile/**").permitAll()
-                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage(LOGIN_FORM_URL)

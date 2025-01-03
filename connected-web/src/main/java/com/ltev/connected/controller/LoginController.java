@@ -22,6 +22,12 @@ public class LoginController {
         return "login/login-form";
     }
 
+    @GetMapping("first-login")
+    public String showLoginPage2(Model model) {
+        model.addAttribute("actionUrl", SecurityConfig.AUTHENTICATE_USER_URL);
+        return "login/login-form";
+    }
+
     @GetMapping(SecurityConfig.ACCESS_DENIED_URL)
     public String showAccessDeniedPage(Model model) {
         model.addAttribute("actionUrl", SecurityConfig.AUTHENTICATE_USER_URL);

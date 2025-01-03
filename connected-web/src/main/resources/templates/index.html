@@ -24,13 +24,13 @@
             <div class="container text-start">
                 <div class="row">
 
-                    <div class="col-1">                               <!-- left menu -->
+                    <div class="col-2">                               <!-- left menu -->
 
                         <div th:insert="~{fragments/fragments :: user-menu}"></div>
 
                     </div>  <!-- left menu END -->
 
-                    <div class="col-11">                               <!-- main content -->
+                    <div class="col">                               <!-- main content -->
                         <form action="#" th:action="@{.}" method="post">
                             <button type="submit" name="action" value="post-form" class="btn btn-primary mb-2">Create new post</button>
                         </form>
