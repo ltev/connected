@@ -1,4 +1,4 @@
-package com.ltev.connected.repository.dao;
+package com.ltev.connected.dao;
 
 import com.ltev.connected.domain.Post;
 

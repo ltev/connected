@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
+//@Repository
 @AllArgsConstructor
 public class FriendRequestRepositoryImpl  {
 

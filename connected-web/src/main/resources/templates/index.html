@@ -46,7 +46,8 @@
                             <div id="ownPostsCollapse" class="accordion-collapse collapse show" data-bs-parent="#ownPosts">
                                 <div class="accordion-body">                        <!-- list own posts -->
                                     <ul th:each="post : ${ownPosts}">
-                                        <p th:text="${#temporals.format(post.created, 'dd-MMM-yyyy HH:mm', #locale)}">Date</p>
+                                        <p th:text="${#temporals.format(post.created, 'dd-MMM-yyyy HH:mm', #locale)
+                                            + ' (' + post.visibility.displayName() + ')'}">Date</p>
                                         <p th:text="${post.text}">Text</p>
                                         <hr>
                                     </ul>

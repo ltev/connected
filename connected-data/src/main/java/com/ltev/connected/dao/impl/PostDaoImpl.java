@@ -1,5 +1,6 @@
-package com.ltev.connected.repository.dao;
+package com.ltev.connected.dao.impl;
 
+import com.ltev.connected.dao.PostDao;
 import com.ltev.connected.domain.Post;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.repository.PostRepository;

@@ -1,5 +1,6 @@
 package com.ltev.connected.repository.dao;
 
+import com.ltev.connected.dao.impl.PostDaoImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

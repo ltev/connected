@@ -1,9 +1,9 @@
 package com.ltev.connected.service.impl;
 
+import com.ltev.connected.dao.UserDao;
 import com.ltev.connected.domain.Post;
 import com.ltev.connected.domain.User;
-import com.ltev.connected.repository.UserRepository;
-import com.ltev.connected.repository.dao.PostDao;
+import com.ltev.connected.dao.PostDao;
 import com.ltev.connected.service.PostService;
 import com.ltev.connected.utils.AuthenticationUtils;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
 public class PostServiceImpl implements PostService {
 
     private PostDao postDao;
-    private UserRepository userRepository;
+    private UserDao userDao;
 
     @Override
     public void save(Post post) {
@@ -27,7 +27,7 @@ public class PostServiceImpl implements PostService {
             // check authentication
             Authentication authentication = AuthenticationUtils.checkAuthenticationOrThrow();
             // get user
-            User user = userRepository.findByUsername(authentication.getName())
+            User user = userDao.findByUsername(authentication.getName())
                     .orElseThrow(() -> new NoSuchElementException("No user with username: " + authentication.getName())
             );
             post.setUser(user);
@@ -37,7 +37,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> findFriendsPosts(String username) {
-        Long userId = userRepository.findByUsername(username).get().getId();
+        Long userId = userDao.findByUsername(username).get().getId();
         return postDao.findFriendsPosts(userId);
     }
 }

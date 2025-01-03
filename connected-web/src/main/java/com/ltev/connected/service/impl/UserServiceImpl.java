@@ -1,9 +1,9 @@
 package com.ltev.connected.service.impl;
 
+import com.ltev.connected.dao.UserDao;
 import com.ltev.connected.domain.FriendRequest;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.repository.FriendRequestRepository;
-import com.ltev.connected.repository.UserRepository;
 import com.ltev.connected.service.UserService;
 import com.ltev.connected.utils.AuthenticationUtils;
 import lombok.AllArgsConstructor;
@@ -17,25 +17,25 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private UserRepository userRepository;
+    private UserDao userDao;
     private FriendRequestRepository friendRequestRepository;
 
     @Override
     public User findByUsernameJoinFetchPosts(String username) {
-        return userRepository.findByUsernameJoinFetchPosts(username)
+        return userDao.findByUsername(username)
                 .orElseThrow(() -> new NoSuchElementException("No user with username: " + username));
     }
 
     @Override
     public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return userDao.findByUsername(username);
     }
 
     @Override
     public Optional<FriendRequest> getFriendRequest(User user) {
         Authentication authentication = AuthenticationUtils.checkAuthenticationOrThrow();
 
-        User loggedUser = userRepository.findByUsername(authentication.getName()).get();
+        User loggedUser = userDao.findByUsername(authentication.getName()).get();
         Optional<FriendRequest> foundRequest = friendRequestRepository.findByFromUserAndToUser(loggedUser, user);
 
         // found or change users order and try again
@@ -50,8 +50,8 @@ public class UserServiceImpl implements UserService {
     public void sendFriendRequest(Long profileId) {
         Authentication authentication = AuthenticationUtils.checkAuthenticationOrThrow();
 
-        User loggedUser = userRepository.findByUsername(authentication.getName()).get();
-        User user = userRepository.findById(profileId).get();
+        User loggedUser = userDao.findByUsername(authentication.getName()).get();
+        User user = userDao.findById(profileId).get();
         FriendRequest fr = new FriendRequest(loggedUser, user);
         friendRequestRepository.save(fr);
     }
