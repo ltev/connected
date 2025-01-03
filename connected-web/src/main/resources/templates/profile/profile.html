@@ -11,7 +11,7 @@
 
     <div class="container">
 
-        <div th:insert="~{fragments :: login-header}"></div>        <!-- Login header -->
+        <div th:insert="~{fragments/fragments :: login-header}"></div>        <!-- Login header -->
 
         <div sec:authorize="isAnonymous()">                         <!-- body for not logged users -->
 

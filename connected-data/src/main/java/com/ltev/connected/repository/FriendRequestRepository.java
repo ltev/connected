@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface FriendRequestRepository extends JpaRepository<FriendRequest, Long> {
@@ -17,4 +18,6 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
     @Modifying
     @Query("update FriendRequest r set r.accepted = current_date where r.id = ?1")
     void acceptFriendRequest(Long requestId);
+
+    List<FriendRequest> findAllByToUser(User toUsers);
 }

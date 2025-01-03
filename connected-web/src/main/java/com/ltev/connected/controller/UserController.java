@@ -17,4 +17,10 @@ public class UserController {
         model.addAttribute("friends", userService.findAllFriends());
         return "user/friends";
     }
+
+    @GetMapping("/friend-requests")
+    public String showFriendshipRequests(Model model) {
+        model.addAttribute("friendRequests", userService.findAllReceivedFriendshipRequests());
+        return "user/friend-requests";
+    }
 }
