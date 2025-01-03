@@ -28,7 +28,8 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    private static final String FIND_FRIENDS_SQL = """
+    private static final String INSERT_INTO_USERS_SQL = "insert into users (username, password, enabled) values (?, ?, 1)";
+    private static final String FIND_FRIENDS_BY_USER_ID_SQL = """
             select id, username from users
             where id in (
             	select to_user_id
@@ -46,8 +47,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void createNewUser(String username, String password) {
-        String sql = "insert into users (username, password, enabled) values (?, ?, 1)";
-        jdbcTemplate.update(sql, username, password);
+        jdbcTemplate.update(INSERT_INTO_USERS_SQL, username, password);
     }
 
     @Override
@@ -67,6 +67,6 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> findAllFriends(Long userId) {
-        return jdbcTemplate.query(FIND_FRIENDS_SQL, new UserRowMapper(), userId, userId);
+        return jdbcTemplate.query(FIND_FRIENDS_BY_USER_ID_SQL, new UserRowMapper(), userId, userId);
     }
 }

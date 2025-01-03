@@ -60,6 +60,11 @@ public class PostDaoImpl implements PostDao {
                     }, userId, userId);
     }
 
+    @Override
+    public List<Post> findPosts(Long userId, Post.Visibility visibility) {
+        return postRepository.findAllByUserAndVisibility(new User(userId), visibility);
+    }
+
     // == PRIVATE HELPER METHODS
 
     private List<Long> findFriends(Long userId) {

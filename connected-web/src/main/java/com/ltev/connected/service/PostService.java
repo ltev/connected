@@ -8,4 +8,6 @@ public interface PostService {
     void save(Post post);
 
     List<Post> findFriendsPosts(String username);
+
+    List<Post> findPosts(Long userId, Post.Visibility visibility);
 }

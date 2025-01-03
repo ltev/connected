@@ -1,7 +1,9 @@
 package com.ltev.connected.service.impl;
 
+import com.ltev.connected.dao.PostDao;
 import com.ltev.connected.dao.UserDao;
 import com.ltev.connected.domain.FriendRequest;
+import com.ltev.connected.domain.Post;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.repository.FriendRequestRepository;
 import com.ltev.connected.repository.UserRepository;
@@ -21,8 +23,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private UserDao userDao;
+    private PostDao postDao;
     private FriendRequestRepository friendRequestRepository;
-    private final UserRepository userRepository;
 
     @Override
     public User findByUsernameJoinFetchPosts(String username) {
@@ -84,7 +86,7 @@ public class UserServiceImpl implements UserService {
     public Optional<ProfileInfo> getInformationForShowingProfile(String profileUsername) {
 
         // check if profileUser exists
-        Optional<User> profileUser = userRepository.findByUsername(profileUsername);
+        Optional<User> profileUser = userDao.findByUsername(profileUsername);
         if (profileUser.isEmpty()) {
             return Optional.empty();
         }
@@ -98,6 +100,9 @@ public class UserServiceImpl implements UserService {
             // check for friend request and status
             Optional<FriendRequest> friendRequest = getFriendRequest(loggedUser, profileUser.get());
             friendRequest.ifPresent(profileInfo::setFriendRequest);
+        } else {
+            List<Post> postsForEveryone = postDao.findPosts(profileUser.get().getId(), Post.Visibility.EVERYONE);
+            profileInfo.setOpenPosts(postsForEveryone);
         }
         return Optional.of(profileInfo);
     }

@@ -1,16 +1,14 @@
 package com.ltev.connected.domain;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
+@NoArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -25,7 +23,9 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     private List<Post> posts;
 
-
+    public User(Long id) {
+        this.id = id;
+    }
 
     @Override
     public boolean equals(Object o) {

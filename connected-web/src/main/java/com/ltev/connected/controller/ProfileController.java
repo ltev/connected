@@ -30,6 +30,8 @@ public class ProfileController {
 
         Optional<ProfileInfo> optionalProfileInfo = userService.getInformationForShowingProfile(profile);
 
+        System.out.println("posts: ");
+
         // check if profile exists
         if (optionalProfileInfo.isEmpty()) {
             return "redirect:/";

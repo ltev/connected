@@ -9,4 +9,6 @@ public interface PostDao {
     List<Post> findFriendsPosts(Long userId);
 
     void save(Post post);
+
+    List<Post> findPosts(Long userId, Post.Visibility visibility);
 }

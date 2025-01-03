@@ -15,9 +15,27 @@
 
         <div sec:authorize="isAnonymous()">                         <!-- body for not logged users -->
 
-            Log in and become friends
+            <div class="accordion" id="ownPosts">      <!-- profile posts -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#ownPostsCollapse" aria-expanded="true" aria-controls="collapseOne">
+                            Profile posts
+                        </button>
+                    </h2>
+                </div>
+                <div id="ownPostsCollapse" class="accordion-collapse collapse show" data-bs-parent="#ownPosts">
+                    <div class="accordion-body">                        <!-- list profile posts -->
+                        <ul th:each="post : ${profileInfo.openPosts}">
+                            <p th:text="${#temporals.format(post.created, 'dd-MMM-yyyy HH:mm', #locale)
+                                            + ' (' + post.visibility.displayName() + ')'}">Date</p>
+                            <p th:text="${post.text}">Text</p>
+                            <hr>
+                        </ul>
+                    </div>
+                </div>
+            </div>      <!-- self posts END -->
 
-        </div>
+        </div>  <!-- body for not logged users END-->
 
 
         <div sec:authorize="isAuthenticated()">                     <!-- body for logged users -->
