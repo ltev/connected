@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<div th:fragment="login-header">
+<div th:fragment="login-header">                                            <!-- fragment: login header -->
     <div class="row">
 
         <div class="col text-left">
@@ -35,6 +35,11 @@
 
     </div>
     <hr>
+</div>
+
+<div th:fragment="user-menu">                                            <!-- fragment: user menu -->
+    <a href="#" th:href="@{'/'}">Main Page</a>
+    <a href="#" th:href="@{''} + '/friends'">Friends</a>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

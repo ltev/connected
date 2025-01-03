@@ -3,6 +3,7 @@ package com.ltev.connected.service;
 import com.ltev.connected.domain.FriendRequest;
 import com.ltev.connected.domain.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -16,4 +17,6 @@ public interface UserService {
     void sendFriendRequest(Long profileId);
 
     void acceptFriendRequest(Long profileId);
+
+    List<User> findAllFriends();
 }

@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -58,8 +59,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void acceptFriendRequest(Long requestId) {
-        Authentication authentication = AuthenticationUtils.checkAuthenticationOrThrow();
+        AuthenticationUtils.checkAuthenticationOrThrow();
 
         friendRequestRepository.acceptFriendRequest(requestId);
+    }
+
+    @Override
+    public List<User> findAllFriends() {
+        Authentication authentication = AuthenticationUtils.checkAuthenticationOrThrow();
+
+        Long userId = userDao.findIdByUsername(authentication.getName()).get();
+
+        return userDao.findAllFriends(userId);
     }
 }

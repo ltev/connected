@@ -11,7 +11,7 @@
 
     <div class="container">
 
-        <div th:insert="~{fragments :: login-header}"></div>        <!-- Login header -->
+        <div th:insert="~{fragments/fragments :: login-header}"></div>        <!-- Login header -->
 
         <div sec:authorize="isAnonymous()">                         <!-- body for not logged users -->
             <div class="mt-2">
@@ -26,7 +26,7 @@
 
                     <div class="col-1">                               <!-- left menu -->
 
-                        <a href="#" th:href="@{''} + '/friends'">Friends</a>
+                        <div th:insert="~{fragments/fragments :: user-menu}"></div>
 
                     </div>  <!-- left menu END -->
 
