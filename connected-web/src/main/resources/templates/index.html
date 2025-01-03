@@ -19,59 +19,64 @@
             </div>
         </div>
 
-
         <div sec:authorize="isAuthenticated()">                     <!-- body for logged users -->
 
-            <form action="#" th:action="@{.}" method="post">
-                <button type="submit" name="action" value="post-form" class="btn btn-primary mb-2">Create new post</button>
-            </form>
+            <div class="container text-start">
+                <div class="row">
 
+                    <div class="col-1">                               <!-- left menu -->
 
-            <form action="#" th:action="@{/logout}" method="POST">      <!-- /logout - default spring security url -->
-                <button type="submit" class="btn btn-info mb-2">Log out</button>
-            </form>
+                        <a href="#" th:href="@{''} + '/friends'">Friends</a>
 
-            <div class="accordion" id="ownPosts">      <!-- self posts -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#ownPostsCollapse" aria-expanded="true" aria-controls="collapseOne">
-                            See your own posts
-                        </button>
-                    </h2>
-                </div>
-                <div id="ownPostsCollapse" class="accordion-collapse collapse show" data-bs-parent="#ownPosts">
-                    <div class="accordion-body">                        <!-- list own posts -->
-                        <ul th:each="post : ${ownPosts}">
-                            <p th:text="${#temporals.format(post.created, 'dd-MMM-yyyy HH:mm', #locale)}">Date
+                    </div>  <!-- left menu END -->
 
-                            </p>
-                            <p th:text="${post.text}">Text</p>
-                            <hr>
-                        </ul>
-                    </div>
-                </div>
-            </div>      <!-- self posts END -->
+                    <div class="col-11">                               <!-- main content -->
+                        <form action="#" th:action="@{.}" method="post">
+                            <button type="submit" name="action" value="post-form" class="btn btn-primary mb-2">Create new post</button>
+                        </form>
 
-            <div class="accordion" id="friendsPosts">      <!-- friends posts -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#friendsPostsCollapse" aria-expanded="true" aria-controls="collapseOne">
-                            See your friends' posts
-                        </button>
-                    </h2>
-                </div>
-                <div id="friendsPostsCollapse" class="accordion-collapse collapse show" data-bs-parent="#friendsPosts">
-                    <div class="accordion-body">                        <!-- list own posts -->
-                        <ul th:each="post : ${friendsPosts}">
-                            <p th:text="${#temporals.format(post.created, 'dd-MMM-yyyy HH:mm', #locale) + ' '
+                        <div class="accordion" id="ownPosts">      <!-- self posts -->
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#ownPostsCollapse" aria-expanded="true" aria-controls="collapseOne">
+                                        See your own posts
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="ownPostsCollapse" class="accordion-collapse collapse show" data-bs-parent="#ownPosts">
+                                <div class="accordion-body">                        <!-- list own posts -->
+                                    <ul th:each="post : ${ownPosts}">
+                                        <p th:text="${#temporals.format(post.created, 'dd-MMM-yyyy HH:mm', #locale)}">Date</p>
+                                        <p th:text="${post.text}">Text</p>
+                                        <hr>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>      <!-- self posts END -->
+
+                        <div class="accordion" id="friendsPosts">      <!-- friends posts -->
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#friendsPostsCollapse" aria-expanded="true" aria-controls="collapseOne">
+                                        See your friends' posts
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="friendsPostsCollapse" class="accordion-collapse collapse show" data-bs-parent="#friendsPosts">
+                                <div class="accordion-body">                        <!-- list own posts -->
+                                    <ul th:each="post : ${friendsPosts}">
+                                        <p th:text="${#temporals.format(post.created, 'dd-MMM-yyyy HH:mm', #locale) + ' '
                             + post.user.username + ' (' + post.visibility.displayName() + ')'}">Date</p>
-                            <p th:text="${post.text}">Text</p>
-                            <hr>
-                        </ul>
-                    </div>
-                </div>
-            </div>      <!-- friends posts END -->
+                                        <p th:text="${post.text}">Text</p>
+                                        <hr>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>      <!-- friends posts END -->
+                    </div>          <!-- main content END -->
 
+                </div>
+            </div>
 
         </div>  <!-- body for logged users END -->
 
