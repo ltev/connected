@@ -45,6 +45,12 @@ public class UserDaoImpl implements UserDao {
     private UserRepository repository;
 
     @Override
+    public void createNewUser(String username, String password) {
+        String sql = "insert into users (username, password, enabled) values (?, ?, 1)";
+        jdbcTemplate.update(sql, username, password);
+    }
+
+    @Override
     public Optional<User> findByUsername(String username) {
         return repository.findByUsername(username);
     }

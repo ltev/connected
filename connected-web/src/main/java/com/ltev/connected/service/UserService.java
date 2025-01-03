@@ -19,4 +19,8 @@ public interface UserService {
     void acceptFriendRequest(Long profileId);
 
     List<User> findAllFriends();
+
+    List<FriendRequest> findAllReceivedFriendshipRequests();
+
+    void createNewUser(String username, String password);
 }

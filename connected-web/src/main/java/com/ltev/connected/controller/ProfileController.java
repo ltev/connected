@@ -24,6 +24,10 @@ public class ProfileController {
     @GetMapping("/{username}")
     public String showUserProfile(@PathVariable("username") String username, Authentication authentication, Model model) {
 
+        if (authentication != null && authentication.getName().equals(username)) {
+            return "redirect:/";
+        }
+
         // check if profile exists
         Optional<User> profile = userService.findByUsername(username);
         if (profile.isEmpty()) {

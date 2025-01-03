@@ -9,18 +9,15 @@
 <body>
 
     <div class="container">
-        <h3 class="mt-5">Login</h3>
+        <h3 class="mt-5">Sign up</h3>
         <hr style="width: 300px">
 
-        <div th:if="${param.error}" class="alert alert-danger" style="width: 300px" role="alert">
-            Invalid username / password
+        <div th:if="${param.taken}" class="alert alert-danger" style="width: 300px" role="alert">
+            This username is already taken. <br>
+            Choose another username
         </div>
 
-        <div th:if="${param.logout}" class="alert alert-success" style="width: 300px" role="alert">
-            You have been logged out
-        </div>
-
-        <form action="#" th:action="@{${actionUrl}}" method="POST">
+        <form action="#" th:action="@{''}" method="POST">
 
             <div class="form-group mt-2" style="width: 300px">
                 <label for="username">Username</label>
@@ -30,7 +27,7 @@
                 <label for="password">Password</label>
                 <input type="password" name="password" class="form-control" id="password" aria-describedby="passwordHelp" placeholder="password">
             </div>
-            <button type="submit" value="login" class="btn btn-primary mt-2">Log in</button>
+            <button type="submit" value="signup" class="btn btn-primary mt-2">Sign up</button>
 
         </form>
 

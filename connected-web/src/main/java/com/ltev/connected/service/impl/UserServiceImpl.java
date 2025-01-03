@@ -69,7 +69,19 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = AuthenticationUtils.checkAuthenticationOrThrow();
 
         Long userId = userDao.findIdByUsername(authentication.getName()).get();
-
         return userDao.findAllFriends(userId);
+    }
+
+    @Override
+    public List<FriendRequest> findAllReceivedFriendshipRequests() {
+        Authentication authentication = AuthenticationUtils.checkAuthenticationOrThrow();
+
+        User user = userDao.findByUsername(authentication.getName()).get();
+        return friendRequestRepository.findAllByToUser(user);
+    }
+
+    @Override
+    public void createNewUser(String username, String password) {
+        userDao.createNewUser(username, password);
     }
 }

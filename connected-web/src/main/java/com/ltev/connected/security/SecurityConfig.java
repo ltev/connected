@@ -21,6 +21,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(
                         configurer -> configurer
                                 .requestMatchers("/").permitAll()
+                                .requestMatchers("/signup").permitAll()
                                 .requestMatchers("/profile/**").permitAll()
                                 .anyRequest().authenticated()
                 )
