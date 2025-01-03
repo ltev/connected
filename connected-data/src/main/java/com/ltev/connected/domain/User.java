@@ -25,6 +25,8 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     private List<Post> posts;
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

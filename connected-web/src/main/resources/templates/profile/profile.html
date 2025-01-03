@@ -24,20 +24,21 @@
 
             <!-- Friend request button -->
 
-            <form action="#" th:action="@{''}" method="post">
-                <input type="hidden" name="profileId" th:value="${profileId}">
+            <form th:object="${profileInfo}" action="#" th:action="@{''}" method="post">
 
-                <div th:if="${friendRequestStatus.name() == 'NOT_SENT'}">
+                <input type="hidden" name="profileId" th:value="*{profileUser.id}">
+
+                <div th:if="*{friendRequestStatus.name() == 'NOT_SENT'}">
                     <button type="submit" name="action" value="send-friend-request" class="btn btn-primary">Send friend request</button>
                 </div>
-                <div th:if="${friendRequestStatus.name() == 'SENT'}">
+                <div th:if="*{friendRequestStatus.name() == 'SENT'}">
                     <button type="submit" disabled name="action" value="#" class="btn btn-primary">Friend request has been sent</button>
                 </div>
-                <div th:if="${friendRequestStatus.name() == 'RECEIVED'}">
-                    <input type="hidden" name="friendRequestId" th:value="${friendRequestId}">
+                <div th:if="*{friendRequestStatus.name() == 'RECEIVED'}">
+                    <input type="hidden" name="friendRequestId" th:value="*{friendRequest.id}">
                     <button type="submit" name="action" value="accept-friend-request" class="btn btn-primary">Accept friend request</button>
                 </div>
-                <div th:if="${friendRequestStatus.name() == 'ACCEPTED'}">
+                <div th:if="*{friendRequestStatus.name() == 'ACCEPTED'}">
                     <button type="submit" disabled name="action" value="#" class="btn btn-primary">You are friends already</button>
                 </div>
 

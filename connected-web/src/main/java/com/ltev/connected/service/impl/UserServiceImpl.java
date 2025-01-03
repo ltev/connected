@@ -93,12 +93,11 @@ public class UserServiceImpl implements UserService {
 
         if (AuthenticationUtils.isAuthenticated()) {
             User loggedUser = userDao.findByUsername(AuthenticationUtils.getAuthentication().getName()).get();
-            profileInfo.setLoggedUsername(Optional.of(loggedUser.getUsername()));
+            profileInfo.setLoggedUsername(loggedUser.getUsername());
 
             // check for friend request and status
             Optional<FriendRequest> friendRequest = getFriendRequest(loggedUser, profileUser.get());
-            profileInfo.setFriendRequest(friendRequest);
-
+            friendRequest.ifPresent(profileInfo::setFriendRequest);
         }
         return Optional.of(profileInfo);
     }

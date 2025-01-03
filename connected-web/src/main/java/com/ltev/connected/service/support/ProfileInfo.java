@@ -5,19 +5,22 @@ import com.ltev.connected.domain.User;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Optional;
-
 @Getter
 @Setter
 public class ProfileInfo {
 
+    private String loggedUsername;
     private User profileUser;
-    private Optional<String> loggedUsername;
-    private Optional<FriendRequest> friendRequest;
+    private FriendRequest friendRequest;
 
     public ProfileInfo(User profileUser) {
         this.profileUser = profileUser;
-        this.loggedUsername = Optional.empty();
-        this.friendRequest = Optional.empty();
     }
+
+    public FriendRequest.Status getFriendRequestStatus() {
+        return friendRequest == null
+                ? FriendRequest.Status.NOT_SENT
+                : friendRequest.getStatus(loggedUsername);
+    }
+
 }
