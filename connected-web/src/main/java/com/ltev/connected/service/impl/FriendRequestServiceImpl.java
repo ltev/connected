@@ -1,8 +1,9 @@
-package com.ltev.connected.service;
+package com.ltev.connected.service.impl;
 
 import com.ltev.connected.domain.FriendRequest;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.repository.FriendRequestRepository;
+import com.ltev.connected.service.FriendRequestService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

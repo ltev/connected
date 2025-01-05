@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -92,18 +93,31 @@ public class UserServiceImpl implements UserService {
         }
 
         ProfileInfo profileInfo = new ProfileInfo(profileUser.get());
+        List<Post> foundPosts;
 
         if (AuthenticationUtils.isAuthenticated()) {
+            List<Post.Visibility> acceptedVisibilities = new ArrayList<>();
+            acceptedVisibilities.add(Post.Visibility.EVERYONE);
+            acceptedVisibilities.add(Post.Visibility.LOGGED_USERS);
+
             User loggedUser = userDao.findByUsername(AuthenticationUtils.getAuthentication().getName()).get();
             profileInfo.setLoggedUsername(loggedUser.getUsername());
 
             // check for friend request and status
             Optional<FriendRequest> friendRequest = friendRequestService.getFriendRequest(loggedUser, profileUser.get());
-            friendRequest.ifPresent(profileInfo::setFriendRequest);
+
+            if (friendRequest.isPresent()) {
+                profileInfo.setFriendRequest(friendRequest.get());
+                acceptedVisibilities.add(Post.Visibility.FRIENDS);
+            }
+            foundPosts = postDao.findPosts(profileUser.get(), acceptedVisibilities);
+            // User endProfileUser = userDao.findByUsernameAndVisibility(profileUsername, acceptedVisibilities).get();
+            // profileInfo.setProfileUser(endProfileUser);
         } else {
-            List<Post> postsForEveryone = postDao.findPosts(profileUser.get().getId(), Post.Visibility.EVERYONE);
-            profileInfo.setOpenPosts(postsForEveryone);
+            foundPosts = postDao.findPosts(profileUser.get().getId(), Post.Visibility.EVERYONE);
         }
+
+        profileInfo.getProfileUser().setPosts(foundPosts);
         return Optional.of(profileInfo);
     }
 }

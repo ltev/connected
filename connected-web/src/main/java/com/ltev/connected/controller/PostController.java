@@ -21,7 +21,7 @@ public class PostController {
     @PostMapping(params = "action=post-form")
     public String showPostForm(Model model) {
         model.addAttribute("post", new Post());
-        return "post-form";
+        return "post/post-form";
     }
 
     @PostMapping(params = "action=new-post")

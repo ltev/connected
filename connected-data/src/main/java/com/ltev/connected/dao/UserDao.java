@@ -1,5 +1,6 @@
 package com.ltev.connected.dao;
 
+import com.ltev.connected.domain.Post;
 import com.ltev.connected.domain.User;
 
 import java.util.List;
@@ -10,6 +11,8 @@ public interface UserDao {
     void createNewUser(String username, String password);
 
     Optional<User> findByUsername(String username);
+
+    Optional<User> findByUsernameAndVisibility(String username, List<Post.Visibility> visibilities);
 
     Optional<Long> findIdByUsername(String username);
 

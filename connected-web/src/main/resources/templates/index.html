@@ -30,10 +30,7 @@
 
                     </div>  <!-- left menu END -->
 
-                    <div class="col">                               <!-- main content -->
-                        <form action="#" th:action="@{.}" method="post">
-                            <button type="submit" name="action" value="post-form" class="btn btn-primary mb-2">Create new post</button>
-                        </form>
+                    <div class="col">                               <!-- main content column -->
 
                         <div class="accordion" id="ownPosts">      <!-- self posts -->
                             <div class="accordion-item">
@@ -60,32 +57,8 @@
                                 </div>  <!-- list own posts accordion body END -->
                             </div>
                         </div>      <!-- self posts END -->
-                       <br>
 
-                        <div class="accordion" id="friendsPosts">      <!-- friends posts -->
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#friendsPostsCollapse" aria-expanded="true" aria-controls="collapseOne">
-                                        See your friends' posts
-                                    </button>
-                                </h2>
-                            </div>
-                            <div id="friendsPostsCollapse" class="accordion-collapse collapse show" data-bs-parent="#friendsPosts">
-                                <div class="accordion-body d-grid gap-2">                        <!-- list own posts -->
-                                    <div class="card" th:each="post : ${friendsPosts}">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Card title</h5>
-                                            <h6 class="card-subtitle mb-2 text-body-secondary"
-                                                th:text="${#temporals.format(post.created, 'dd-MMM-yyyy HH:mm', #locale)
-                                                    + ' ' + post.user.username + ' (' + post.visibility.displayName() + ')'}">Post info</h6>
-                                            <p class="card-text" th:text="${post.text}">Text</p>
-                                            <a href="#" th:href="@{/post/} + ${post.id}" class="card-link">Comments</a>
-                                        </div>
-                                    </div>
-                                </div>  <!-- list own posts accordion body END -->
-                            </div>
-                        </div>      <!-- friends posts END -->
-                    </div>          <!-- main content END -->
+                    </div>          <!-- main content column END -->
 
                 </div>
             </div>

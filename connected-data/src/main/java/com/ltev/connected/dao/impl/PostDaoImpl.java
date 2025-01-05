@@ -72,6 +72,11 @@ public class PostDaoImpl implements PostDao {
         return postRepository.findAllByUserAndVisibility(new User(userId), visibility);
     }
 
+    @Override
+    public List<Post> findPosts(User user, List<Post.Visibility> visibilities) {
+        return postRepository.findAllByUserAndVisibilityIn(user, visibilities);
+    }
+
     // == PRIVATE HELPER METHODS
 
     private List<Long> findFriends(Long userId) {
