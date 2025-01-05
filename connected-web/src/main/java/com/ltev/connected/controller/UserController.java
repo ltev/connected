@@ -15,12 +15,14 @@ public class UserController {
     @GetMapping("/friends")
     public String showFriends(Model model) {
         model.addAttribute("friends", userService.findAllFriends());
+        model.addAttribute("activeButton", "friends");
         return "user/friends";
     }
 
     @GetMapping("/friend-requests")
     public String showFriendshipRequests(Model model) {
         model.addAttribute("friendRequests", userService.findAllReceivedNotAcceptedFriendshipRequests());
+        model.addAttribute("activeButton", "friendRequests");
         return "user/friend-requests";
     }
 }

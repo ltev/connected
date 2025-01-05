@@ -28,6 +28,7 @@ public class IndexController {
 
             List<Post> friendsPosts = postService.findFriendsPosts(authentication.getName());
             model.addAttribute("friendsPosts", friendsPosts);
+            model.addAttribute("activeButton", "mainPage");
         }
         return "index";
     }

@@ -43,11 +43,17 @@
 </div>
 
 <div th:fragment="user-menu">                                            <!-- fragment: user menu -->
-    <a href="#" th:href="@{'/'}">Main Page</a>
+    <a href="#" th:href="@{'/'}">
+        <button type="button" class="btn" th:classappend="${activeButton} == 'mainPage' ? 'active'">Main Page</button>
+    </a>
     <br>
-    <a href="#" th:href="@{friends}">Friends</a>
+    <a href="#" th:href="@{friends}">
+        <button type="button" class="btn" th:classappend="${activeButton} == 'friends' ? 'active'">Friends</button>
+    </a>
     <br>
-    <a href="#" th:href="@{friend-requests}">Friend requests</a>
+    <a href="#" th:href="@{friend-requests}">
+        <button type="button" class="btn" th:classappend="${activeButton} == 'friendRequests' ? 'active'">Friend requests</button>
+    </a>
     <br>
 </div>
 
