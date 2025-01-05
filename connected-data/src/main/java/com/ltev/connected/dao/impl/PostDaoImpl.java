@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Optional;
 
 @Primary
 @Repository
@@ -29,9 +30,15 @@ public class PostDaoImpl implements PostDao {
     }
 
     @Override
+    public Optional<Post> findById(Long postId) {
+        return postRepository.findById(postId);
+    }
+
+    @Override
     public List<Post> findFriendsPosts(Long userId) {
         String sql = """
-                select p.id as post_id, p.created, p.visibility, p.text, u.id as user_id, u.username from posts p
+                select p.id as post_id, p.created, p.visibility, p.text, u.id as user_id, u.username 
+                from posts p
                 join users u on u.id = user_id
                 where user_id in (
                 	select to_user_id

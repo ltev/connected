@@ -23,6 +23,10 @@ public class Post {
         LOGGED_USERS,
         EVERYONE;
 
+        public static boolean atLeast(Visibility expected, Visibility actual) {
+            return expected.ordinal() <= actual.ordinal();
+        }
+
         public String displayName() {
             return this.toString().toLowerCase();
         }
@@ -44,7 +48,7 @@ public class Post {
     @CreationTimestamp(source = SourceType.VM)
     private ZonedDateTime created;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
     @JoinColumn(name = "user_id")
     private User user;
 

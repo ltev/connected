@@ -5,8 +5,7 @@ import com.ltev.connected.dao.UserDao;
 import com.ltev.connected.domain.FriendRequest;
 import com.ltev.connected.domain.Post;
 import com.ltev.connected.domain.User;
-import com.ltev.connected.repository.FriendRequestRepository;
-import com.ltev.connected.repository.UserRepository;
+import com.ltev.connected.service.FriendRequestService;
 import com.ltev.connected.service.UserService;
 import com.ltev.connected.service.support.ProfileInfo;
 import com.ltev.connected.utils.AuthenticationUtils;
@@ -24,7 +23,8 @@ public class UserServiceImpl implements UserService {
 
     private UserDao userDao;
     private PostDao postDao;
-    private FriendRequestRepository friendRequestRepository;
+
+    private FriendRequestService friendRequestService;
 
     @Override
     public User findByUsernameJoinFetchPosts(String username) {
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = AuthenticationUtils.checkAuthenticationOrThrow();
 
         User loggedUser = userDao.findByUsername(authentication.getName()).get();
-        return getFriendRequest(loggedUser, user);
+        return friendRequestService.getFriendRequest(loggedUser, user);
     }
 
     @Override
@@ -52,14 +52,14 @@ public class UserServiceImpl implements UserService {
         User loggedUser = userDao.findByUsername(authentication.getName()).get();
         User user = userDao.findById(profileId).get();
         FriendRequest fr = new FriendRequest(loggedUser, user);
-        friendRequestRepository.save(fr);
+        friendRequestService.save(fr);
     }
 
     @Override
     public void acceptFriendRequest(Long requestId) {
         AuthenticationUtils.checkAuthenticationOrThrow();
 
-        friendRequestRepository.acceptFriendRequest(requestId);
+        friendRequestService.acceptFriendRequest(requestId);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = AuthenticationUtils.checkAuthenticationOrThrow();
 
         User user = userDao.findByUsername(authentication.getName()).get();
-        return friendRequestRepository.findAllByToUserAndAccepted(user, null);
+        return friendRequestService.findAllByToUserAndAccepted(user);
     }
 
     @Override
@@ -98,25 +98,12 @@ public class UserServiceImpl implements UserService {
             profileInfo.setLoggedUsername(loggedUser.getUsername());
 
             // check for friend request and status
-            Optional<FriendRequest> friendRequest = getFriendRequest(loggedUser, profileUser.get());
+            Optional<FriendRequest> friendRequest = friendRequestService.getFriendRequest(loggedUser, profileUser.get());
             friendRequest.ifPresent(profileInfo::setFriendRequest);
         } else {
             List<Post> postsForEveryone = postDao.findPosts(profileUser.get().getId(), Post.Visibility.EVERYONE);
             profileInfo.setOpenPosts(postsForEveryone);
         }
         return Optional.of(profileInfo);
-    }
-
-    // == PRIVATE HELPER METHODS ==
-
-    public Optional<FriendRequest> getFriendRequest(User user1, User user2) {
-        Optional<FriendRequest> foundRequest = friendRequestRepository.findByFromUserAndToUser(user1, user2);
-
-        // found or change users order and try again
-        if (foundRequest.isPresent()) {
-            return foundRequest;
-        } else {
-            return friendRequestRepository.findByFromUserAndToUser(user2, user1);
-        }
     }
 }

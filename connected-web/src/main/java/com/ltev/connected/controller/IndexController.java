@@ -5,6 +5,7 @@ import com.ltev.connected.domain.User;
 import com.ltev.connected.service.PostService;
 import com.ltev.connected.service.impl.UserServiceImpl;
 import lombok.AllArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +26,8 @@ public class IndexController {
         if (authentication != null) {
             User user = userService.findByUsername(authentication.getName()).get();
             model.addAttribute("ownPosts", user.getPosts());
+
+            // boolean isInitialized = Hibernate.isInitialized(user.getPosts());
 
             List<Post> friendsPosts = postService.findFriendsPosts(authentication.getName());
             model.addAttribute("friendsPosts", friendsPosts);

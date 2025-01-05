@@ -2,6 +2,7 @@ package com.ltev.connected.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
@@ -24,8 +25,10 @@ public class SecurityConfig {
                                 .requestMatchers("/login").permitAll()
                                 .requestMatchers("/signup").permitAll()
                                 .requestMatchers("/profile/**").permitAll()
-                                .anyRequest().permitAll()
+                                .requestMatchers("/post/**").permitAll()
+                                .anyRequest().authenticated()
                 )
+                .exceptionHandling(Customizer.withDefaults())
                 .formLogin(form -> form
                         .loginPage(LOGIN_FORM_URL)
                         // no controller request mapping required - will be taken care by spring security filters

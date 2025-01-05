@@ -77,7 +77,7 @@
                                             <h5 class="card-title">Card title</h5>
                                             <h6 class="card-subtitle mb-2 text-body-secondary"
                                                 th:text="${#temporals.format(post.created, 'dd-MMM-yyyy HH:mm', #locale)
-                                                    + ' (' + post.visibility.displayName() + ')'}">Post info</h6>
+                                                    + ' ' + post.user.username + ' (' + post.visibility.displayName() + ')'}">Post info</h6>
                                             <p class="card-text" th:text="${post.text}">Text</p>
                                             <a href="#" th:href="@{/post/} + ${post.id}" class="card-link">Comments</a>
                                         </div>
