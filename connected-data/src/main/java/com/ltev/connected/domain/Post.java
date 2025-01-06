@@ -2,6 +2,7 @@ package com.ltev.connected.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "posts")
+@NoArgsConstructor
 @Getter
 @Setter
 public class Post {
@@ -41,6 +43,10 @@ public class Post {
             }
             throw new RuntimeException("No visibility of ordinal: " + visibility);
         }
+    }
+
+    public Post(Long id) {
+        this.id = id;
     }
 
     @Id

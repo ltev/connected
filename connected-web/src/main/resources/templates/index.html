@@ -41,11 +41,11 @@
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#ownPostsCollapse" aria-expanded="true" aria-controls="collapseOne">
-                                        See your own posts
+                                        Your posts:
                                     </button>
                                 </h2>
                             </div>
-                            <div id="ownPostsCollapse" class="accordion-collapse collapse show" data-bs-parent="#ownPosts">
+                            <div id="ownPostsCollapse" class="accordion-collapse collapse" data-bs-parent="#ownPosts">
                                 <div class="accordion-body d-grid gap-2">                        <!-- list own posts -->
 
                                     <div class="card" th:each="post : ${ownPosts}">
@@ -62,6 +62,33 @@
                                 </div>  <!-- list own posts accordion body END -->
                             </div>
                         </div>      <!-- self posts END -->
+
+                        <div class="accordion mt-2" id="friendsPosts">      <!-- friends posts -->
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#friendsPostsCollapse" aria-expanded="true" aria-controls="collapseOne">
+                                        Friends' posts:
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="friendsPostsCollapse" class="accordion-collapse collapse show" data-bs-parent="#friendsPosts">
+                                <div class="accordion-body d-grid gap-2">                        <!-- list friends posts -->
+
+                                    <div class="card" th:each="post : ${friendsPosts}">
+                                        <div class="card-body">
+                                            <h5 class="card-title" th:text="${post.title}">Post title</h5>
+                                            <h6 class="card-subtitle mb-2 text-body-secondary"
+                                                th:text="${#temporals.format(post.created, 'dd-MMM-yyyy HH:mm', #locale)
+                                                    + ' ' + post.user.username + ' (' + post.visibility.displayName() + ')'}">Post info</h6>
+
+                                            <p class="card-text" th:text="${post.text}">Text</p>
+                                            <a href="#" th:href="@{/post/} + ${post.id}" class="card-link">Comments</a>
+                                        </div>
+                                    </div>
+
+                                </div>  <!-- list friends posts accordion body END -->
+                            </div>
+                        </div>      <!-- friends posts END -->
 
                     </div>          <!-- main content column END -->
 

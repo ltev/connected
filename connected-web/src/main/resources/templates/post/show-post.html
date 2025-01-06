@@ -18,11 +18,12 @@
             <div class="col-2">                                             <!-- left menu -->
                 <div sec:authorize="isAuthenticated()">                     <!-- body for logged users -->
                     <div th:insert="~{fragments/fragments :: user-menu}"></div>
-                </div>
+                </div>                                                      <!-- body for logged users END -->
             </div>  <!-- left menu END -->
 
-            <div class="col">   <!-- main content -->
-                <div class="card">
+            <div class="col">                       <!-- main content column -->
+
+                <div class="card">                  <!-- post -->
                     <div class="card-body">
                         <h5 class="card-title" th:text="${post.title}">Post title</h5>
                         <h6 class="card-subtitle mb-2 text-body-secondary text-end"
@@ -31,8 +32,39 @@
                         <p class="card-text" th:text="${post.text}">Text</p>
                         <a href="#" th:href="@{/post/} + ${post.id}" class="card-link">Comments</a>
                     </div>
-                </div>
-            </div>          <!-- main content END -->
+                </div>      <!-- post END -->
+
+                <div class="mt-3">       <!-- show comments -->
+                    <h5>Comments: </h5>
+
+                    <table class="table">
+                        <tbody>
+                            <tr th:each="comment : ${post.comments}">
+                                <td class="col-2">
+                                    <p th:text="${comment.user.username}">User</p>
+                                    <p th:text="${#temporals.format(comment.created, 'dd-MMM-yyyy HH:mm', #locale)}">Date</p>
+                                </td>
+                                <td th:text="${comment.text}">
+                                    Text
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>      <!-- show comments END -->
+
+                <div sec:authorize="isAuthenticated()">        <!-- write comment -->   <!-- body for logged users -->
+                    <form action="#" th:action="@{''}" method="post">
+                        <div class="mb-3">
+                            <label for="text" class="form-label h5">Add comment:</label>
+                            <textarea class="form-control" id="text" name="commentText" rows="10"></textarea>
+                        </div>
+
+                        <input type="hidden" name="loggedUserId" value="#" th:value="${loggedUserId}">
+                        <button type="submit" name="action" value="new-comment" class="btn btn-primary mb-2">Post</button>
+                    </form>
+                </div>      <!-- write comment END -->  <!-- body for logged users END -->
+
+            </div>          <!-- main content column END -->
 
         </div>
 

@@ -37,7 +37,7 @@ public class PostDaoImpl implements PostDao {
     @Override
     public List<Post> findFriendsPosts(Long userId) {
         String sql = """
-                select p.id as post_id, p.created, p.visibility, p.text, u.id as user_id, u.username 
+                select p.id as post_id, p.created, p.visibility, p.title, p.text, u.id as user_id, u.username 
                 from posts p
                 join users u on u.id = user_id
                 where user_id in (
@@ -60,6 +60,7 @@ public class PostDaoImpl implements PostDao {
                         post.setUser(user);
                         post.setId(rs.getLong("post_id"));
                         post.setCreated(rs.getTimestamp("created").toInstant().atZone(ZoneId.systemDefault()));
+                        post.setTitle(rs.getString("title"));
                         post.setText(rs.getString("text"));
                         post.setVisibility(Post.Visibility.ofOrdinal(rs.getByte("visibility")));
 

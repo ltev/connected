@@ -2,9 +2,11 @@ package com.ltev.connected.service.impl;
 
 import com.ltev.connected.dao.PostDao;
 import com.ltev.connected.dao.UserDao;
+import com.ltev.connected.domain.Comment;
 import com.ltev.connected.domain.FriendRequest;
 import com.ltev.connected.domain.Post;
 import com.ltev.connected.domain.User;
+import com.ltev.connected.repository.CommentRepository;
 import com.ltev.connected.service.FriendRequestService;
 import com.ltev.connected.service.PostService;
 import com.ltev.connected.service.support.PostInfo;
@@ -25,8 +27,10 @@ public class PostServiceImpl implements PostService {
     private UserDao userDao;
     private FriendRequestService friendRequestService;
 
+    private CommentRepository commentRepository;
+
     @Override
-    public void save(Post post) {
+    public void savePost(Post post) {
         // check if post has a user
         if (post.getUser() == null) {
             // check authentication
@@ -79,5 +83,17 @@ public class PostServiceImpl implements PostService {
             }
         }
         return postInfo;
+    }
+
+    @Override
+    public void saveComment(Long postId, String commentText, Long loggedUserId) {
+        AuthenticationUtils.checkAuthenticationOrThrow();
+
+        Comment comment = new Comment();
+        comment.setUser(new User(loggedUserId));
+        comment.setPost(new Post(postId));
+        comment.setText(commentText);
+
+        commentRepository.save(comment);
     }
 }
