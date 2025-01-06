@@ -8,6 +8,7 @@ import org.hibernate.annotations.SourceType;
 import org.springframework.lang.NonNull;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -60,6 +61,9 @@ public class Post {
 
     @NonNull
     private String text;
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    private List<Comment> comments;
 
     @Override
     public String toString() {
