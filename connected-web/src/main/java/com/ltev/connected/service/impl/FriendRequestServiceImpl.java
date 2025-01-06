@@ -41,6 +41,6 @@ public class FriendRequestServiceImpl implements FriendRequestService {
 
     @Override
     public List<FriendRequest> findAllByToUserAndAccepted(User user) {
-        return friendRequestRepository.findAllByToUserAndAccepted(user, null);
+        return friendRequestRepository.findByToUserAndAccepted(user, null);
     }
 }

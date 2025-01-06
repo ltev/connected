@@ -32,6 +32,11 @@
 
                     <div class="col">                               <!-- main content column -->
 
+                        <form action="#" th:action="@{.}" method="post">
+                            <button type="submit" name="action" value="post-form" class="btn btn-primary mb-2">Create new post</button>
+                        </form>
+
+
                         <div class="accordion" id="ownPosts">      <!-- self posts -->
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
@@ -45,7 +50,7 @@
 
                                     <div class="card" th:each="post : ${ownPosts}">
                                         <div class="card-body">
-                                            <h5 class="card-title">Card title</h5>
+                                            <h5 class="card-title" th:text="${post.title}">Post title</h5>
                                             <h6 class="card-subtitle mb-2 text-body-secondary text-end"
                                                 th:text="${#temporals.format(post.created, 'dd-MMM-yyyy HH:mm', #locale)
                                                     + ' (' + post.visibility.displayName() + ')'}">Post info</h6>

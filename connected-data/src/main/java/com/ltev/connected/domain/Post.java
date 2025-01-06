@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
+import org.springframework.lang.NonNull;
 
 import java.time.ZonedDateTime;
 
@@ -55,6 +56,9 @@ public class Post {
     @Enumerated(EnumType.ORDINAL)
     private Visibility visibility;
 
+    private String title;
+
+    @NonNull
     private String text;
 
     @Override
@@ -64,6 +68,7 @@ public class Post {
                 ", created=" + created +
                 ", user=" + (user != null ? user.getUsername() : null) +
                 ", visibility=" + visibility +
+                ", title=" + title +
                 ", text='" + text + '\'' +
                 '}';
     }

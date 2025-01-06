@@ -18,15 +18,27 @@
         <!-- body -->
 
         <form th:object="${post}" action="#" th:action="@{.}" method="post">
-            <div class="mb-3">
-                <h4>New post:</h4>
+            <h4>New post:</h4>
+            <br>
 
-                <select class="form-select" th:field="*{visibility}">
+            <div class="mb-3">
+                <label for="visibility" class="form-label">Post visibility:</label>
+                <select class="form-select" th:field="*{visibility}" id="visibility">
                     <option th:each="visibility : ${T(com.ltev.connected.domain.Post.Visibility).values()}"
                             th:value="${visibility}" th:text="${visibility}"></option>
                 </select>
-                <textarea class="form-control" th:field="*{text}" rows="10"></textarea>
             </div>
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Post title: (optional)</label>
+                <input type="text" class="form-control" id="title" th:field="*{title}">
+            </div>
+
+            <div class="mb-3">
+                <label for="text" class="form-label">Post text:</label>
+                <textarea class="form-control" id="text" th:field="*{text}" rows="10"></textarea>
+            </div>
+
             <button type="submit" name="action" value="new-post" class="btn btn-primary mb-2">Post</button>
         </form>
 

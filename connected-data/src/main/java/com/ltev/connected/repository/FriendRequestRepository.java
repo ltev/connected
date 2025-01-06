@@ -20,5 +20,5 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
     @Query("update FriendRequest r set r.accepted = current_date where r.id = ?1")
     void acceptFriendRequest(Long requestId);
 
-    List<FriendRequest> findAllByToUserAndAccepted(User toUsers, LocalDate accepted);
+    List<FriendRequest> findByToUserAndAccepted(User toUsers, LocalDate accepted);
 }
