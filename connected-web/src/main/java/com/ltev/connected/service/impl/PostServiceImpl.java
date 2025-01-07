@@ -65,6 +65,7 @@ public class PostServiceImpl implements PostService {
                 User loggedUser = userDao.findByUsername(AuthenticationUtils.getAuthentication().getName()).get();
                 postInfo.setLoggedUser(loggedUser);
 
+                // check if friends
                 if (! loggedUser.equals(post.get().getUser())) {
                     Optional<FriendRequest> friendRequest = friendRequestService.getFriendRequest(loggedUser, post.get().getUser());
 
@@ -73,6 +74,10 @@ public class PostServiceImpl implements PostService {
                         postInfo.setFriends(true);
                     }
                 }
+
+                // check if like
+                Optional<Like> like = likeRepository.findById(new Like.Id(post.get(), loggedUser));
+                like.ifPresent(l -> postInfo.setLikeValue(l.getValue()));
             }
         }
         return postInfo;
@@ -94,16 +99,28 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void saveLike(Long postId, Like.Value likeValue) {
+    public void saveOrRemoveLike(Long postId, Like.Value likeValue) {
         AuthenticationUtils.checkAuthenticationOrThrow();
 
         User user = userDao.findByUsername(AuthenticationUtils.getAuthentication().getName())
                 .orElseThrow(() -> new NoSuchElementException("No user"));
+        Like.Id likeId = new Like.Id(new Post(postId), user);
 
-        Like like = new Like();
-        like.setId(new Like.Id(new Post(postId), user));
-        like.setValue(likeValue);
+        Optional<Like> dbLike = likeRepository.findById(likeId);
 
-        likeRepository.save(like);
+        if (dbLike.isPresent()) {
+            Like like = dbLike.get();
+            if (dbLike.get().getValue() == likeValue) {
+                likeRepository.delete(like);
+            } else {
+                like.setValue(likeValue);
+                likeRepository.save(like);
+            }
+        } else {
+            Like like = new Like();
+            like.setId(likeId);
+            like.setValue(likeValue);
+            likeRepository.save(like);
+        }
     }
 }

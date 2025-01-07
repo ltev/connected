@@ -10,7 +10,7 @@
 <body>
 
 <!-- HEADER -->
-<div class="row" th:fragment="login-header">
+<div class="row mt-3" th:fragment="login-header">
 
     <div class="col text-left">
         <h3>Connected</h3>
@@ -68,21 +68,21 @@
 
         <form action="#" th:action="@{/}" method="post">
             <div class="btn-group" role="group">
-                <button type="submit" class="btn btn-outline-primary"
+                <button type="submit" class="btn btn-outline-primary btn-sm" th:classappend="${activeLikeButton} == 2 ? 'active btn-success'"
                         name="likeValue" th:value="${T(com.ltev.connected.domain.Like.Value).LIKE}">Like</button>
-                <button type="submit" class="btn btn-outline-primary"
+                <button type="submit" class="btn btn-outline-primary btn-sm" th:classappend="${activeLikeButton} == 1 ? 'active btn-success'"
                         name="likeValue" th:value="${T(com.ltev.connected.domain.Like.Value).INDIFFERENCE}">+/-</button>
-                <button type="submit" class="btn btn-outline-primary"
+                <button type="submit" class="btn btn-outline-primary btn-sm" th:classappend="${activeLikeButton} == 0 ? 'active btn-success'"
                         name="likeValue" th:value="${T(com.ltev.connected.domain.Like.Value).DISLIKE}">Dislike</button>
 
             </div>
 
+            <a th:if="${includePostLink} == true" href="#"
+               th:href="@{/post/} + ${post.id}" class="card-link"
+               th:text="'Comments (' + ${post.numComments} + ')'">Comments</a>
+
             <input type="hidden" name="postId" th:value="${post.id}">
         </form>
-
-        <a th:if="${includePostLink} == true"
-           href="#"  th:href="@{/post/} + ${post.id}" class="card-link"
-           th:text="'Comments (' + ${post.numComments} + ')'">Comments</a>
     </div>
 </div>
 

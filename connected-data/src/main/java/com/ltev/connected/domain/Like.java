@@ -14,9 +14,9 @@ public class Like {
      * ORDER should not be changed! Ordinals are used in for storing in DB
      */
     public static enum Value {
-        LIKE,
+        DISLIKE,
         INDIFFERENCE,
-        DISLIKE
+        LIKE
     }
 
     @NoArgsConstructor

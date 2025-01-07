@@ -15,5 +15,5 @@ public interface PostService {
 
     void saveComment(Long postId, String comment, Long loggedUserId);
 
-    void saveLike(Long postId, Like.Value likeValue);
+    void saveOrRemoveLike(Long postId, Like.Value likeValue);
 }

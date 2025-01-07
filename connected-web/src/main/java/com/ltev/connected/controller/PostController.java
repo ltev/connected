@@ -44,6 +44,9 @@ public class PostController {
                 model.addAttribute("post", post);
                 if (postInfo.getLoggedUser() != null) {
                     model.addAttribute("loggedUserId", postInfo.getLoggedUser().getId());
+                    if (postInfo.getLikeValue() != null) {
+                        model.addAttribute("activeLikeButton", postInfo.getLikeValue().ordinal());
+                    }
                 }
                 return "post/show-post";
             }
@@ -60,8 +63,8 @@ public class PostController {
     }
 
     @PostMapping(params = "likeValue")
-    public String saveLike(Long postId, Like.Value likeValue, HttpServletRequest  request) {
-        postService.saveLike(postId, likeValue);
+    public String saveOrRemoveLike(Long postId, Like.Value likeValue, HttpServletRequest  request) {
+        postService.saveOrRemoveLike(postId, likeValue);
         return "redirect:" + request.getHeader("Referer");
     }
 }
