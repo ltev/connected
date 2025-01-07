@@ -71,6 +71,8 @@ public class Post {
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     private List<Comment> comments;
 
+    private long numComments;
+
     @Override
     public String toString() {
         return "Post{" +

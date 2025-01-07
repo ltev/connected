@@ -26,7 +26,6 @@ public class PostServiceImpl implements PostService {
     private PostDao postDao;
     private UserDao userDao;
     private FriendRequestService friendRequestService;
-
     private CommentRepository commentRepository;
 
     @Override
@@ -95,5 +94,8 @@ public class PostServiceImpl implements PostService {
         comment.setText(commentText);
 
         commentRepository.save(comment);
+
+        // update comments count
+        postDao.increaseNumCommentsByOne(postId);
     }
 }

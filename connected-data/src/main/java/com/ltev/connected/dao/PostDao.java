@@ -17,4 +17,6 @@ public interface PostDao {
     List<Post> findPosts(Long userId, Post.Visibility visibility);
 
     List<Post> findPosts(User user, List<Post.Visibility> visibilities);
+
+    void increaseNumCommentsByOne(Long postId);
 }

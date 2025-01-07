@@ -37,7 +37,7 @@ public class PostDaoImpl implements PostDao {
     @Override
     public List<Post> findFriendsPosts(Long userId) {
         String sql = """
-                select p.id as post_id, p.created, p.visibility, p.title, p.text, u.id as user_id, u.username 
+                select p.id as post_id, p.created, p.visibility, p.title, p.text, p.num_comments, u.id as user_id, u.username 
                 from posts p
                 join users u on u.id = user_id
                 where user_id in (
@@ -58,11 +58,12 @@ public class PostDaoImpl implements PostDao {
 
                         Post post = new Post();
                         post.setUser(user);
-                        post.setId(rs.getLong("post_id"));
                         post.setCreated(rs.getTimestamp("created").toInstant().atZone(ZoneId.systemDefault()));
+                        post.setVisibility(Post.Visibility.ofOrdinal(rs.getByte("visibility")));
+                        post.setId(rs.getLong("post_id"));
                         post.setTitle(rs.getString("title"));
                         post.setText(rs.getString("text"));
-                        post.setVisibility(Post.Visibility.ofOrdinal(rs.getByte("visibility")));
+                        post.setNumComments(rs.getLong("num_comments"));
 
                         return post;
                     }, userId, userId);
@@ -76,6 +77,13 @@ public class PostDaoImpl implements PostDao {
     @Override
     public List<Post> findPosts(User user, List<Post.Visibility> visibilities) {
         return postRepository.findAllByUserAndVisibilityIn(user, visibilities);
+    }
+
+    @Override
+    public void increaseNumCommentsByOne(Long postId) {
+//        String sql = "update posts set num_comments = num_comments + 1 where id = ?";
+//        jdbcTemplate.update(sql, postId);
+        postRepository.increaseNumCommentsByOne(postId);
     }
 
     // == PRIVATE HELPER METHODS

@@ -1,0 +1,1 @@
+update posts p set p.num_comments = (select count(*) from comments where post_id = p.id);

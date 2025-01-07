@@ -1,0 +1,1 @@
+alter table posts add column num_comments bigint default 0;

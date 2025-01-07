@@ -55,7 +55,8 @@
                                                 th:text="${#temporals.format(post.created, 'dd-MMM-yyyy HH:mm', #locale)
                                                     + ' (' + post.visibility.displayName() + ')'}">Post info</h6>
                                             <p class="card-text" th:text="${post.text}">Text</p>
-                                            <a href="#" th:href="@{/post/} + ${post.id}" class="card-link">Comments</a>
+                                            <a href="#" th:href="@{/post/} + ${post.id}" class="card-link"
+                                                th:text="'Comments (' + ${post.numComments} + ')'">Comments</a>
                                         </div>
                                     </div>
 
@@ -82,7 +83,8 @@
                                                     + ' ' + post.user.username + ' (' + post.visibility.displayName() + ')'}">Post info</h6>
 
                                             <p class="card-text" th:text="${post.text}">Text</p>
-                                            <a href="#" th:href="@{/post/} + ${post.id}" class="card-link">Comments</a>
+                                            <a href="#" th:href="@{/post/} + ${post.id}" class="card-link"
+                                                th:text="'Comments (' + ${post.numComments} + ')'">Comments</a>
                                         </div>
                                     </div>
 
