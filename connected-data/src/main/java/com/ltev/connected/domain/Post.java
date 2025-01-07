@@ -20,7 +20,7 @@ import java.util.List;
 public class Post {
 
     /**
-     * ORDER should not be changed!
+     * ORDER should not be changed! Ordinals are used in for storing in DB
      */
     public enum Visibility {
         MYSELF,

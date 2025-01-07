@@ -1,8 +1,10 @@
 package com.ltev.connected.controller;
 
+import com.ltev.connected.domain.Like;
 import com.ltev.connected.domain.Post;
 import com.ltev.connected.service.PostService;
 import com.ltev.connected.service.support.PostInfo;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,5 +57,11 @@ public class PostController {
                               @RequestParam("commentText") String comment) {
         postService.saveComment(postId, comment, loggedUserId);
         return "redirect:/post/" + postId;
+    }
+
+    @PostMapping(params = "likeValue")
+    public String saveLike(Long postId, Like.Value likeValue, HttpServletRequest  request) {
+        postService.saveLike(postId, likeValue);
+        return "redirect:" + request.getHeader("Referer");
     }
 }

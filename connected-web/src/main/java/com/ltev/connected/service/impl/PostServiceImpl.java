@@ -2,11 +2,9 @@ package com.ltev.connected.service.impl;
 
 import com.ltev.connected.dao.PostDao;
 import com.ltev.connected.dao.UserDao;
-import com.ltev.connected.domain.Comment;
-import com.ltev.connected.domain.FriendRequest;
-import com.ltev.connected.domain.Post;
-import com.ltev.connected.domain.User;
+import com.ltev.connected.domain.*;
 import com.ltev.connected.repository.CommentRepository;
+import com.ltev.connected.repository.LikeRepository;
 import com.ltev.connected.service.FriendRequestService;
 import com.ltev.connected.service.PostService;
 import com.ltev.connected.service.support.PostInfo;
@@ -27,6 +25,8 @@ public class PostServiceImpl implements PostService {
     private UserDao userDao;
     private FriendRequestService friendRequestService;
     private CommentRepository commentRepository;
+
+    private LikeRepository likeRepository;
 
     @Override
     public void savePost(Post post) {
@@ -91,5 +91,19 @@ public class PostServiceImpl implements PostService {
 
         // update comments count
         postDao.increaseNumCommentsByOne(postId);
+    }
+
+    @Override
+    public void saveLike(Long postId, Like.Value likeValue) {
+        AuthenticationUtils.checkAuthenticationOrThrow();
+
+        User user = userDao.findByUsername(AuthenticationUtils.getAuthentication().getName())
+                .orElseThrow(() -> new NoSuchElementException("No user"));
+
+        Like like = new Like();
+        like.setId(new Like.Id(new Post(postId), user));
+        like.setValue(likeValue);
+
+        likeRepository.save(like);
     }
 }

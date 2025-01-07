@@ -66,7 +66,22 @@
                + ' ' + post.user.username + ' (' + post.visibility.displayName() + ')'}">Post info</h6>
         <p class="card-text" th:text="${post.text}">Text</p>
 
-        <a href="#" th:if="${includePostLink} == true" th:href="@{/post/} + ${post.id}" class="card-link"
+        <form action="#" th:action="@{/}" method="post">
+            <div class="btn-group" role="group">
+                <button type="submit" class="btn btn-outline-primary"
+                        name="likeValue" th:value="${T(com.ltev.connected.domain.Like.Value).LIKE}">Like</button>
+                <button type="submit" class="btn btn-outline-primary"
+                        name="likeValue" th:value="${T(com.ltev.connected.domain.Like.Value).INDIFFERENCE}">+/-</button>
+                <button type="submit" class="btn btn-outline-primary"
+                        name="likeValue" th:value="${T(com.ltev.connected.domain.Like.Value).DISLIKE}">Dislike</button>
+
+            </div>
+
+            <input type="hidden" name="postId" th:value="${post.id}">
+        </form>
+
+        <a th:if="${includePostLink} == true"
+           href="#"  th:href="@{/post/} + ${post.id}" class="card-link"
            th:text="'Comments (' + ${post.numComments} + ')'">Comments</a>
     </div>
 </div>
