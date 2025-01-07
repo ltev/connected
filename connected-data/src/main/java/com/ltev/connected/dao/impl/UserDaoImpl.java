@@ -112,6 +112,7 @@ public class UserDaoImpl implements UserDao {
                     ) p
                     on u.id = p.user_id
                 where u.username = ?""", inSql);
+
         Object[] parameters = new Object[visibilities.size() + 2];
         parameters[0] = username;
         parameters[parameters.length - 1] = username;

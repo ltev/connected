@@ -9,6 +9,7 @@ import org.hibernate.annotations.SourceType;
 import org.springframework.lang.NonNull;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,8 +28,19 @@ public class Post {
         LOGGED_USERS,
         EVERYONE;
 
+        private static int TOTAL_SIZE = 4;
+
         public static boolean atLeast(Visibility expected, Visibility actual) {
             return expected.ordinal() <= actual.ordinal();
+        }
+
+        public static List<Visibility> ofAtLeast(Visibility atLeast) {
+            int size = TOTAL_SIZE - atLeast.ordinal();
+            List<Visibility> list = new ArrayList<>(size);
+            for (byte i = (byte) atLeast.ordinal(); i < TOTAL_SIZE; i++) {
+                list.add(Visibility.ofOrdinal(i));
+            }
+            return list;
         }
 
         public String displayName() {

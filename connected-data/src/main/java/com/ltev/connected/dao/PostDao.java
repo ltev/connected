@@ -10,13 +10,13 @@ public interface PostDao {
 
     Optional<Post> findById(Long postId);
 
-    List<Post> findFriendsPosts(Long userId);
-
     void save(Post post);
 
     List<Post> findPosts(Long userId, Post.Visibility visibility);
 
     List<Post> findPosts(User user, List<Post.Visibility> visibilities);
+
+    List<Post> findFriendsPosts(String username, List<Post.Visibility> visibilities);
 
     void increaseNumCommentsByOne(Long postId);
 }

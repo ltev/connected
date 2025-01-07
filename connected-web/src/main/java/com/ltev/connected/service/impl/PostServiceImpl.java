@@ -45,13 +45,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> findFriendsPosts(String username) {
-        Long userId = userDao.findByUsername(username).get().getId();
-        return postDao.findFriendsPosts(userId);
-    }
-
-    @Override
-    public List<Post> findPosts(Long userId, Post.Visibility visibility) {
-        return postDao.findPosts(userId, visibility);
+         return postDao.findFriendsPosts(username, Post.Visibility.ofAtLeast(Post.Visibility.FRIENDS));
     }
 
     @Override
