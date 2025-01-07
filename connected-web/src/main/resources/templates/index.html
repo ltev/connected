@@ -11,7 +11,7 @@
 
     <div class="container">
 
-        <div th:insert="~{fragments/fragments :: login-header}"></div>        <!-- Login header -->
+        <div th:replace="~{fragments/fragments :: login-header}"></div>        <!-- Login header -->
 
         <div sec:authorize="isAnonymous()">                         <!-- body for not logged users -->
             <div class="mt-2">
@@ -26,7 +26,7 @@
 
                     <div class="col-2">                               <!-- left menu -->
 
-                        <div th:insert="~{fragments/fragments :: user-menu}"></div>
+                        <div th:replace="~{fragments/fragments :: user-menu}"></div>
 
                     </div>  <!-- left menu END -->
 
@@ -48,17 +48,7 @@
                             <div id="ownPostsCollapse" class="accordion-collapse collapse" data-bs-parent="#ownPosts">
                                 <div class="accordion-body d-grid gap-2">                        <!-- list own posts -->
 
-                                    <div class="card" th:each="post : ${ownPosts}">
-                                        <div class="card-body">
-                                            <h5 class="card-title" th:text="${post.title}">Post title</h5>
-                                            <h6 class="card-subtitle mb-2 text-body-secondary text-end"
-                                                th:text="${#temporals.format(post.created, 'dd-MMM-yyyy HH:mm', #locale)
-                                                    + ' (' + post.visibility.displayName() + ')'}">Post info</h6>
-                                            <p class="card-text" th:text="${post.text}">Text</p>
-                                            <a href="#" th:href="@{/post/} + ${post.id}" class="card-link"
-                                                th:text="'Comments (' + ${post.numComments} + ')'">Comments</a>
-                                        </div>
-                                    </div>
+                                    <div th:each="post : ${ownPosts}" th:insert="~{fragments/fragments :: post-with-comments-link}"></div>  <!-- post fragment -->
 
                                 </div>  <!-- list own posts accordion body END -->
                             </div>
@@ -75,18 +65,7 @@
                             <div id="friendsPostsCollapse" class="accordion-collapse collapse show" data-bs-parent="#friendsPosts">
                                 <div class="accordion-body d-grid gap-2">                        <!-- list friends posts -->
 
-                                    <div class="card" th:each="post : ${friendsPosts}">
-                                        <div class="card-body">
-                                            <h5 class="card-title" th:text="${post.title}">Post title</h5>
-                                            <h6 class="card-subtitle mb-2 text-body-secondary"
-                                                th:text="${#temporals.format(post.created, 'dd-MMM-yyyy HH:mm', #locale)
-                                                    + ' ' + post.user.username + ' (' + post.visibility.displayName() + ')'}">Post info</h6>
-
-                                            <p class="card-text" th:text="${post.text}">Text</p>
-                                            <a href="#" th:href="@{/post/} + ${post.id}" class="card-link"
-                                                th:text="'Comments (' + ${post.numComments} + ')'">Comments</a>
-                                        </div>
-                                    </div>
+                                    <div th:each="post : ${friendsPosts}" th:insert="~{fragments/fragments :: post-with-comments-link}"></div>  <!-- post fragment -->
 
                                 </div>  <!-- list friends posts accordion body END -->
                             </div>

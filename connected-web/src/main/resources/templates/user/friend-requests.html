@@ -26,7 +26,7 @@
 
                     <div class="col-2">                               <!-- left menu -->
 
-                        <div th:insert="~{fragments/fragments :: user-menu}"></div>
+                        <div th:replace="~{fragments/fragments :: user-menu}"></div>
 
                     </div>  <!-- left menu END -->
 
@@ -35,7 +35,9 @@
                         <h5>Friendship requests</h5>
 
                         <div th:each="request : ${friendRequests}">
-                            <p th:text="${request.fromUser.username}"></p>
+                            <a href="#" th:href="@{/profile/} + ${request.fromUser.username}">
+                                <p th:text="${request.fromUser.username}"></p>
+                            </a>
                         </div>
 
                     </div>          <!-- main content END -->
