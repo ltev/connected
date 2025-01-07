@@ -108,7 +108,10 @@ public class UserServiceImpl implements UserService {
 
             if (friendRequest.isPresent()) {
                 profileInfo.setFriendRequest(friendRequest.get());
-                acceptedVisibilities.add(Post.Visibility.FRIENDS);
+
+                if (friendRequest.get().isAccepted()) {
+                    acceptedVisibilities.add(Post.Visibility.FRIENDS);
+                }
             }
             foundPosts = postDao.findPosts(profileUser.get(), acceptedVisibilities);
             // User endProfileUser = userDao.findByUsernameAndVisibility(profileUsername, acceptedVisibilities).get();

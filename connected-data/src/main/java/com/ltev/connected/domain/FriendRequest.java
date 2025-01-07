@@ -66,6 +66,10 @@ public class FriendRequest implements Serializable {
         return status;
     }
 
+    public boolean isAccepted() {
+        return getStatus() == Status.ACCEPTED;
+    }
+
     // == PRIVATE HELPER METHODS ==
 
     private Status getStatus() {
