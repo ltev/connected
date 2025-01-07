@@ -24,11 +24,11 @@ public class PostDaoImpl implements PostDao {
     public static final String FIND_FRIENDS_IDS_BY_USERNAME_SQL = """
             select to_user_id
             from friend_requests
-            Where from_user_id = (select user_id from users where username = ?) and accepted is not null
+            Where from_user_id = (select id from users where username = ?) and accepted is not null
             UNION
             select from_user_id
             from friend_requests
-            Where to_user_id = (select user_id from users where username = ?) and accepted is not null""";
+            Where to_user_id = (select id from users where username = ?) and accepted is not null""";
 
     public static final String FIND_FRIENDS_POSTS_BY_USERNAME_AND_VISIBILITY_SQL = """
             select p.id as post_id, p.created, p.visibility, p.title, p.text, p.num_comments, u.id as user_id, u.username
