@@ -12,6 +12,8 @@ public interface PostService {
 
     List<Post> findFriendsPosts(String username);
 
+    List<PostInfo> findPostsInfo();
+
     List<PostInfo> findFriendsPostsInfo();
 
     Optional<PostInfo> getPostInfo(Long postId);

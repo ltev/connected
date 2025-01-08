@@ -107,6 +107,21 @@ public class PostDaoImpl implements PostDao {
     }
 
     @Override
+    public List<PostInfo> findPostsInfo(String username) {
+        String sql = """
+                select p.id as post_id, p.created, p.visibility, p.title, p.text, p.num_comments,
+                u.id as post_user_id, u.username as post_user_username, l.value as like_value,
+                	(select count(*) from likes where post_id = p.id and value = 0) as num_dislike,
+                	(select count(*) from likes where post_id = p.id and value = 1) as num_indifference,
+                	(select count(*) from likes where post_id = p.id and value = 2) as num_like
+                from posts p
+                join users u on u.id = p.user_id
+                left join likes l on l.post_id = p.id and l.user_id = (select id from users where username = ?)
+                where p.user_id = (select id from users where username = ?)""";
+        return jdbcTemplate.query(sql, new PostInfoRowMapper(false), username, username);
+    }
+
+    @Override
     public List<PostInfo> findFriendsPostsInfo(String username) {
         String sql = """
                 select p.id as post_id, p.created, p.visibility, p.title, p.text, p.num_comments, 

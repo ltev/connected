@@ -21,6 +21,8 @@ public interface PostDao {
 
     Optional<PostInfo> findPostInfo(Long postId, String username);
 
+    List<PostInfo> findPostsInfo(String username);
+
     List<PostInfo> findFriendsPostsInfo(String username);
 
     void increaseNumCommentsByOne(Long postId);

@@ -25,6 +25,6 @@ public class PostInfo {
     }
 
     public boolean isSelfPost() {
-        return loggedUser.equals(post.getUser());
+        return post.getUser().equals(loggedUser);
     }
 }

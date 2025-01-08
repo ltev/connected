@@ -50,10 +50,17 @@ public class PostServiceImpl implements PostService {
          return postDao.findFriendsPosts(username, Post.Visibility.ofAtLeast(Post.Visibility.FRIENDS));
     }
 
+    @Override
+    public List<PostInfo> findPostsInfo() {
+       AuthenticationUtils.checkAuthenticationOrThrow();
+
+       return postDao.findPostsInfo(AuthenticationUtils.getUsername());
+    }
 
     @Override
     public List<PostInfo> findFriendsPostsInfo() {
         AuthenticationUtils.checkAuthenticationOrThrow();
+
         return postDao.findFriendsPostsInfo(AuthenticationUtils.getUsername());
     }
 
@@ -63,11 +70,11 @@ public class PostServiceImpl implements PostService {
 
         Optional<PostInfo> postInfo = postDao.findPostInfo(postId, AuthenticationUtils.getUsername());
 
-        if (postInfo.isPresent()) {
+        if (postInfo.isPresent() && !postInfo.get().isSelfPost()) {
             Optional<FriendRequest> friendRequest = friendRequestService.getFriendRequest(
                     userDao.findByUsername(AuthenticationUtils.getUsername()).get(),
                     postRepository.findById(postId).get().getUser());
-            postInfo.get().setFriends(friendRequest.get().isAccepted());
+            friendRequest.ifPresent(request -> postInfo.get().setFriends(request.isAccepted()));
         }
         return postInfo;
 

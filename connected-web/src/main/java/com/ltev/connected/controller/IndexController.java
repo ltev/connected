@@ -23,8 +23,8 @@ public class IndexController {
     public String index(Model model, Authentication authentication) {
 
         if (authentication != null) {
-            User user = userService.findByUsername(authentication.getName()).get();
-            model.addAttribute("ownPosts", user.getPosts());
+            List<PostInfo> ownPostsInfo = postService.findPostsInfo();
+            model.addAttribute("ownPostsInfo", ownPostsInfo);
 
             // boolean isInitialized = Hibernate.isInitialized(user.getPosts());
 
