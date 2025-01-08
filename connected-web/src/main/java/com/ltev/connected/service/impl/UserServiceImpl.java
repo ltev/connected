@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
     public void acceptFriendRequest(Long requestId) {
         AuthenticationUtils.checkAuthenticationOrThrow();
 
-        friendRequestService.acceptFriendRequest(requestId);
+        friendRequestService.acceptFriendRequest(requestId, AuthenticationUtils.getUsername());
     }
 
     @Override

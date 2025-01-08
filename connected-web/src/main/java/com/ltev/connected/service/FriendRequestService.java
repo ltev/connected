@@ -13,7 +13,7 @@ public interface FriendRequestService {
 
     Optional<FriendRequest> getFriendRequest(User user1, User user2);
 
-    void acceptFriendRequest(Long requestId);
+    void acceptFriendRequest(Long requestId, String loggedUser);
 
     List<FriendRequest> findAllByToUserNotAccepted(User user);
 

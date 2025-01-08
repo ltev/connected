@@ -1,5 +1,6 @@
 package com.ltev.connected.controller;
 
+import static com.ltev.connected.controller.support.ControllerSupport.redirectToLastUrl;
 import com.ltev.connected.domain.Like;
 import com.ltev.connected.domain.Post;
 import com.ltev.connected.dto.PostInfo;
@@ -56,6 +57,6 @@ public class PostController {
     @PostMapping(params = "likeValue")
     public String saveOrRemoveLike(Long postId, Like.Value likeValue, HttpServletRequest request) {
         postService.saveOrRemoveLike(postId, likeValue);
-        return "redirect:" + request.getHeader("Referer");
+        return redirectToLastUrl(request);
     }
 }

@@ -37,8 +37,8 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     }
 
     @Override
-    public void acceptFriendRequest(Long requestId) {
-        friendRequestRepository.acceptFriendRequest(requestId);
+    public void acceptFriendRequest(Long requestId, String loggedUserName) {
+        friendRequestRepository.acceptFriendRequestByIdAndUsername(requestId, loggedUserName);
     }
 
     @Override

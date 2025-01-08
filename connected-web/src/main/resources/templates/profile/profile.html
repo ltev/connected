@@ -30,7 +30,7 @@
         <div class="col">                                       <!-- main content -->
             <div sec:authorize="isAuthenticated()">                     <!-- body for logged users -->
 
-                <form th:object="${profileInfo}" action="#" th:action="@{''}" method="post"> <!-- friend request buttons -->
+                <form th:object="${profileInfo}" action="#" th:action="@{/}" method="post"> <!-- friend request buttons -->
 
                     <input type="hidden" name="profileId" th:value="*{profileUser.id}">
 

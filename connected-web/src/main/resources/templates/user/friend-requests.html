@@ -34,18 +34,57 @@
 
                         <h5>Friendship requests received:</h5>
 
+                        <div th:if="${receivedFriendRequests.size} == 0">
+                            All requests that you have received have been accepted
+                            <hr>
+                        </div>
+
                         <div th:each="request : ${receivedFriendRequests}">
-                            <a href="#" th:href="@{/profile/} + ${request.fromUser.username}">
-                                <p th:text="${request.fromUser.username}"></p>
-                            </a>
+                            <table class="table">
+                                <tbody>
+                                <tr>
+                                    <td class="col-4">
+                                        <p th:text="${request.sent}"></p>
+                                    </td>
+                                    <td class="col-4">
+                                        <a href="#" th:href="@{/profile/} + ${request.fromUser.username}">
+                                            <p th:text="${request.fromUser.username}"></p>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="#" th:href="'/accept-' + ${request.id}">
+                                            <button class="btn btn-primary">Accept</button>
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
 
                         <h5>Friendship requests sent:</h5>
 
+                        <div th:if="${sentFriendRequests.size} == 0">
+                            All requests that you have sent have been accepted
+                        </div>
+
                         <div th:each="request : ${sentFriendRequests}">
-                            <a href="#" th:href="@{/profile/} + ${request.toUser.username}">
-                                <p th:text="${request.toUser.username}"></p>
-                            </a>
+                            <table class="table">
+                                <tbody>
+                                <tr>
+                                    <td class="col-4">
+                                        <p th:text="${request.sent}"></p>
+                                    </td>
+                                    <td class="col-4">
+                                        <a href="#" th:href="@{/profile/} + ${request.toUser.username}">
+                                            <p th:text="${request.toUser.username}"></p>
+                                        </a>
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
 
                     </div>          <!-- main content END -->

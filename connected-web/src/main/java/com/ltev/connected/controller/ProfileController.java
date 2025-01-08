@@ -39,16 +39,4 @@ public class ProfileController {
 
         return "profile/profile";
     }
-
-    @PostMapping(value = "/{username}", params = "action=send-friend-request")
-    public String sendFriendRequest(@PathVariable String username, Long profileId) {
-        userService.sendFriendRequest(profileId);
-        return "redirect:/profile/" + username;
-    }
-
-    @PostMapping(value = "/{username}", params = "action=accept-friend-request")
-    public String acceptFriendRequest(@PathVariable String username, Long friendRequestId) {
-        userService.acceptFriendRequest(friendRequestId);
-        return "redirect:/profile/" + username;
-    }
 }
