@@ -5,6 +5,7 @@ import com.ltev.connected.domain.User;
 import com.ltev.connected.service.support.ProfileInfo;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface UserService {
@@ -22,6 +23,10 @@ public interface UserService {
     List<User> findAllFriends();
 
     List<FriendRequest> findAllReceivedNotAcceptedFriendshipRequests();
+
+    List<FriendRequest> findAllSentNotAcceptedFriendshipRequests();
+
+    Map<FriendRequest.Status, List<FriendRequest>> findAllReceivedAndSentNotAcceptedFriendshipRequests();
 
     void createNewUser(String username, String password);
 

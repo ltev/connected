@@ -14,10 +14,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -77,7 +74,23 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = AuthenticationUtils.checkAuthenticationOrThrow();
 
         User user = userDao.findByUsername(authentication.getName()).get();
-        return friendRequestService.findAllByToUserAndAccepted(user);
+        return friendRequestService.findAllByToUserNotAccepted(user);
+    }
+
+    @Override
+    public List<FriendRequest> findAllSentNotAcceptedFriendshipRequests() {
+        Authentication authentication = AuthenticationUtils.checkAuthenticationOrThrow();
+
+        User user = userDao.findByUsername(authentication.getName()).get();
+        return friendRequestService.findAllByFromUserNotAccepted(user);
+    }
+
+    @Override
+    public Map<FriendRequest.Status, List<FriendRequest>> findAllReceivedAndSentNotAcceptedFriendshipRequests() {
+        Authentication authentication = AuthenticationUtils.checkAuthenticationOrThrow();
+
+        User user = userDao.findByUsername(authentication.getName()).get();
+        return friendRequestService.findAllReceivedAndSentNotAccepted(user);
     }
 
     @Override

@@ -32,11 +32,19 @@
 
                     <div class="col">                               <!-- main content -->
 
-                        <h5>Friendship requests</h5>
+                        <h5>Friendship requests received:</h5>
 
-                        <div th:each="request : ${friendRequests}">
+                        <div th:each="request : ${receivedFriendRequests}">
                             <a href="#" th:href="@{/profile/} + ${request.fromUser.username}">
                                 <p th:text="${request.fromUser.username}"></p>
+                            </a>
+                        </div>
+
+                        <h5>Friendship requests sent:</h5>
+
+                        <div th:each="request : ${sentFriendRequests}">
+                            <a href="#" th:href="@{/profile/} + ${request.toUser.username}">
+                                <p th:text="${request.toUser.username}"></p>
                             </a>
                         </div>
 

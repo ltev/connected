@@ -4,11 +4,12 @@ import com.ltev.connected.domain.FriendRequest;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.repository.FriendRequestRepository;
 import com.ltev.connected.service.FriendRequestService;
-import com.ltev.connected.utils.AuthenticationUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -41,8 +42,21 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     }
 
     @Override
-    public List<FriendRequest> findAllByToUserAndAccepted(User user) {
+    public List<FriendRequest> findAllByToUserNotAccepted(User user) {
         return friendRequestRepository.findByToUserAndAccepted(user, null);
+    }
+
+    @Override
+    public List<FriendRequest> findAllByFromUserNotAccepted(User user) {
+        return friendRequestRepository.findByFromUserAndAccepted(user, null);
+    }
+
+    @Override
+    public Map<FriendRequest.Status, List<FriendRequest>> findAllReceivedAndSentNotAccepted(User user) {
+        Map<FriendRequest.Status, List<FriendRequest>> map = new HashMap<>(2);
+        map.put(FriendRequest.Status.RECEIVED, findAllByToUserNotAccepted(user));
+        map.put(FriendRequest.Status.SENT, findAllByFromUserNotAccepted(user));
+        return map;
     }
 
     @Override

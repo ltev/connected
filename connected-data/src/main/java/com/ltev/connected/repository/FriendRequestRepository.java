@@ -21,4 +21,6 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
     void acceptFriendRequest(Long requestId);
 
     List<FriendRequest> findByToUserAndAccepted(User toUsers, LocalDate accepted);
+
+    List<FriendRequest> findByFromUserAndAccepted(User fromUser, LocalDate accepted);
 }
