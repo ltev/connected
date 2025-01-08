@@ -18,7 +18,7 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
     @Transactional
     @Modifying
     @Query("update FriendRequest r set r.accepted = current_date " +
-            "where r.id = ?1 and r.toUser.username = ?2")
+            "where r.accepted is null and r.id = ?1 and r.toUser.username = ?2")
     void acceptFriendRequestByIdAndUsername(Long requestId, String username);
 
     List<FriendRequest> findByToUserAndAccepted(User toUsers, LocalDate accepted);
