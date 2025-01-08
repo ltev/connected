@@ -1,4 +1,4 @@
-package com.ltev.connected.service.support;
+package com.ltev.connected.dto;
 
 import com.ltev.connected.domain.Like;
 import com.ltev.connected.domain.Post;
@@ -16,6 +16,9 @@ public class PostInfo {
     private Post post;
     private boolean friends;
     private Like.Value likeValue;
+    private int numLikes;
+    private int numDislikes;
+    private int numIndifferences;
 
     public boolean isUserLogged() {
         return loggedUser != null;

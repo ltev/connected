@@ -1,11 +1,10 @@
 package com.ltev.connected.controller;
 
-import com.ltev.connected.domain.Post;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.service.PostService;
 import com.ltev.connected.service.impl.UserServiceImpl;
+import com.ltev.connected.dto.PostInfo;
 import lombok.AllArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,8 +28,8 @@ public class IndexController {
 
             // boolean isInitialized = Hibernate.isInitialized(user.getPosts());
 
-            List<Post> friendsPosts = postService.findFriendsPosts(authentication.getName());
-            model.addAttribute("friendsPosts", friendsPosts);
+            List<PostInfo> friendsPostsInfo = postService.findFriendsPostsInfo();
+            model.addAttribute("friendsPostsInfo", friendsPostsInfo);
             model.addAttribute("activeButton", "mainPage");
         }
         return "index";

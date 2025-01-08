@@ -48,8 +48,8 @@
                             <div id="ownPostsCollapse" class="accordion-collapse collapse" data-bs-parent="#ownPosts">
                                 <div class="accordion-body d-grid gap-2">                        <!-- list own posts -->
 
-                                    <div th:each="post : ${ownPosts}" th:insert="~{fragments/fragments :: post-with-comments-link}"></div>  <!-- post fragment -->
-
+             <!--                       <div th:each="post : ${ownPosts}" th:insert="~{fragments/fragments :: post-with-comments-link}"></div>  <!-- post fragment -->
+-->
                                 </div>  <!-- list own posts accordion body END -->
                             </div>
                         </div>      <!-- self posts END -->
@@ -65,7 +65,7 @@
                             <div id="friendsPostsCollapse" class="accordion-collapse collapse show" data-bs-parent="#friendsPosts">
                                 <div class="accordion-body d-grid gap-2">                        <!-- list friends posts -->
 
-                                    <div th:each="post : ${friendsPosts}" th:insert="~{fragments/fragments :: post-with-comments-link}"></div>  <!-- post fragment -->
+                                    <div th:each="postInfo : ${friendsPostsInfo}" th:insert="~{fragments/fragments :: post-with-comments-link}"></div>  <!-- post fragment -->
 
                                 </div>  <!-- list friends posts accordion body END -->
                             </div>

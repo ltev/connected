@@ -1,8 +1,10 @@
 package com.ltev.connected.dao.impl;
 
 import com.ltev.connected.dao.PostDao;
+import com.ltev.connected.dao.impl.helper.PostInfoRowMapper;
 import com.ltev.connected.domain.Post;
 import com.ltev.connected.domain.User;
+import com.ltev.connected.dto.PostInfo;
 import com.ltev.connected.repository.PostRepository;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.AllArgsConstructor;
@@ -86,6 +88,45 @@ public class PostDaoImpl implements PostDao {
 
                     return post;
                 }, parameters);
+    }
+
+    @Override
+    public Optional<PostInfo> findPostInfo(Long postId, String username) {
+        String sql = """
+                select p.id as post_id, p.created, p.visibility, p.title, p.text, p.num_comments,
+                	u.id as post_user_id, u.username as post_user_username,
+                    (select id from users where username = ?) as user_id, 'ltev' as username, l.value as like_value,
+                	(select count(*) from likes where post_id = p.id and value = 0) as num_dislike,
+                	(select count(*) from likes where post_id = p.id and value = 1) as num_indifference,
+                	(select count(*) from likes where post_id = p.id and value = 2) as num_like
+                from posts p
+                join users u on u.id = p.user_id
+                left join likes l on l.post_id = p.id and l.user_id = (select id from users where username = ?)
+                where p.id = ?""";
+        return Optional.ofNullable(jdbcTemplate.queryForObject(sql, new PostInfoRowMapper(true), username, username, postId));
+    }
+
+    @Override
+    public List<PostInfo> findFriendsPostsInfo(String username) {
+        String sql = """
+                select p.id as post_id, p.created, p.visibility, p.title, p.text, p.num_comments, 
+                u.id as post_user_id, u.username as post_user_username, l.value as like_value,
+                	(select count(*) from likes where post_id = p.id and value = 0) as num_dislike,
+                	(select count(*) from likes where post_id = p.id and value = 1) as num_indifference,
+                	(select count(*) from likes where post_id = p.id and value = 2) as num_like
+                from posts p
+                join users u on u.id = p.user_id
+                left join likes l on l.post_id = p.id and l.user_id = (select id from users where username = ?)
+                where p.user_id in (
+                	select to_user_id
+                	from friend_requests
+                	Where from_user_id = (select id from users where username = ?) and accepted is not null
+                	UNION
+                	select from_user_id
+                	from friend_requests
+                	where to_user_id = (select id from users where username = ?) and accepted is not null
+                ) and visibility in (1, 2, 3)""";
+        return jdbcTemplate.query(sql, new PostInfoRowMapper(false), username, username, username);
     }
 
     @Override

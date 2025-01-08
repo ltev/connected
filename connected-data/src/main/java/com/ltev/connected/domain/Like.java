@@ -16,7 +16,16 @@ public class Like {
     public static enum Value {
         DISLIKE,
         INDIFFERENCE,
-        LIKE
+        LIKE;
+
+        public static Value ofOrdinal(Integer likeOrdinal) {
+            for (Value temp : Value.values()) {
+                if (temp.ordinal() == likeOrdinal) {
+                    return temp;
+                }
+            }
+            throw new RuntimeException("No Like.Value of ordinal: " + likeOrdinal);
+        }
     }
 
     @NoArgsConstructor

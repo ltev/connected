@@ -20,4 +20,8 @@ public class AuthenticationUtils {
         }
         return getAuthentication();
     }
+
+    public static String getUsername() {
+        return getAuthentication().getName();
+    }
 }

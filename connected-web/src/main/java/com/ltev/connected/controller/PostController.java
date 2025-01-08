@@ -3,12 +3,14 @@ package com.ltev.connected.controller;
 import com.ltev.connected.domain.Like;
 import com.ltev.connected.domain.Post;
 import com.ltev.connected.service.PostService;
-import com.ltev.connected.service.support.PostInfo;
+import com.ltev.connected.dto.PostInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
@@ -31,22 +33,21 @@ public class PostController {
 
     @GetMapping("post/{id}")
     public String showPost(@PathVariable Long id, Model model) {
-        PostInfo postInfo = postService.getPostInfo(id);
-        Post post = postInfo.getPost();
+        Optional<PostInfo> postInfoOptional = postService.getPostInfo(id);
+        System.out.println("friends: " + postInfoOptional.get());
+        if (postInfoOptional.isPresent()) {
+            PostInfo postInfo = postInfoOptional.get();
+            Post post = postInfo.getPost();
 
-        if (post != null) {
             if (post.getVisibility() == Post.Visibility.EVERYONE
                 || (postInfo.isUserLogged()
                     && (postInfo.isSelfPost()
                         || (postInfo.isFriends() && Post.Visibility.atLeast(Post.Visibility.FRIENDS, post.getVisibility())) // friends
                         || Post.Visibility.atLeast(Post.Visibility.LOGGED_USERS, post.getVisibility())  // not friends
             ))) {
-                model.addAttribute("post", post);
+                model.addAttribute("postInfo", postInfo);
                 if (postInfo.getLoggedUser() != null) {
                     model.addAttribute("loggedUserId", postInfo.getLoggedUser().getId());
-                    if (postInfo.getLikeValue() != null) {
-                        model.addAttribute("activeLikeButton", postInfo.getLikeValue().ordinal());
-                    }
                 }
                 return "post/show-post";
             }

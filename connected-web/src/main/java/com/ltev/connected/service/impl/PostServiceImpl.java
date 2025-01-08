@@ -5,9 +5,10 @@ import com.ltev.connected.dao.UserDao;
 import com.ltev.connected.domain.*;
 import com.ltev.connected.repository.CommentRepository;
 import com.ltev.connected.repository.LikeRepository;
+import com.ltev.connected.repository.PostRepository;
 import com.ltev.connected.service.FriendRequestService;
 import com.ltev.connected.service.PostService;
-import com.ltev.connected.service.support.PostInfo;
+import com.ltev.connected.dto.PostInfo;
 import com.ltev.connected.utils.AuthenticationUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -27,6 +28,7 @@ public class PostServiceImpl implements PostService {
     private CommentRepository commentRepository;
 
     private LikeRepository likeRepository;
+    private final PostRepository postRepository;
 
     @Override
     public void savePost(Post post) {
@@ -48,39 +50,55 @@ public class PostServiceImpl implements PostService {
          return postDao.findFriendsPosts(username, Post.Visibility.ofAtLeast(Post.Visibility.FRIENDS));
     }
 
+
     @Override
-    public PostInfo getPostInfo(Long postId) {
-        PostInfo postInfo = new PostInfo();
-        Optional<Post> post = postDao.findById(postId);
+    public List<PostInfo> findFriendsPostsInfo() {
+        AuthenticationUtils.checkAuthenticationOrThrow();
+        return postDao.findFriendsPostsInfo(AuthenticationUtils.getUsername());
+    }
 
-        if (post.isPresent()) {
-            postInfo.setPost(post.get());
+    @Override
+    public Optional<PostInfo> getPostInfo(Long postId) {
+        AuthenticationUtils.checkAuthenticationOrThrow();
 
-            if (AuthenticationUtils.isAuthenticated()) {
-                /*
-                When post.user -> fetch.LAZY, loggedUser must be fetched before post, otherwise if loggedUser will have
-                the same id as post.user, then loggedUser class will be of the same type as post.user -> HibernateProxy,
-                when the order is reverse both will be of class User
-                 */
-                User loggedUser = userDao.findByUsername(AuthenticationUtils.getAuthentication().getName()).get();
-                postInfo.setLoggedUser(loggedUser);
+        Optional<PostInfo> postInfo = postDao.findPostInfo(postId, AuthenticationUtils.getUsername());
 
-                // check if friends
-                if (! loggedUser.equals(post.get().getUser())) {
-                    Optional<FriendRequest> friendRequest = friendRequestService.getFriendRequest(loggedUser, post.get().getUser());
-
-                    if (friendRequest.isPresent()
-                            && friendRequest.get().getStatus(loggedUser.getUsername()) == FriendRequest.Status.ACCEPTED) {
-                        postInfo.setFriends(true);
-                    }
-                }
-
-                // check if like
-                Optional<Like> like = likeRepository.findById(new Like.Id(post.get(), loggedUser));
-                like.ifPresent(l -> postInfo.setLikeValue(l.getValue()));
-            }
+        if (postInfo.isPresent()) {
+            Optional<FriendRequest> friendRequest = friendRequestService.getFriendRequest(
+                    userDao.findByUsername(AuthenticationUtils.getUsername()).get(),
+                    postRepository.findById(postId).get().getUser());
+            postInfo.get().setFriends(friendRequest.get().isAccepted());
         }
         return postInfo;
+
+//        if (post.isPresent()) {
+//            postInfo.setPost(post.get());
+//
+//            if (AuthenticationUtils.isAuthenticated()) {
+//                /*
+//                When post.user -> fetch.LAZY, loggedUser must be fetched before post, otherwise if loggedUser will have
+//                the same id as post.user, then loggedUser class will be of the same type as post.user -> HibernateProxy,
+//                when the order is reverse both will be of class User
+//                 */
+//                User loggedUser = userDao.findByUsername(AuthenticationUtils.getAuthentication().getName()).get();
+//                postInfo.setLoggedUser(loggedUser);
+//
+//                // check if friends
+//                if (! loggedUser.equals(post.get().getUser())) {
+//                    Optional<FriendRequest> friendRequest = friendRequestService.getFriendRequest(loggedUser, post.get().getUser());
+//
+//                    if (friendRequest.isPresent()
+//                            && friendRequest.get().getStatus(loggedUser.getUsername()) == FriendRequest.Status.ACCEPTED) {
+//                        postInfo.setFriends(true);
+//                    }
+//                }
+//
+//                // check if like
+//                Optional<Like> like = likeRepository.findById(new Like.Id(post.get(), loggedUser));
+//                like.ifPresent(l -> postInfo.setLikeValue(l.getValue()));
+//            }
+//        }
+//        return postInfo;
     }
 
     @Override
