@@ -62,9 +62,9 @@
                 </div>
                 <div id="ownPostsCollapse" class="accordion-collapse collapse show" data-bs-parent="#ownPosts">
                     <div class="accordion-body d-grid gap-2">                        <!-- list own posts -->
-<!--
-                        <div th:each="post : ${profileInfo.profileUser.posts}" th:insert="~{fragments/fragments :: post-with-comments-link}"></div>  <!-- post fragment -->
--->
+
+                        <div th:each="postInfo : ${profileInfo.postsInfo}" th:insert="~{fragments/fragments :: post-with-comments-link}"></div>  <!-- post fragment -->
+
                     </div>  <!-- list own posts accordion body END -->
                 </div>
             </div>      <!-- self posts END -->

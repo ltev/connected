@@ -15,4 +15,6 @@ public interface FriendRequestService {
     void acceptFriendRequest(Long requestId);
 
     List<FriendRequest> findAllByToUserAndAccepted(User user);
+
+    boolean areFriends(User user1, User user2);
 }

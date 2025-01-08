@@ -4,6 +4,7 @@ import com.ltev.connected.domain.FriendRequest;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.repository.FriendRequestRepository;
 import com.ltev.connected.service.FriendRequestService;
+import com.ltev.connected.utils.AuthenticationUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -42,5 +43,11 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     @Override
     public List<FriendRequest> findAllByToUserAndAccepted(User user) {
         return friendRequestRepository.findByToUserAndAccepted(user, null);
+    }
+
+    @Override
+    public boolean areFriends(User user1, User user2) {
+        Optional<FriendRequest> friendRequest = getFriendRequest(user1, user2);
+        return friendRequest.isPresent() && friendRequest.get().isAccepted();
     }
 }

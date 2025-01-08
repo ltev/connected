@@ -2,13 +2,15 @@ package com.ltev.connected.service.impl;
 
 import com.ltev.connected.dao.PostDao;
 import com.ltev.connected.dao.UserDao;
-import com.ltev.connected.domain.*;
+import com.ltev.connected.domain.Comment;
+import com.ltev.connected.domain.Like;
+import com.ltev.connected.domain.Post;
+import com.ltev.connected.domain.User;
+import com.ltev.connected.dto.PostInfo;
 import com.ltev.connected.repository.CommentRepository;
 import com.ltev.connected.repository.LikeRepository;
-import com.ltev.connected.repository.PostRepository;
 import com.ltev.connected.service.FriendRequestService;
 import com.ltev.connected.service.PostService;
-import com.ltev.connected.dto.PostInfo;
 import com.ltev.connected.utils.AuthenticationUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -26,9 +28,7 @@ public class PostServiceImpl implements PostService {
     private UserDao userDao;
     private FriendRequestService friendRequestService;
     private CommentRepository commentRepository;
-
     private LikeRepository likeRepository;
-    private final PostRepository postRepository;
 
     @Override
     public void savePost(Post post) {
@@ -39,7 +39,7 @@ public class PostServiceImpl implements PostService {
             // get user
             User user = userDao.findByUsername(authentication.getName())
                     .orElseThrow(() -> new NoSuchElementException("No user with username: " + authentication.getName())
-            );
+                    );
             post.setUser(user);
         }
         postDao.save(post);
@@ -47,14 +47,14 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> findFriendsPosts(String username) {
-         return postDao.findFriendsPosts(username, Post.Visibility.ofAtLeast(Post.Visibility.FRIENDS));
+        return postDao.findFriendsPosts(username, Post.Visibility.ofAtLeast(Post.Visibility.FRIENDS));
     }
 
     @Override
     public List<PostInfo> findPostsInfo() {
-       AuthenticationUtils.checkAuthenticationOrThrow();
+        AuthenticationUtils.checkAuthenticationOrThrow();
 
-       return postDao.findPostsInfo(AuthenticationUtils.getUsername());
+        return postDao.findPostsInfo(AuthenticationUtils.getUsername());
     }
 
     @Override
@@ -66,17 +66,31 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Optional<PostInfo> getPostInfo(Long postId) {
-        AuthenticationUtils.checkAuthenticationOrThrow();
+        Optional<PostInfo> postInfoOptional = postDao.findPostInfo(postId, AuthenticationUtils.getUsername());
 
-        Optional<PostInfo> postInfo = postDao.findPostInfo(postId, AuthenticationUtils.getUsername());
-
-        if (postInfo.isPresent() && !postInfo.get().isSelfPost()) {
-            Optional<FriendRequest> friendRequest = friendRequestService.getFriendRequest(
-                    userDao.findByUsername(AuthenticationUtils.getUsername()).get(),
-                    postRepository.findById(postId).get().getUser());
-            friendRequest.ifPresent(request -> postInfo.get().setFriends(request.isAccepted()));
+        if (postInfoOptional.isEmpty()
+                || (!AuthenticationUtils.isAuthenticated()
+                && postInfoOptional.get().getPost().getVisibility() != Post.Visibility.EVERYONE)) {
+            return Optional.empty();
         }
-        return postInfo;
+
+        // part for authenticated only
+        PostInfo postInfo = postInfoOptional.get();
+
+        if (postInfo.isSelfPost()
+                || Post.Visibility.atLeast(Post.Visibility.LOGGED_USERS, postInfo.getPost().getVisibility())
+                || (postInfo.getPost().getVisibility() == Post.Visibility.FRIENDS
+                        && friendRequestService.areFriends(
+                            userDao.findByUsername(AuthenticationUtils.getUsername()).get(),
+                            postInfo.getPost().getUser()))) {
+
+            // find comments
+            List<Comment> comments = postDao.findCommentsByPost(postId);
+            postInfo.getPost().setComments(comments);
+
+            return postInfoOptional;
+        }
+        return Optional.empty();
 
 //        if (post.isPresent()) {
 //            postInfo.setPost(post.get());

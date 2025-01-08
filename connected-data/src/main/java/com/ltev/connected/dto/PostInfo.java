@@ -14,7 +14,6 @@ public class PostInfo {
 
     private User loggedUser;
     private Post post;
-    private boolean friends;
     private Like.Value likeValue;
     private int numLikes;
     private int numDislikes;
