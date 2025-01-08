@@ -2,8 +2,8 @@ package com.ltev.connected.controller;
 
 import com.ltev.connected.domain.Like;
 import com.ltev.connected.domain.Post;
-import com.ltev.connected.service.PostService;
 import com.ltev.connected.dto.PostInfo;
+import com.ltev.connected.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -34,23 +34,13 @@ public class PostController {
     @GetMapping("post/{id}")
     public String showPost(@PathVariable Long id, Model model) {
         Optional<PostInfo> postInfoOptional = postService.getPostInfo(id);
-        System.out.println("friends: " + postInfoOptional.get());
-        if (postInfoOptional.isPresent()) {
-            PostInfo postInfo = postInfoOptional.get();
-            Post post = postInfo.getPost();
 
-            if (post.getVisibility() == Post.Visibility.EVERYONE
-                || (postInfo.isUserLogged()
-                    && (postInfo.isSelfPost()
-                        || (postInfo.isFriends() && Post.Visibility.atLeast(Post.Visibility.FRIENDS, post.getVisibility())) // friends
-                        || Post.Visibility.atLeast(Post.Visibility.LOGGED_USERS, post.getVisibility())  // not friends
-            ))) {
-                model.addAttribute("postInfo", postInfo);
-                if (postInfo.getLoggedUser() != null) {
-                    model.addAttribute("loggedUserId", postInfo.getLoggedUser().getId());
-                }
-                return "post/show-post";
+        if (postInfoOptional.isPresent()) {
+            model.addAttribute("postInfo", postInfoOptional.get());
+            if (postInfoOptional.get().getLoggedUser() != null) {
+                model.addAttribute("loggedUserId", postInfoOptional.get().getLoggedUser().getId());
             }
+            return "post/show-post";
         }
         return "redirect:/";
     }
@@ -64,7 +54,7 @@ public class PostController {
     }
 
     @PostMapping(params = "likeValue")
-    public String saveOrRemoveLike(Long postId, Like.Value likeValue, HttpServletRequest  request) {
+    public String saveOrRemoveLike(Long postId, Like.Value likeValue, HttpServletRequest request) {
         postService.saveOrRemoveLike(postId, likeValue);
         return "redirect:" + request.getHeader("Referer");
     }

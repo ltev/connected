@@ -57,7 +57,7 @@ public class FriendRequest implements Serializable {
 
     public Status getStatus(Long checkingUserId) {
         if (checkingUserId == null || (checkingUserId != fromUser.getId() && checkingUserId != toUser.getId())) {
-            throw new RuntimeException("Invalid checkingUserId.");
+            throw new RuntimeException("Invalid checkingUserId : " + checkingUserId);
         }
         Status status = getStatus();
         if (status == Status.SENT && checkingUserId == toUser.getId()) {

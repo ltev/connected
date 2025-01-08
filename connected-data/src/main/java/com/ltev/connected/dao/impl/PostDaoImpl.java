@@ -2,13 +2,16 @@ package com.ltev.connected.dao.impl;
 
 import com.ltev.connected.dao.PostDao;
 import com.ltev.connected.dao.impl.helper.PostInfoRowMapper;
+import com.ltev.connected.domain.Comment;
 import com.ltev.connected.domain.Post;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.dto.PostInfo;
+import com.ltev.connected.repository.CommentRepository;
 import com.ltev.connected.repository.PostRepository;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -40,9 +43,20 @@ public class PostDaoImpl implements PostDao {
             + FIND_FRIENDS_IDS_BY_USERNAME_SQL
             + ") and visibility in ";
 
+    private static final String FIND_ALL_POSTS_INFO_SQL = """
+            select p.id as post_id, p.created, p.visibility, p.title, p.text, p.num_comments,
+                	u.id as post_user_id, u.username as post_user_username,
+                    (select id from users where username = ?) as user_id, ? as username, l.value as like_value,
+                	(select count(*) from likes where post_id = p.id and value = 0) as num_dislike,
+                	(select count(*) from likes where post_id = p.id and value = 1) as num_indifference,
+                	(select count(*) from likes where post_id = p.id and value = 2) as num_like
+                from posts p
+                join users u on u.id = p.user_id
+                left join likes l on l.post_id = p.id and l.user_id = (select id from users where username = ?)""";
     private final PostRepository postRepository;
     private final EntityManagerFactory emf;
     private final JdbcTemplate jdbcTemplate;
+    private final CommentRepository commentRepository;
 
     @Override
     public void save(Post post) {
@@ -90,35 +104,58 @@ public class PostDaoImpl implements PostDao {
                 }, parameters);
     }
 
+    /**
+     * Find one post by its id
+     */
     @Override
-    public Optional<PostInfo> findPostInfo(Long postId, String username) {
-        String sql = """
-                select p.id as post_id, p.created, p.visibility, p.title, p.text, p.num_comments,
-                	u.id as post_user_id, u.username as post_user_username,
-                    (select id from users where username = ?) as user_id, 'ltev' as username, l.value as like_value,
-                	(select count(*) from likes where post_id = p.id and value = 0) as num_dislike,
-                	(select count(*) from likes where post_id = p.id and value = 1) as num_indifference,
-                	(select count(*) from likes where post_id = p.id and value = 2) as num_like
-                from posts p
-                join users u on u.id = p.user_id
-                left join likes l on l.post_id = p.id and l.user_id = (select id from users where username = ?)
-                where p.id = ?""";
-        return Optional.ofNullable(jdbcTemplate.queryForObject(sql, new PostInfoRowMapper(true), username, username, postId));
+    public Optional<PostInfo> findPostInfo(Long postId, String loggedUsername) {
+        String sql = FIND_ALL_POSTS_INFO_SQL
+                + " where p.id = ?";
+        try {
+            return Optional.of(jdbcTemplate.queryForObject(sql, new PostInfoRowMapper(true),
+                loggedUsername, loggedUsername, loggedUsername, postId));
+        } catch (EmptyResultDataAccessException ex) {
+            return Optional.empty();
+        }
     }
 
+    /**
+     * Find all posts whom author is 'username'
+     */
     @Override
     public List<PostInfo> findPostsInfo(String username) {
-        String sql = """
-                select p.id as post_id, p.created, p.visibility, p.title, p.text, p.num_comments,
-                u.id as post_user_id, u.username as post_user_username, l.value as like_value,
-                	(select count(*) from likes where post_id = p.id and value = 0) as num_dislike,
-                	(select count(*) from likes where post_id = p.id and value = 1) as num_indifference,
-                	(select count(*) from likes where post_id = p.id and value = 2) as num_like
-                from posts p
-                join users u on u.id = p.user_id
-                left join likes l on l.post_id = p.id and l.user_id = (select id from users where username = ?)
-                where p.user_id = (select id from users where username = ?)""";
-        return jdbcTemplate.query(sql, new PostInfoRowMapper(false), username, username);
+        String sql = FIND_ALL_POSTS_INFO_SQL
+                + " where p.user_id = (select id from users where username = ?)";
+        return jdbcTemplate.query(sql, new PostInfoRowMapper(false),
+                username, username, username, username);
+    }
+
+    /**
+     * Find all posts whom author is 'postUsername', and in visibility
+     * loggedUsername -> for checking posts like status
+     */
+    @Override
+    public List<PostInfo> findPostsInfo(String postUsername, List<Post.Visibility> visibilities, String loggedUsername) {
+        String visibilitiesSql = String.join(",", Collections.nCopies(visibilities.size(), "?"));
+
+        String sql = new StringBuilder()
+                .append(FIND_ALL_POSTS_INFO_SQL)
+                .append(" where p.user_id = (select id from users where username = ?)")
+                .append(" and p.visibility in (")
+                .append(visibilitiesSql)
+                .append(")")
+                .toString();
+
+        Object[] parameters = new Object[4 + visibilities.size()];
+        parameters[0] = loggedUsername;
+        parameters[1] = loggedUsername;
+        parameters[2] = loggedUsername;
+        parameters[3] = postUsername;
+        for (int i = 0; i < visibilities.size(); i++) {
+            parameters[4 + i] = visibilities.get(i).ordinal();
+        }
+
+        return jdbcTemplate.query(sql, new PostInfoRowMapper(false), parameters);
     }
 
     @Override
@@ -159,6 +196,11 @@ public class PostDaoImpl implements PostDao {
 //        String sql = "update posts set num_comments = num_comments + 1 where id = ?";
 //        jdbcTemplate.update(sql, postId);
         postRepository.increaseNumCommentsByOne(postId);
+    }
+
+    @Override
+    public List<Comment> findCommentsByPost(Long postId) {
+        return commentRepository.findByPost(new Post(postId));
     }
 
     // == PRIVATE HELPER METHODS

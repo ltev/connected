@@ -1,5 +1,6 @@
 package com.ltev.connected.dao;
 
+import com.ltev.connected.domain.Comment;
 import com.ltev.connected.domain.Post;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.dto.PostInfo;
@@ -19,11 +20,15 @@ public interface PostDao {
 
     List<Post> findFriendsPosts(String username, List<Post.Visibility> visibilities);
 
-    Optional<PostInfo> findPostInfo(Long postId, String username);
+    Optional<PostInfo> findPostInfo(Long postId, String loggedUsername);
 
     List<PostInfo> findPostsInfo(String username);
+
+    List<PostInfo> findPostsInfo(String postUsername, List<Post.Visibility> visibilities, String loggedUsername);
 
     List<PostInfo> findFriendsPostsInfo(String username);
 
     void increaseNumCommentsByOne(Long postId);
+
+    List<Comment> findCommentsByPost(Long postId);
 }
