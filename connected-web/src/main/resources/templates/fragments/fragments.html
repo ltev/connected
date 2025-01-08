@@ -9,7 +9,12 @@
 </head>
 <body>
 
+<!-- DATE TIME DISPLAY -->
+
+<span th:fragment="dateTimeDisplay(dateTime)" th:text="${#temporals.format(dateTime, 'dd-MMM-yyyy HH:mm', #locale)}">Date time display</span>
+
 <!-- HEADER -->
+
 <div class="row mt-3" th:fragment="login-header">
 
     <div class="col text-left">
@@ -62,9 +67,10 @@ postInfo object must be of type PostInfo
 
 <div class="card" th:fragment="post(includeCommentsLink)" th:object="${postInfo}">
     <div class="card-body">
+
         <h5 class="card-title" th:text="*{post.title}">Post title</h5>
         <h6 class="card-subtitle mb-2 text-body-secondary">
-            <span th:text="*{#temporals.format(post.created, 'dd-MMM-yyyy HH:mm', #locale)}"></span>
+            <span th:replace="fragments/fragments :: dateTimeDisplay(*{post.created})">Date time</span>
             <a href="#" th:href="@{/profile/} + *{post.user.username}"
                th:text="*{post.user.username}">
             </a>
