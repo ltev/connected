@@ -58,42 +58,46 @@
 
 <!-- POST -->
 
-<div class="card" th:fragment="post(includePostLink)">
+<div class="card" th:fragment="post(includeCommentsLink)" th:object="${postInfo}">
     <div class="card-body">
-        <h5 class="card-title" th:text="${postInfo.post.title}">Post title</h5>
-        <h6 class="card-subtitle mb-2 text-body-secondary"
-            th:text="${#temporals.format(postInfo.post.created, 'dd-MMM-yyyy HH:mm', #locale)
-               + ' ' + postInfo.post.user.username + ' (' + postInfo.post.visibility.displayName() + ')'}">Post info</h6>
-        <p class="card-text" th:text="${postInfo.post.text}">Text</p>
+        <h5 class="card-title" th:text="*{post.title}">Post title</h5>
+        <h6 class="card-subtitle mb-2 text-body-secondary">
+            <span th:text="*{#temporals.format(post.created, 'dd-MMM-yyyy HH:mm', #locale)}"></span>
+            <a href="#" th:href="@{/profile/} + *{post.user.username}"
+               th:text="*{post.user.username}">
+            </a>
+            <span th:text="' (' + *{post.visibility.displayName()} + ')'"></span>
+        </h6>
+        <p class="card-text" th:text="*{post.text}">Text</p>
 
         <div sec:authorize="isAuthenticated()">
             <form action="#" th:action="@{/}" method="post">
                 <div class="btn-group" role="group">
 
                     <button type="submit" class="btn btn-outline-primary btn-sm"
-                            th:classappend="${postInfo.likeValue} and ${postInfo.likeValue.ordinal == 2} ? 'active btn-success'"
-                            name="likeValue" th:value="${T(com.ltev.connected.domain.Like.Value).LIKE}"
-                            th:text="'Like (' + ${postInfo.numLikes} + ')'">Like</button>
+                            th:classappend="*{likeValue} and *{likeValue.ordinal == 2} ? 'active btn-success'"
+                            name="likeValue" th:value="*{T(com.ltev.connected.domain.Like.Value).LIKE}"
+                            th:text="'Like (' + *{numLikes} + ')'">Like</button>
 
                     <button type="submit" class="btn btn-outline-primary btn-sm"
-                            name="likeValue" th:value="${T(com.ltev.connected.domain.Like.Value).INDIFFERENCE}"
-                            th:classappend="${postInfo.likeValue} and ${postInfo.likeValue.ordinal == 1} ? 'active btn-success'"
-                            th:text="'+/- (' +  ${postInfo.numIndifferences} + ')'">+/-</button>
+                            name="likeValue" th:value="*{T(com.ltev.connected.domain.Like.Value).INDIFFERENCE}"
+                            th:classappend="*{likeValue} and *{likeValue.ordinal == 1} ? 'active btn-success'"
+                            th:text="'+/- (' +  *{numIndifferences} + ')'">+/-</button>
 
                     <button type="submit" class="btn btn-outline-primary btn-sm"
-                            name="likeValue" th:value="${T(com.ltev.connected.domain.Like.Value).DISLIKE}"
-                            th:classappend="${postInfo.likeValue} and ${postInfo.likeValue.ordinal == 0} ? 'active btn-success'"
-                            th:text="'+/- (' +  ${postInfo.numDislikes} + ')'">+/-</button>
+                            name="likeValue" th:value="*{T(com.ltev.connected.domain.Like.Value).DISLIKE}"
+                            th:classappend="*{likeValue} and *{likeValue.ordinal == 0} ? 'active btn-success'"
+                            th:text="'+/- (' +  *{numDislikes} + ')'">+/-</button>
 
                 </div>
 
-                <input type="hidden" name="postId" th:value="${postInfo.post.id}">
+                <input type="hidden" name="postId" th:value="*{post.id}">
             </form>
         </div>
 
-        <a th:if="${includePostLink} == true" href="#"
-           th:href="@{/post/} + ${postInfo.post.id}" class="card-link"
-           th:text="'Comments (' + ${postInfo.post.numComments} + ')'">Comments</a>
+        <a th:if="${includeCommentsLink} == true" href="#"
+           th:href="@{/post/} + *{post.id}" class="card-link"
+           th:text="'Comments (' + *{post.numComments} + ')'">Comments</a>
     </div>
 </div>
 
