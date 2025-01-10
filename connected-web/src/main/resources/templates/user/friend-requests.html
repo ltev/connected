@@ -30,9 +30,9 @@
 
                     </div>  <!-- left menu END -->
 
-                    <div class="col">                               <!-- main content -->
+                    <div class="col-10">                               <!-- main content -->
 
-                        <h5>Friendship requests received:</h5>
+                        <h4>Friendship requests received:</h4>
 
                         <div th:if="${receivedFriendRequests.size} == 0">
                             All requests that you have received have been accepted
@@ -59,7 +59,7 @@
                             </table>
                         </div>
 
-                        <h5>Friendship requests sent:</h5>
+                        <h4>Friendship requests sent:</h4>
 
                         <div th:if="${sentFriendRequests.size} == 0">
                             All requests that you have sent have been accepted

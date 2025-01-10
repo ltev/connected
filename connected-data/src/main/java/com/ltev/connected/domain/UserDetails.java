@@ -35,6 +35,5 @@ public class UserDetails {
             throw new RuntimeException("Different id values!");
         }
         this.user = user;
-        this.id = user.getId();
     }
 }

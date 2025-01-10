@@ -25,7 +25,7 @@ public class AccountServiceImpl implements AccountService {
 
         if (userDetails.getId() == null) {
             User user = userDao.findByUsername(AuthenticationUtils.getUsername()).get();
-            userDetails.setId(user.getId());
+            userDetails.setUser(user);
         }
         userDetailsRepository.save(userDetails);
     }
