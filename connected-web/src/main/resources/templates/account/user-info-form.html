@@ -24,8 +24,16 @@
 
         <div class="col">                               <!-- main content -->
 
-            <form th:object="${searchInfo}" action="#" th:action="@{''}" method="post">
-                <h4>Search:</h4>
+            <div th:if="${param.success}" class="alert alert-success" style="width: 300px" role="alert">
+                Your data has been changed
+            </div>
+
+            <form th:object="${userDetails}" action="#" th:action="@{''}" method="post">
+                <h4>User Details:</h4>
+                All data will stay confidential and will be used for search purpose only.
+                <br>
+                If you leave these fields empty your friends will not be able to find you using the search field.
+                <br>
                 <br>
 
                 <div class="mb-3">
@@ -38,36 +46,9 @@
                     <input type="text" class="form-control" id="lastName" th:field="*{lastName}">
                 </div>
 
-                <button type="submit" name="action" value="new-post" class="btn btn-primary mb-2">Search</button>
+                <button type="submit" name="action" value="new-post" class="btn btn-primary mb-2">Submit</button>
             </form>
 
-            <div th:if="${foundPeople}">
-                <br>
-
-                <div th:if="${foundPeople.isEmpty()}">
-                    No person found
-                </div>
-
-                <div th:if="${! foundPeople.isEmpty()}">
-                    <h5>Found people:</h5>
-
-                    <div th:each="userDetails : ${foundPeople}">
-                        <table class="table">
-                            <tbody>
-                            <tr>
-                                <td class="col-4">
-                                    <div th:replace="~{fragments/fragments :: linkedUsername(${userDetails.user.username})}"></div>
-                                </td>
-                                <td class="col-4">
-                                    <p th:text="${userDetails.firstName + ' ' + userDetails.lastName}"></p>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </div>
         </div>          <!-- main content END -->
 
     </div>  <!-- row END -->

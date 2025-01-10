@@ -1,9 +1,7 @@
 package com.ltev.connected.controller;
 
-import com.ltev.connected.domain.User;
-import com.ltev.connected.service.PostService;
-import com.ltev.connected.service.impl.UserServiceImpl;
 import com.ltev.connected.dto.PostInfo;
+import com.ltev.connected.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -16,7 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 public class IndexController {
 
-    private final UserServiceImpl userService;
     private final PostService postService;
 
     @GetMapping("/")

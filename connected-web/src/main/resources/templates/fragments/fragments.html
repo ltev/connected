@@ -56,19 +56,28 @@
 <div th:fragment="user-menu" class="d-grid gap-1">
     <a href="#" th:href="@{'/'}">
         <button type="button" class="btn" th:classappend="${activeButton} == 'mainPage' ? 'active'"
-                th:text="#{menu.mainPage}">Main Page</button>
+                th:text="#{menu.mainPage}">Main Page
+        </button>
     </a>
     <a href="#" th:href="@{'/search'}">
         <button type="button" class="btn" th:classappend="${activeButton} == 'search' ? 'active'"
-                th:text="#{menu.search}">Search</button>
+                th:text="#{menu.search}">Search
+        </button>
     </a>
     <a href="#" th:href="@{/friends}">
         <button type="button" class="btn" th:classappend="${activeButton} == 'friends' ? 'active'"
-                th:text="#{menu.friends}">Friends</button>
+                th:text="#{menu.friends}">Friends
+        </button>
     </a>
     <a href="#" th:href="@{/friend-requests}">
         <button type="button" class="btn" th:classappend="${activeButton} == 'friendRequests' ? 'active'"
-                th:text="#{menu.friendRequests}">Friend requests</button>
+                th:text="#{menu.friendRequests}">Friend requests
+        </button>
+    </a>
+    <a href="#" th:href="@{/account/user-info}">
+        <button type="button" class="btn" th:classappend="${activeButton} == 'account' ? 'active'"
+                th:text="#{menu.account}">Account
+        </button>
     </a>
 </div>
 
@@ -94,17 +103,20 @@ postInfo object must be of type PostInfo
                     <button type="submit" class="btn btn-outline-primary btn-sm"
                             th:classappend="*{likeValue} and *{likeValue.ordinal == 2} ? 'active btn-success'"
                             name="likeValue" th:value="*{T(com.ltev.connected.domain.Like.Value).LIKE}"
-                            th:text="'Like (' + *{numLikes} + ')'">Like</button>
+                            th:text="'Like (' + *{numLikes} + ')'">Like
+                    </button>
 
                     <button type="submit" class="btn btn-outline-primary btn-sm"
                             name="likeValue" th:value="*{T(com.ltev.connected.domain.Like.Value).INDIFFERENCE}"
                             th:classappend="*{likeValue} and *{likeValue.ordinal == 1} ? 'active btn-success'"
-                            th:text="'+/- (' +  *{numIndifferences} + ')'">+/-</button>
+                            th:text="'+/- (' +  *{numIndifferences} + ')'">+/-
+                    </button>
 
                     <button type="submit" class="btn btn-outline-primary btn-sm"
                             name="likeValue" th:value="*{T(com.ltev.connected.domain.Like.Value).DISLIKE}"
                             th:classappend="*{likeValue} and *{likeValue.ordinal == 0} ? 'active btn-success'"
-                            th:text="'+/- (' +  *{numDislikes} + ')'">+/-</button>
+                            th:text="'+/- (' +  *{numDislikes} + ')'">+/-
+                    </button>
                 </div>
 
                 <input type="hidden" name="postId" th:value="*{post.id}">

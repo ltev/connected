@@ -59,6 +59,7 @@ public class UserController {
     @GetMapping("/search")
     public String showSearchPage(Model model) {
         model.addAttribute("searchInfo", new SearchInfo());
+        model.addAttribute("activeButton", "search");
         return "/user/search";
     }
 
