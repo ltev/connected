@@ -189,17 +189,21 @@ public class UserServiceImpl implements UserService {
     public List<UserDetails> searchForPeople(SearchInfo searchInfo) {
         AuthenticationUtils.checkAuthenticationOrThrow();
 
-        List<UserDetails> foundPeople;
-        searchInfo.check();
-        if (! searchInfo.hasFirstName() && ! searchInfo.hasLastName()) {
-            foundPeople = Collections.emptyList();
-        } else if (searchInfo.hasFirstName() && searchInfo.hasLastName()) {
-            foundPeople = userDetailsRepository.findByFirstNameAndLastName(searchInfo.getFirstName(), searchInfo.getLastName());
-        }else if (searchInfo.hasFirstName()) {
-            foundPeople = userDetailsRepository.findByFirstName(searchInfo.getFirstName());
-        } else {
-            foundPeople = userDetailsRepository.findByLastName(searchInfo.getLastName());
-        }
-        return foundPeople;
+        return switch (searchInfo.searchBy()) {
+            case "-firstName" -> userDetailsRepository.findByFirstName(searchInfo.getFirstName());
+            case "-lastName" -> userDetailsRepository.findByLastName(searchInfo.getLastName());
+            case "-age" -> userDetailsRepository.findByBirthdayBetween(
+                    searchInfo.fromDate(), searchInfo.toDate());
+            case "-firstName-lastName" -> userDetailsRepository.findByFirstNameAndLastName(
+                    searchInfo.getFirstName(), searchInfo.getLastName());
+            case "-firstName-age" -> userDetailsRepository.findByFirstNameAndBirthdayBetween(
+                    searchInfo.getFirstName(), searchInfo.fromDate(), searchInfo.toDate());
+            case "-lastName-age" -> userDetailsRepository.findByLastNameAndBirthdayBetween(
+                    searchInfo.getLastName(), searchInfo.fromDate(), searchInfo.toDate());
+            case "-firstName-lastName-age" -> userDetailsRepository.findByFirstNameAndLastNameAndBirthdayBetween(
+                    searchInfo.getFirstName(), searchInfo.getLastName(), searchInfo.fromDate(), searchInfo.toDate());
+            case "" -> Collections.emptyList();
+            default -> throw new RuntimeException("Not defined");
+        };
     }
 }

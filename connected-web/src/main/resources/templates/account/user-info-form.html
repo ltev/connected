@@ -43,14 +43,12 @@
 
                 <div class="mb-3">
                     <label for="lastName" class="form-label">Last name:</label>
-                    <input type="text" class="form-control" id="lastName" th:field="*{lastName}" />
+                    <input type="text" class="form-control" id="lastName" th:field="*{lastName}">
                 </div>
 
                 <div class="mb-3">
                     <label for="birthday" class="form-label">Birthday:</label>
-                    <p th:text="*{#temporals.format(birthday, 'dd-MM-yyyy')}"></p>
-                    <p th:text="*{{birthday}}"></p>
-                    <input type="date" class="form-control" id="birthday" th:field="*{birthday}" />
+                    <input type="date" class="form-control" id="birthday" th:field="*{birthday}">
                 </div>
 
                 <input hidden th:field="*{id}" />

@@ -38,6 +38,24 @@
                     <input type="text" class="form-control" id="lastName" th:field="*{lastName}">
                 </div>
 
+                <div class="row g-3 align-items-center">
+                    <div class="col-auto">
+                        <label class="form-label">Min age:</label>
+                    </div>
+
+                    <div class="col-auto">
+                        <input type="number"  min="0" max="120" step="1" class="form-control" id="minAge" th:field="*{minAge}">
+                    </div>
+
+                    <div class="col-auto">
+                        <label class="form-label">Max age:</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="number" min="0" max="120" step="1" class="form-control col-auto" th:field="*{maxAge}">
+                    </div>
+                </div>
+
+                <br>
                 <button type="submit" name="action" value="new-post" class="btn btn-primary mb-2">Search</button>
             </form>
 
