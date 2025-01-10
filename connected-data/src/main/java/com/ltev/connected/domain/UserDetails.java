@@ -26,6 +26,7 @@ public class UserDetails {
     private String firstName;
     private String lastName;
 
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthday;
 
     public void setId(Long id) {
