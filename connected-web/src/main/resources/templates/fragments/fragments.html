@@ -13,6 +13,12 @@
 
 <span th:fragment="dateTimeDisplay(dateTime)" th:text="${#temporals.format(dateTime, 'dd-MMM-yyyy HH:mm', #locale)}">Date time display</span>
 
+<!-- LINKED USERNAME -->
+
+<span th:fragment="linkedUsername(username)">
+    <a href="#" th:href="@{/profile/} + ${username}" th:text="${username}">username</a>
+</span>
+
 <!-- HEADER -->
 
 <div class="row mt-3" th:fragment="login-header">
@@ -49,15 +55,20 @@
 
 <div th:fragment="user-menu" class="d-grid gap-1">
     <a href="#" th:href="@{'/'}">
-        <button type="button" class="btn" th:classappend="${activeButton} == 'mainPage' ? 'active'">Main Page</button>
+        <button type="button" class="btn" th:classappend="${activeButton} == 'mainPage' ? 'active'"
+                th:text="#{menu.mainPage}">Main Page</button>
+    </a>
+    <a href="#" th:href="@{'/search'}">
+        <button type="button" class="btn" th:classappend="${activeButton} == 'search' ? 'active'"
+                th:text="#{menu.search}">Search</button>
     </a>
     <a href="#" th:href="@{/friends}">
-        <button type="button" class="btn" th:classappend="${activeButton} == 'friends' ? 'active'">Friends</button>
+        <button type="button" class="btn" th:classappend="${activeButton} == 'friends' ? 'active'"
+                th:text="#{menu.friends}">Friends</button>
     </a>
     <a href="#" th:href="@{/friend-requests}">
-        <button type="button" class="btn" th:classappend="${activeButton} == 'friendRequests' ? 'active'">Friend
-            requests
-        </button>
+        <button type="button" class="btn" th:classappend="${activeButton} == 'friendRequests' ? 'active'"
+                th:text="#{menu.friendRequests}">Friend requests</button>
     </a>
 </div>
 
@@ -71,9 +82,7 @@ postInfo object must be of type PostInfo
         <h5 class="card-title" th:text="*{post.title}">Post title</h5>
         <h6 class="card-subtitle mb-2 text-body-secondary">
             <span th:replace="fragments/fragments :: dateTimeDisplay(*{post.created})">Date time</span>
-            <a href="#" th:href="@{/profile/} + *{post.user.username}"
-               th:text="*{post.user.username}">
-            </a>
+            <span th:replace="~{fragments/fragments :: linkedUsername(*{post.user.username})}"></span>
             <span th:text="' (' + *{post.visibility.displayName()} + ')'"></span>
         </h6>
         <p class="card-text" th:text="*{post.text}">Text</p>
@@ -96,7 +105,6 @@ postInfo object must be of type PostInfo
                             name="likeValue" th:value="*{T(com.ltev.connected.domain.Like.Value).DISLIKE}"
                             th:classappend="*{likeValue} and *{likeValue.ordinal == 0} ? 'active btn-success'"
                             th:text="'+/- (' +  *{numDislikes} + ')'">+/-</button>
-
                 </div>
 
                 <input type="hidden" name="postId" th:value="*{post.id}">

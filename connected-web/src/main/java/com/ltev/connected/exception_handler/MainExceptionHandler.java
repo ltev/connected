@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @EnableWebMvc
 public class MainExceptionHandler {
 
-    @ExceptionHandler(NoHandlerFoundException.class)
+    //@ExceptionHandler(NoHandlerFoundException.class)
     public String handleException(Exception e) {
         return "Exception";
     }

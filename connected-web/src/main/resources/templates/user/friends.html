@@ -34,7 +34,7 @@
 
                         <ul>
                             <li th:each="friend : ${friends}">
-                                <a href="#" th:href="@{/profile/} + ${friend.username}" th:text="${friend.username}"/>
+                                <span th:replace="~{fragments/fragments :: linkedUsername(${friend.username})}"></span>
                             </li>
                         </ul>
 

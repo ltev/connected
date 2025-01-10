@@ -1,7 +1,9 @@
 package com.ltev.connected.controller;
 
 import com.ltev.connected.controller.support.ControllerSupport;
+import com.ltev.connected.controller.support.SearchInfo;
 import com.ltev.connected.domain.FriendRequest;
+import com.ltev.connected.domain.UserDetails;
 import com.ltev.connected.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -52,5 +54,18 @@ public class UserController {
     public String acceptFriendRequestGet(@PathVariable Long friendRequestId) {
         userService.acceptFriendRequest(friendRequestId);
         return "redirect:/friend-requests";
+    }
+
+    @GetMapping("/search")
+    public String showSearchPage(Model model) {
+        model.addAttribute("searchInfo", new SearchInfo());
+        return "/user/search";
+    }
+
+    @PostMapping("/search")
+    public String processSearch(SearchInfo searchInfo, Model model) {
+        List<UserDetails> foundPeople = userService.searchForPeople(searchInfo);
+        model.addAttribute("foundPeople", foundPeople);
+        return "/user/search";
     }
 }

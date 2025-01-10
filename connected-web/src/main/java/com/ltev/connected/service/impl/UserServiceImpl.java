@@ -1,11 +1,14 @@
 package com.ltev.connected.service.impl;
 
+import com.ltev.connected.controller.support.SearchInfo;
 import com.ltev.connected.dao.PostDao;
 import com.ltev.connected.dao.UserDao;
 import com.ltev.connected.domain.FriendRequest;
 import com.ltev.connected.domain.Post;
 import com.ltev.connected.domain.User;
+import com.ltev.connected.domain.UserDetails;
 import com.ltev.connected.dto.PostInfo;
+import com.ltev.connected.repository.UserDetailsRepository;
 import com.ltev.connected.service.FriendRequestService;
 import com.ltev.connected.service.UserService;
 import com.ltev.connected.service.support.ProfileInfo;
@@ -22,8 +25,8 @@ public class UserServiceImpl implements UserService {
 
     private UserDao userDao;
     private PostDao postDao;
-
     private FriendRequestService friendRequestService;
+    private UserDetailsRepository userDetailsRepository;
 
     @Override
     public User findByUsernameJoinFetchPosts(String username) {
@@ -180,5 +183,23 @@ public class UserServiceImpl implements UserService {
 
         profileInfo.getProfileUser().setPosts(foundPosts);
         return Optional.of(profileInfo);
+    }
+
+    @Override
+    public List<UserDetails> searchForPeople(SearchInfo searchInfo) {
+        AuthenticationUtils.checkAuthenticationOrThrow();
+
+        List<UserDetails> foundPeople;
+        searchInfo.check();
+        if (! searchInfo.hasFirstName() && ! searchInfo.hasLastName()) {
+            foundPeople = Collections.emptyList();
+        } else if (searchInfo.hasFirstName() && searchInfo.hasLastName()) {
+            foundPeople = userDetailsRepository.findByFirstNameAndLastName(searchInfo.getFirstName(), searchInfo.getLastName());
+        }else if (searchInfo.hasFirstName()) {
+            foundPeople = userDetailsRepository.findByFirstName(searchInfo.getFirstName());
+        } else {
+            foundPeople = userDetailsRepository.findByLastName(searchInfo.getLastName());
+        }
+        return foundPeople;
     }
 }

@@ -42,21 +42,19 @@
                         <div th:each="request : ${receivedFriendRequests}">
                             <table class="table">
                                 <tbody>
-                                <tr>
-                                    <td class="col-4">
-                                        <p th:text="${request.sent}"></p>
-                                    </td>
-                                    <td class="col-4">
-                                        <a href="#" th:href="@{/profile/} + ${request.fromUser.username}">
-                                            <p th:text="${request.fromUser.username}"></p>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="#" th:href="'/accept-' + ${request.id}">
-                                            <button class="btn btn-primary">Accept</button>
-                                        </a>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td class="col-4">
+                                            <p th:text="${request.sent}"></p>
+                                        </td>
+                                        <td class="col-4">
+                                            <span th:replace="~{fragments/fragments :: linkedUsername(${request.fromUser.username})}"></span>
+                                        </td>
+                                        <td>
+                                            <a href="#" th:href="'/accept-' + ${request.id}">
+                                                <button class="btn btn-primary">Accept</button>
+                                            </a>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -70,19 +68,17 @@
                         <div th:each="request : ${sentFriendRequests}">
                             <table class="table">
                                 <tbody>
-                                <tr>
-                                    <td class="col-4">
-                                        <p th:text="${request.sent}"></p>
-                                    </td>
-                                    <td class="col-4">
-                                        <a href="#" th:href="@{/profile/} + ${request.toUser.username}">
-                                            <p th:text="${request.toUser.username}"></p>
-                                        </a>
-                                    </td>
-                                    <td>
+                                    <tr>
+                                        <td class="col-4">
+                                            <p th:text="${request.sent}"></p>
+                                        </td>
+                                        <td class="col-4">
+                                            <span th:replace="~{fragments/fragments :: linkedUsername(${request.toUser.username})}"></span>
+                                        </td>
+                                        <td>
 
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
