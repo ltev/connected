@@ -38,14 +38,15 @@
 
                 <div class="mb-3">
                     <label for="firstName" class="form-label">First name:</label>
-                    <input type="text" class="form-control" id="firstName" th:field="*{firstName}">
+                    <input type="text" class="form-control" id="firstName" th:field="*{firstName}" />
                 </div>
 
                 <div class="mb-3">
                     <label for="lastName" class="form-label">Last name:</label>
-                    <input type="text" class="form-control" id="lastName" th:field="*{lastName}">
+                    <input type="text" class="form-control" id="lastName" th:field="*{lastName}" />
                 </div>
 
+                <input hidden th:field="*{id}" />
                 <button type="submit" name="action" value="new-post" class="btn btn-primary mb-2">Submit</button>
             </form>
 
