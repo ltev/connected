@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "user_details")
@@ -22,6 +25,8 @@ public class UserDetails {
 
     private String firstName;
     private String lastName;
+
+    private LocalDate birthday;
 
     public void setId(Long id) {
         if (user != null && user.getId() != id) {
