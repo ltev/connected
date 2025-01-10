@@ -4,6 +4,7 @@ import com.ltev.connected.domain.UserDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserDetailsRepository extends JpaRepository<UserDetails, Long> {
 
@@ -12,4 +13,6 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Long> 
     List<UserDetails> findByLastName(String lastName);
 
     List<UserDetails> findByFirstNameAndLastName(String firstName, String lastName);
+
+    Optional<UserDetails> findByUserUsername(String username);
 }
