@@ -7,10 +7,13 @@ create table api_groups (
 		unique key api_groups_name_idx (name)
 ) engine=InnoDB default charset=latin1;
 
-create table groups_admins (
+create table groups_users (
 		group_id bigint not null,
         user_id bigint not null,
+		request_sent date not null,
+        request_accepted date,
+        is_admin tinyint,
         primary key (group_id, user_id),
-		constraint `groups_admins_group_id_fk` foreign key (group_id) references api_groups (id),
-        constraint `groups_admins_user_id_fk` foreign key (user_id) references users (id)
+        constraint `group_requests_group_id_fk` FOREIGN KEY (group_id) REFERENCES api_groups (id),
+        constraint `group_requests_user_id_fk` FOREIGN KEY (user_id) REFERENCES users (id)
 ) engine=InnoDB default charset=latin1;
