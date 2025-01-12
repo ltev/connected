@@ -31,6 +31,10 @@
                 New group has been created
             </div>
 
+            <h4>Groups:</h4>
+            <ol>
+                <li th:each="group : ${groups}" th:text="${group.name}">group</li>
+            </ol>
         </div>          <!-- main content END -->
 
     </div>  <!-- row END -->
