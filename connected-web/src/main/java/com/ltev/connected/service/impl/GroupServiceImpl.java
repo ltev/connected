@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -25,5 +26,10 @@ public class GroupServiceImpl implements GroupService {
         User admin = userDao.findByUsername(username).get();
         group.setAdmins(List.of(admin));
         groupRepository.save(group);
+    }
+
+    @Override
+    public Optional<Group> getGroup(Long id) {
+        return groupRepository.findById(id);
     }
 }
