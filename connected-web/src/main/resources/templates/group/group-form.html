@@ -25,6 +25,12 @@
         <div class="col">                               <!-- main content -->
 
             <form th:object="${group}" action="#" th:action="@{''}" method="post">
+
+                <div th:if="${param.taken}" class="alert alert-danger" style="width: 300px" role="alert">
+                    This group name is already taken.<br>
+                    Choose another group name
+                </div>
+
                 <h4>New group:</h4>
                 <br>
 
