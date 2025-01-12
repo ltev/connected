@@ -1,9 +1,10 @@
 package com.ltev.connected.controller;
 
 import com.ltev.connected.domain.Group;
+import com.ltev.connected.dto.GroupInfo;
 import com.ltev.connected.service.GroupService;
 import lombok.AllArgsConstructor;
-import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -21,7 +23,9 @@ public class GroupController {
     private GroupService groupService;
 
     @GetMapping
-    public String showGroupsPage() {
+    public String showGroupsPage(Model model) {
+        List<Group> groups = groupService.getUserGroups();
+        model.addAttribute("groups", groups);
         return "group/groups";
     }
 
@@ -35,20 +39,33 @@ public class GroupController {
     public String processForm(Group group) {
         try {
             groupService.createGroup(group);
-        } catch (DuplicateKeyException e) {
-            return "redirect:/groups?taken";
+        } catch (DataIntegrityViolationException e) {
+            return "redirect:new?taken";
         }
-        return "redirect:/groups?taken";
+        return "redirect:/groups?created";
     }
 
     @GetMapping("{id}")
-    public String showGroup(@PathVariable Long id, Model model) {
-        Optional<Group> groupOptional = groupService.getGroup(id);
+    public String showGroup(@PathVariable("id") String strId, Model model) {
+        Optional<GroupInfo> groupInfoOptional;
 
-        if (groupOptional.isPresent()) {
-            model.addAttribute("group", groupOptional.get());
+        Long aLong = Long.valueOf(strId);
+        if (isNumber(strId)
+                && (groupInfoOptional = groupService.getGroupInfo(aLong)).isPresent()) {
+            model.addAttribute("groupInfo", groupInfoOptional.get());
             return "group/show-group";
         }
         return "redirect:/";
+    }
+
+    // == PRIVATE HELPER METHODS ==
+
+    private boolean isNumber(String str) {
+        try {
+            long l = Long.parseLong(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }

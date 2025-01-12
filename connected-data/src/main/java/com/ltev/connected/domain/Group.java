@@ -27,9 +27,9 @@ public class Group {
     private String name;
     private String description;
 
-    @ManyToMany
-    @JoinTable(name = "groups_admins",
-            joinColumns = @JoinColumn(name = "group_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @Transient
     private List<User> admins;
+
+    @Transient
+    private List<User> members;
 }

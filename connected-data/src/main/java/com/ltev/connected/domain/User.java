@@ -30,6 +30,11 @@ public class User implements Serializable {
         this.id = id;
     }
 
+    public User(Long id, String username) {
+        this.id = id;
+        this.username = username;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

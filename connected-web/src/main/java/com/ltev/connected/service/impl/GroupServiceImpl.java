@@ -1,9 +1,8 @@
 package com.ltev.connected.service.impl;
 
-import com.ltev.connected.dao.UserDao;
+import com.ltev.connected.dao.GroupDao;
 import com.ltev.connected.domain.Group;
-import com.ltev.connected.domain.User;
-import com.ltev.connected.repository.GroupRepository;
+import com.ltev.connected.dto.GroupInfo;
 import com.ltev.connected.service.GroupService;
 import com.ltev.connected.utils.AuthenticationUtils;
 import lombok.AllArgsConstructor;
@@ -16,20 +15,38 @@ import java.util.Optional;
 @AllArgsConstructor
 public class GroupServiceImpl implements GroupService {
 
-    private GroupRepository groupRepository;
-    private UserDao userDao;
+    private GroupDao groupDao;
 
     @Override
     public void createGroup(Group group) {
-        String username = AuthenticationUtils.checkAuthenticationOrThrow().getName();
-
-        User admin = userDao.findByUsername(username).get();
-        group.setAdmins(List.of(admin));
-        groupRepository.save(group);
+        groupDao.save(group);
+        groupDao.saveGroupAdmin(group.getId(), AuthenticationUtils.getUsername());
     }
 
     @Override
-    public Optional<Group> getGroup(Long id) {
-        return groupRepository.findById(id);
+    public List<Group> getUserGroups() {
+        return groupDao.findGroupsByUsername(AuthenticationUtils.getUsername());
+    }
+
+    @Override
+    public Optional<GroupInfo> getGroupInfo(Long groupId) {
+        Optional<GroupInfo> groupInfoOptional = groupDao.findGroupInfo(groupId, AuthenticationUtils.getUsername());
+
+        if (groupInfoOptional.isEmpty()) {
+            return Optional.empty();
+        }
+
+        GroupInfo groupInfo = groupInfoOptional.get();
+
+        // get information for a group member
+        if (groupInfo.isMember()) {
+            // get admins
+            groupInfo.getGroup().setAdmins(groupDao.findAdmins(groupId));
+
+            // get 4 members
+            int limit = 4;
+            groupInfo.getGroup().setMembers(groupDao.findMembers(groupId, limit));
+        }
+        return groupInfoOptional;
     }
 }
