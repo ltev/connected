@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://thymeleaf.org"
+>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <title>Groups</title>
+    <title>New group</title>
 </head>
 <body>
 
@@ -23,13 +24,22 @@
 
         <div class="col">                               <!-- main content -->
 
-            <a href="#" th:href="@{/group/new}">
-                <button type="submit" name="action" value="post-form" class="btn btn-primary mb-2">Create new group</button>
-            </a>
+            <form th:object="${group}" action="#" th:action="@{''}" method="post">
+                <h4>New group:</h4>
+                <br>
 
-            <div th:if="${param.created}" class="alert alert-success" style="width: 300px" role="alert">
-                New group has been created
-            </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Group name:</label>
+                    <input type="text" class="form-control" id="name" th:field="*{name}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Group description:</label>
+                    <textarea class="form-control" id="description" th:field="*{description}" rows="3"></textarea>
+                </div>
+
+                <button type="submit" name="action" value="new-post" class="btn btn-primary mb-2">Create</button>
+            </form>
 
         </div>          <!-- main content END -->
 
