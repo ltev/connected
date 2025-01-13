@@ -70,7 +70,7 @@ public class GroupDaoImpl implements GroupDao {
         }
     }
 
-    private static final String FIND_GROUP_MEMBERS_SQL = """
+    private static final String FIND_GROUP_REQUEST_SQL = """
             select u.id as user_id, u.username as user_username
             from api_groups g
             left join groups_users gu on g.id = gu.group_id
@@ -125,7 +125,7 @@ public class GroupDaoImpl implements GroupDao {
 
     @Override
     public List<User> findAdmins(Long groupId) {
-        String sql = FIND_GROUP_MEMBERS_SQL
+        String sql = FIND_GROUP_REQUEST_SQL
                 + " and gu.is_admin = ?";
         return jdbcTemplate.query(sql,
                 (rs, rowNum) -> new User(rs.getLong("user_id"), rs.getString("user_username")),
@@ -134,8 +134,8 @@ public class GroupDaoImpl implements GroupDao {
 
     @Override
     public List<User> findMembers(Long groupId, int limit) {
-        String sql = FIND_GROUP_MEMBERS_SQL
-                + "  limit ?";
+        String sql = FIND_GROUP_REQUEST_SQL
+                + " and gu.request_accepted is not null limit ?";
         return jdbcTemplate.query(sql,
                 (rs, rowNum) -> new User(rs.getLong("user_id"), rs.getString("user_username")),
                 groupId, limit);
