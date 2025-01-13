@@ -1,11 +1,15 @@
 package com.ltev.connected.service.impl;
 
 import com.ltev.connected.dao.GroupDao;
+import com.ltev.connected.dao.UserDao;
 import com.ltev.connected.domain.Group;
+import com.ltev.connected.domain.GroupRequest;
+import com.ltev.connected.domain.User;
 import com.ltev.connected.dto.GroupInfo;
 import com.ltev.connected.service.GroupService;
 import com.ltev.connected.utils.AuthenticationUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +19,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class GroupServiceImpl implements GroupService {
 
-    private GroupDao groupDao;
+    private final GroupDao groupDao;
+    private final UserDao userDao;
 
     @Override
     public void createGroup(Group group) {
@@ -48,5 +53,16 @@ public class GroupServiceImpl implements GroupService {
             groupInfo.getGroup().setMembers(groupDao.findMembers(groupId, limit));
         }
         return groupInfoOptional;
+    }
+
+    @Override
+    public void sendGroupRequest(Long groupId) {
+        Authentication authentication = AuthenticationUtils.checkAuthenticationOrThrow();
+
+        User loggedUser = userDao.findByUsername(authentication.getName()).get();
+        GroupRequest.Id requestId = new GroupRequest.Id(groupId, loggedUser.getId());
+        GroupRequest groupRequest = new GroupRequest();
+        groupRequest.setId(requestId);
+        groupDao.saveGroupRequest(groupRequest);
     }
 }

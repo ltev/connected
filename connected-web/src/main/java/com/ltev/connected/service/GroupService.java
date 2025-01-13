@@ -13,4 +13,6 @@ public interface GroupService {
     List<Group> getUserGroups();
 
     Optional<GroupInfo> getGroupInfo(Long groupId);
+
+    void sendGroupRequest(Long groupId);
 }

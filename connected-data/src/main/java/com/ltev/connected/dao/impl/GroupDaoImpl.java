@@ -6,6 +6,7 @@ import com.ltev.connected.domain.GroupRequest;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.dto.GroupInfo;
 import com.ltev.connected.repository.GroupRepository;
+import com.ltev.connected.repository.GroupRequestRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -75,9 +76,9 @@ public class GroupDaoImpl implements GroupDao {
             left join users u on u.id = gu.user_id
             where g.id = ?""";
 
-    private JdbcTemplate jdbcTemplate;
-
+    private final JdbcTemplate jdbcTemplate;
     private final GroupRepository groupRepository;
+    private final GroupRequestRepository groupRequestRepository;
 
     @Override
     public void save(Group group) {
@@ -136,5 +137,10 @@ public class GroupDaoImpl implements GroupDao {
         return jdbcTemplate.query(sql,
                 (rs, rowNum) -> new User(rs.getLong("user_id"), rs.getString("user_username")),
                 groupId, limit);
+    }
+
+    @Override
+    public void saveGroupRequest(GroupRequest groupRequest) {
+        groupRequestRepository.save(groupRequest);
     }
 }

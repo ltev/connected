@@ -58,6 +58,12 @@ public class GroupController {
         return "redirect:/";
     }
 
+    @PostMapping(path = "{id}", params = "action=send-group-request")
+    public String joinGroup(@PathVariable("id") Long groupId) {
+        groupService.sendGroupRequest(groupId);
+        return "redirect:" + groupId;
+    }
+
     // == PRIVATE HELPER METHODS ==
 
     private boolean isNumber(String str) {

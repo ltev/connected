@@ -1,6 +1,7 @@
 package com.ltev.connected.dao;
 
 import com.ltev.connected.domain.Group;
+import com.ltev.connected.domain.GroupRequest;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.dto.GroupInfo;
 
@@ -20,4 +21,6 @@ public interface GroupDao {
     List<User> findAdmins(Long groupId);
 
     List<User> findMembers(Long groupId, int limit);
+
+    void saveGroupRequest(GroupRequest groupRequest);
 }

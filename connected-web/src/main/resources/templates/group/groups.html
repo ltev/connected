@@ -24,7 +24,8 @@
         <div class="col">                               <!-- main content -->
 
             <a href="#" th:href="@{/group/new}">
-                <button type="submit" name="action" value="post-form" class="btn btn-primary mb-2">Create new group</button>
+                <button type="submit" name="action" value="post-form" class="btn btn-primary mb-2">Create new group
+                </button>
             </a>
 
             <div th:if="${param.created}" class="alert alert-success" style="width: 300px" role="alert">
@@ -33,7 +34,10 @@
 
             <h4>Groups:</h4>
             <ol>
-                <li th:each="group : ${groups}" th:text="${group.name}">group</li>
+                <li th:each="group : ${groups}">
+                    <a href="#" th:href="@{/group/} + ${group.id}" th:text="${group.name}">
+                </a>
+                </li>
             </ol>
         </div>          <!-- main content END -->
 

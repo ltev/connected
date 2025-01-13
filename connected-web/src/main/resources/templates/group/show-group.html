@@ -21,7 +21,25 @@
 
         <div class="col" th:object="${groupInfo}">                       <!-- main content column -->
 
-            <div th:if="*{isMember}">                                     <!-- members only -->
+            <div th:if="*{groupRequest.isMember()} == false">                          <!-- not member -->
+
+                <form th:object="${groupInfo.groupRequest}" action="#" th:action="@{''}" method="post">     <!-- group request buttons -->
+
+                    <div th:if="*{status.name() == 'NOT_SENT'}">
+                        <button type="submit" name="action" value="send-group-request" class="btn btn-primary">Join group</button>
+                    </div>
+                    <div th:if="*{status.name() == 'SENT'}">
+                        <button type="submit" disabled name="action" value="#" class="btn btn-primary">Request has been sent</button>
+                    </div>
+                    <div th:if="*{status.name() == 'ACCEPTED'}">
+                        <button type="submit" disabled name="action" value="#" class="btn btn-primary">You are a member</button>
+                    </div>
+
+                </form> <!-- group request buttons END -->
+
+            </div>  <!-- not member END -->
+
+            <div th:if="*{groupRequest.isMember()}">                                     <!-- members only -->
 
                 <div class="row text-center">
                     <div class="col-8">
@@ -36,8 +54,10 @@
                         </div>
                         <hr>
 
-                        <h6>Members:</h6>
+
                         <div class="row justify-content-around" th:if="*{group.members.size} >= 2">
+                            <h6>Members:</h6>
+
                             <div class="col-4">
                                 <div th:replace="~{fragments/fragments :: linkedUsername(*{group.members.get(0).username})}"></div>
                             </div>
