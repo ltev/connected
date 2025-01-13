@@ -1,6 +1,7 @@
 package com.ltev.connected.service.support;
 
 import com.ltev.connected.domain.FriendRequest;
+import com.ltev.connected.domain.RequestStatus;
 import com.ltev.connected.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ class ProfileInfoTest {
         profileInfo.setLoggedUsername(erik.getUsername());
         profileInfo.setFriendRequest(friendRequest);
 
-        assertThat(profileInfo.getFriendRequestStatus()).isEqualTo(FriendRequest.Status.NOT_SENT);
+        assertThat(profileInfo.getFriendRequestStatus()).isEqualTo(RequestStatus.NOT_SENT);
     }
 
     @Test
@@ -51,7 +52,7 @@ class ProfileInfoTest {
         profileInfo.setLoggedUsername(erik.getUsername());
         profileInfo.setFriendRequest(friendRequest);
 
-        assertThat(profileInfo.getFriendRequestStatus()).isEqualTo(FriendRequest.Status.SENT);
+        assertThat(profileInfo.getFriendRequestStatus()).isEqualTo(RequestStatus.SENT);
     }
 
     @Test
@@ -66,7 +67,7 @@ class ProfileInfoTest {
         profileInfo.setLoggedUsername(dave.getUsername());
         profileInfo.setFriendRequest(friendRequest);
 
-        assertThat(profileInfo.getFriendRequestStatus()).isEqualTo(FriendRequest.Status.RECEIVED);
+        assertThat(profileInfo.getFriendRequestStatus()).isEqualTo(RequestStatus.RECEIVED);
     }
 
     @Test
@@ -82,7 +83,7 @@ class ProfileInfoTest {
         profileInfo.setLoggedUsername(erik.getUsername());
         profileInfo.setFriendRequest(friendRequest);
 
-        assertThat(profileInfo.getFriendRequestStatus()).isEqualTo(FriendRequest.Status.ACCEPTED);
+        assertThat(profileInfo.getFriendRequestStatus()).isEqualTo(RequestStatus.ACCEPTED);
     }
 
     @Test
@@ -98,6 +99,6 @@ class ProfileInfoTest {
         profileInfo.setLoggedUsername(erik.getUsername());
         profileInfo.setFriendRequest(friendRequest);
 
-        assertThat(profileInfo.getFriendRequestStatus()).isEqualTo(FriendRequest.Status.ACCEPTED);
+        assertThat(profileInfo.getFriendRequestStatus()).isEqualTo(RequestStatus.ACCEPTED);
     }
 }

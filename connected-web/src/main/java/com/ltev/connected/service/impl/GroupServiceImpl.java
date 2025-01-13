@@ -39,7 +39,7 @@ public class GroupServiceImpl implements GroupService {
         GroupInfo groupInfo = groupInfoOptional.get();
 
         // get information for a group member
-        if (groupInfo.isMember()) {
+        if (groupInfo.getGroupRequest().isMember()) {
             // get admins
             groupInfo.getGroup().setAdmins(groupDao.findAdmins(groupId));
 

@@ -2,6 +2,7 @@ package com.ltev.connected.dao.impl;
 
 import com.ltev.connected.dao.GroupDao;
 import com.ltev.connected.domain.Group;
+import com.ltev.connected.domain.GroupRequest;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.dto.GroupInfo;
 import com.ltev.connected.repository.GroupRepository;
@@ -11,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -43,9 +45,25 @@ public class GroupDaoImpl implements GroupDao {
         public GroupInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
             GroupInfo groupInfo = new GroupInfo();
             groupInfo.setGroup(groupRowMapper.mapRow(rs, -1));
-            groupInfo.setMember(rs.getByte("is_member") == 1);
-            groupInfo.setAdmin(rs.getByte("is_admin") == 1);
             groupInfo.setNumMembers(rs.getInt("num_members"));
+
+            GroupRequest groupRequest = new GroupRequest();
+            long userId = rs.getLong("user_id");
+
+            // if request exists
+            if (userId > 0) {
+                groupRequest.setId(new GroupRequest.Id(
+                        groupInfo.getGroup().getId(),
+                        userId
+                ));
+                groupRequest.setSent(rs.getDate("request_sent").toLocalDate());
+                Date requestAccepted = rs.getDate("request_accepted");
+                if (requestAccepted != null) {
+                    groupRequest.setAccepted(requestAccepted.toLocalDate());
+                }
+                groupRequest.setIsAdmin(rs.getByte("is_admin"));
+            }
+            groupInfo.setGroupRequest(groupRequest);
             return groupInfo;
         }
     }
@@ -78,7 +96,7 @@ public class GroupDaoImpl implements GroupDao {
     @Override
     public List<Group> findGroupsByUsername(String username) {
         String sql = """
-            select *
+            select g.id, g.created, g.name, g.description
             from api_groups g
             left join groups_users gu on g.id = gu.group_id
             left join users u on u.id = gu.user_id
@@ -90,14 +108,13 @@ public class GroupDaoImpl implements GroupDao {
     public Optional<GroupInfo> findGroupInfo(Long groupId, String loggedUsername) {
         String sql = """
                 select g.id as id, g.created as created, g.name as name, g.description as description,
-                (select count(*) from groups_users where group_id = g.id and user_id = (select id from users where username = ?)) as is_member,
-                (select count(*) from groups_users where is_admin = 1 and group_id = g.id and user_id = (select id from users where username = ?)) as is_admin,
-                (select count(*) from groups_users where group_id = g.id and request_accepted is not null) as num_members
+                    (select count(*) from groups_users where group_id = g.id and request_accepted is not null) as num_members,
+                    gu.user_id as user_id, gu.request_sent, gu.request_accepted, gu.is_admin
                 from api_groups g
+                left join groups_users gu on gu.group_id = g.id and gu.user_id = (select id from users where username = ?)
                 where g.id = ?""";
         try {
-            return Optional.of(jdbcTemplate.queryForObject(sql, new GroupInfoRowMapper(),
-                    loggedUsername, loggedUsername, groupId));
+            return Optional.of(jdbcTemplate.queryForObject(sql, new GroupInfoRowMapper(), loggedUsername, groupId));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
