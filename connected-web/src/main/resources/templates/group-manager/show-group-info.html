@@ -34,7 +34,7 @@
                             <p th:text="${request.sent}"></p>
                         </td>
                         <td class="col-4">
-                            <p th:text="${request.id.user.username}">username</p>
+                            <span th:replace="~{fragments/fragments :: linkedUsername(${request.id.user.username})}"></span>
                         </td>
                         <td>
                             <a href="#" th:href="@{'/group-manager/accept/'} + ${request.id.group.id} + '-' + ${request.id.user.id}">

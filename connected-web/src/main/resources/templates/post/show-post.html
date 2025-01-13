@@ -31,9 +31,9 @@
                     <table class="table">
                         <tbody>
                             <tr th:each="comment : ${postInfo.post.comments}">
-                                <td class="col-2">
-                                    <p th:text="${comment.user.username}">User</p>
-                                    <p th:text="${#temporals.format(comment.created, 'dd-MMM-yyyy HH:mm', #locale)}">Date</p>
+                                <td class="col-2 text-center">
+                                    <div th:insert="~{fragments/fragments :: linkedUsername(${comment.user.username})}"></div>
+                                    <div th:replace="fragments/fragments :: dateTimeDisplay(${comment.created})">Date time</div>
                                 </td>
                                 <td th:text="${comment.text}">
                                     Text
@@ -51,7 +51,7 @@
                         </div>
 
                         <input type="hidden" name="loggedUserId" value="#" th:value="${loggedUserId}">
-                        <button type="submit" name="action" value="new-comment" class="btn btn-primary mb-2">Post</button>
+                        <button type="submit" name="action" value="new-comment" class="btn btn-primary mb-2">Add comment</button>
                     </form>
                 </div>      <!-- write comment END -->  <!-- body for logged users END -->
 

@@ -43,10 +43,13 @@
                             </a>
                         </td>
                         <td class="col-4">
-                            <p th:text="${groupInfo.numRequestsToAccept}">num request</p>
+                            <p th:text="${groupInfo.numRequestsToAccept}">Num request</p>
                         </td>
                         <td class="col-4">
-
+                            <a href="#" th:href="@{'/group-manager/'} + *{groupInfo.groupId}"
+                               th:if="${groupInfo.numRequestsToAccept} > 0">
+                                <button class="btn btn-primary">View requests</button>
+                            </a>
                         </td>
                         <td>
 

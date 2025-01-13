@@ -9,10 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface GroupRequestRepository extends JpaRepository<GroupRequest, GroupRequest.Id> {
 
     List<GroupRequest> findByIdGroupAndAccepted(Group group, LocalDate accepted);
+
+    Optional<GroupRequest> findByIdGroupIdAndIdUserUsername(Long groupId, String username);
 
     @Transactional
     @Modifying
