@@ -36,7 +36,6 @@
                             <button type="submit" name="action" value="post-form" class="btn btn-primary mb-2">Create new post</button>
                         </form>
 
-
                         <div class="accordion" id="ownPosts">      <!-- self posts -->
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
@@ -45,10 +44,11 @@
                                     </button>
                                 </h2>
                             </div>
-                            <div id="ownPostsCollapse" class="accordion-collapse collapse" data-bs-parent="#ownPosts">
+
+                            <div id="ownPostsCollapse" class="accordion-collapse collapse" th:classappend="${param.self} ? show" data-bs-parent="#ownPosts">
                                 <div class="accordion-body d-grid gap-2">                        <!-- list own posts -->
 
-                                    <div th:each="postInfo : ${ownPostsInfo}" th:insert="~{fragments/fragments :: post-with-comments-link}"></div>  <!-- post fragment -->
+                                    <div th:each="postInfo : ${ownPostsInfo}" th:insert="~{fragments/fragments :: post-with-comments-link-inside-self-accordion}"></div>  <!-- post fragment -->
 
                                 </div>  <!-- list own posts accordion body END -->
                             </div>

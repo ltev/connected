@@ -23,8 +23,6 @@ public class IndexController {
             List<PostInfo> ownPostsInfo = postService.findPostsInfo();
             model.addAttribute("ownPostsInfo", ownPostsInfo);
 
-            // boolean isInitialized = Hibernate.isInitialized(user.getPosts());
-
             List<PostInfo> friendsPostsInfo = postService.findFriendsPostsInfo();
             model.addAttribute("friendsPostsInfo", friendsPostsInfo);
             model.addAttribute("activeButton", "mainPage");

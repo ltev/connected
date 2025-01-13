@@ -90,7 +90,7 @@
 postInfo object must be of type PostInfo
 -->
 
-<div class="card" th:fragment="post(includeCommentsLink)" th:object="${postInfo}">
+<div class="card" th:fragment="post(includeCommentsLink, isFromSelfAccordion)" th:object="${postInfo}">
     <div class="card-body">
 
         <h5 class="card-title" th:text="*{post.title}">Post title</h5>
@@ -104,6 +104,8 @@ postInfo object must be of type PostInfo
         <div sec:authorize="isAuthenticated()">
             <form action="#" th:action="@{/}" method="post">
                 <div class="btn-group" role="group">
+
+                    <input hidden name="isFromSelfAccordion" th:value="${isFromSelfAccordion}">
 
                     <button type="submit" class="btn btn-outline-primary btn-sm"
                             th:classappend="*{likeValue} and *{likeValue.ordinal == 2} ? 'active btn-success'"
@@ -134,9 +136,11 @@ postInfo object must be of type PostInfo
     </div>
 </div>
 
-<div class="card" th:fragment="post-without-comments-link" th:replace="fragments/fragments :: post(false)"></div>
+<div class="card" th:fragment="post-without-comments-link" th:replace="fragments/fragments :: post(false, false)"></div>
 
-<div class="card" th:fragment="post-with-comments-link" th:replace="fragments/fragments :: post(true)"></div>
+<div class="card" th:fragment="post-with-comments-link" th:replace="fragments/fragments :: post(true, false)"></div>
+
+<div class="card" th:fragment="post-with-comments-link-inside-self-accordion" th:replace="fragments/fragments :: post(true, true)"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

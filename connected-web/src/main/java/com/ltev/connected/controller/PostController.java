@@ -1,6 +1,5 @@
 package com.ltev.connected.controller;
 
-import static com.ltev.connected.controller.support.ControllerSupport.redirectToLastUrl;
 import com.ltev.connected.domain.Like;
 import com.ltev.connected.domain.Post;
 import com.ltev.connected.dto.PostInfo;
@@ -12,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+
+import static com.ltev.connected.controller.support.ControllerSupport.redirectToLastUrlWithoutParameters;
 
 @Controller
 @RequestMapping("/")
@@ -55,8 +56,11 @@ public class PostController {
     }
 
     @PostMapping(params = "likeValue")
-    public String saveOrRemoveLike(Long postId, Like.Value likeValue, HttpServletRequest request) {
+    public String saveOrRemoveLike(Long postId, Like.Value likeValue, boolean isFromSelfAccordion, HttpServletRequest request) {
         postService.saveOrRemoveLike(postId, likeValue);
-        return redirectToLastUrl(request);
+        if (isFromSelfAccordion) {
+            return "redirect:/?self";
+        }
+        return redirectToLastUrlWithoutParameters(request);
     }
 }
