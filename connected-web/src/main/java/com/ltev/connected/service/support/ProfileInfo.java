@@ -1,6 +1,7 @@
 package com.ltev.connected.service.support;
 
 import com.ltev.connected.domain.FriendRequest;
+import com.ltev.connected.domain.RequestStatus;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.dto.PostInfo;
 import lombok.Getter;
@@ -21,9 +22,9 @@ public class ProfileInfo {
         this.profileUser = profileUser;
     }
 
-    public FriendRequest.Status getFriendRequestStatus() {
+    public RequestStatus getFriendRequestStatus() {
         return friendRequest == null
-                ? FriendRequest.Status.NOT_SENT
+                ? RequestStatus.NOT_SENT
                 : friendRequest.getStatus(loggedUsername);
     }
 }

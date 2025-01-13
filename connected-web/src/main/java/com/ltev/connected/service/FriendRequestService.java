@@ -1,6 +1,7 @@
 package com.ltev.connected.service;
 
 import com.ltev.connected.domain.FriendRequest;
+import com.ltev.connected.domain.RequestStatus;
 import com.ltev.connected.domain.User;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public interface FriendRequestService {
 
     List<FriendRequest> findAllByFromUserNotAccepted(User user);
 
-    Map<FriendRequest.Status, List<FriendRequest>> findAllReceivedAndSentNotAccepted(User user);
+    Map<RequestStatus, List<FriendRequest>> findAllReceivedAndSentNotAccepted(User user);
 
     boolean areFriends(User user1, User user2);
 }

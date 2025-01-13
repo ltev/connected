@@ -1,7 +1,10 @@
 package com.ltev.connected.domain;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
 
@@ -15,13 +18,6 @@ import java.time.LocalDate;
 @Setter
 @ToString
 public class FriendRequest implements Serializable {
-
-    public enum Status {
-        NOT_SENT,
-        SENT,
-        RECEIVED,
-        ACCEPTED
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +41,7 @@ public class FriendRequest implements Serializable {
 
     private LocalDate accepted;
 
-    public Status getStatus(String checkingUsername) {
+    public RequestStatus getStatus(String checkingUsername) {
         Long userId = null;
         if (fromUser.getUsername().equals(checkingUsername)) {
             userId = fromUser.getId();
@@ -55,28 +51,28 @@ public class FriendRequest implements Serializable {
         return getStatus(userId);
     }
 
-    public Status getStatus(Long checkingUserId) {
+    public RequestStatus getStatus(Long checkingUserId) {
         if (checkingUserId == null || (checkingUserId != fromUser.getId() && checkingUserId != toUser.getId())) {
             throw new RuntimeException("Invalid checkingUserId : " + checkingUserId);
         }
-        Status status = getStatus();
-        if (status == Status.SENT && checkingUserId == toUser.getId()) {
-            status = Status.RECEIVED;
+        RequestStatus status = getStatus();
+        if (status == RequestStatus.SENT && checkingUserId == toUser.getId()) {
+            status = RequestStatus.RECEIVED;
         }
         return status;
     }
 
     public boolean isAccepted() {
-        return getStatus() == Status.ACCEPTED;
+        return getStatus() == RequestStatus.ACCEPTED;
     }
 
     // == PRIVATE HELPER METHODS ==
 
-    private Status getStatus() {
+    private RequestStatus getStatus() {
         return sent != null && accepted != null
-                ? Status.ACCEPTED
+                ? RequestStatus.ACCEPTED
                 : sent != null
-                    ? Status.SENT
-                    : Status.NOT_SENT;
+                    ? RequestStatus.SENT
+                    : RequestStatus.NOT_SENT;
     }
 }

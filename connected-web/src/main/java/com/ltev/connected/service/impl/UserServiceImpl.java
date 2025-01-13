@@ -3,10 +3,7 @@ package com.ltev.connected.service.impl;
 import com.ltev.connected.controller.support.SearchInfo;
 import com.ltev.connected.dao.PostDao;
 import com.ltev.connected.dao.UserDao;
-import com.ltev.connected.domain.FriendRequest;
-import com.ltev.connected.domain.Post;
-import com.ltev.connected.domain.User;
-import com.ltev.connected.domain.UserDetails;
+import com.ltev.connected.domain.*;
 import com.ltev.connected.dto.PostInfo;
 import com.ltev.connected.repository.UserDetailsRepository;
 import com.ltev.connected.service.FriendRequestService;
@@ -89,7 +86,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<FriendRequest.Status, List<FriendRequest>> findAllReceivedAndSentNotAcceptedFriendshipRequests() {
+    public Map<RequestStatus, List<FriendRequest>> findAllReceivedAndSentNotAcceptedFriendshipRequests() {
         Authentication authentication = AuthenticationUtils.checkAuthenticationOrThrow();
 
         User user = userDao.findByUsername(authentication.getName()).get();

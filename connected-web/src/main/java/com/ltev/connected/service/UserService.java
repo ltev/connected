@@ -2,6 +2,7 @@ package com.ltev.connected.service;
 
 import com.ltev.connected.controller.support.SearchInfo;
 import com.ltev.connected.domain.FriendRequest;
+import com.ltev.connected.domain.RequestStatus;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.domain.UserDetails;
 import com.ltev.connected.service.support.ProfileInfo;
@@ -28,7 +29,7 @@ public interface UserService {
 
     List<FriendRequest> findAllSentNotAcceptedFriendshipRequests();
 
-    Map<FriendRequest.Status, List<FriendRequest>> findAllReceivedAndSentNotAcceptedFriendshipRequests();
+    Map<RequestStatus, List<FriendRequest>> findAllReceivedAndSentNotAcceptedFriendshipRequests();
 
     void createNewUser(String username, String password);
 

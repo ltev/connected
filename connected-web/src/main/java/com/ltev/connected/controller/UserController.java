@@ -3,6 +3,7 @@ package com.ltev.connected.controller;
 import com.ltev.connected.controller.support.ControllerSupport;
 import com.ltev.connected.controller.support.SearchInfo;
 import com.ltev.connected.domain.FriendRequest;
+import com.ltev.connected.domain.RequestStatus;
 import com.ltev.connected.domain.UserDetails;
 import com.ltev.connected.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,9 +32,9 @@ public class UserController {
 
     @GetMapping("/friend-requests")
     public String showFriendshipRequests(Model model) {
-        Map<FriendRequest.Status, List<FriendRequest>> map = userService.findAllReceivedAndSentNotAcceptedFriendshipRequests();
-        model.addAttribute("receivedFriendRequests", map.get(FriendRequest.Status.RECEIVED));
-        model.addAttribute("sentFriendRequests", map.get(FriendRequest.Status.SENT));
+        Map<RequestStatus, List<FriendRequest>> map = userService.findAllReceivedAndSentNotAcceptedFriendshipRequests();
+        model.addAttribute("receivedFriendRequests", map.get(RequestStatus.RECEIVED));
+        model.addAttribute("sentFriendRequests", map.get(RequestStatus.SENT));
         model.addAttribute("activeButton", "friendRequests");
         return "user/friend-requests";
     }

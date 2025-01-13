@@ -1,6 +1,7 @@
 package com.ltev.connected.service.impl;
 
 import com.ltev.connected.domain.FriendRequest;
+import com.ltev.connected.domain.RequestStatus;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.repository.FriendRequestRepository;
 import com.ltev.connected.service.FriendRequestService;
@@ -52,10 +53,10 @@ public class FriendRequestServiceImpl implements FriendRequestService {
     }
 
     @Override
-    public Map<FriendRequest.Status, List<FriendRequest>> findAllReceivedAndSentNotAccepted(User user) {
-        Map<FriendRequest.Status, List<FriendRequest>> map = new HashMap<>(2);
-        map.put(FriendRequest.Status.RECEIVED, findAllByToUserNotAccepted(user));
-        map.put(FriendRequest.Status.SENT, findAllByFromUserNotAccepted(user));
+    public Map<RequestStatus, List<FriendRequest>> findAllReceivedAndSentNotAccepted(User user) {
+        Map<RequestStatus, List<FriendRequest>> map = new HashMap<>(2);
+        map.put(RequestStatus.RECEIVED, findAllByToUserNotAccepted(user));
+        map.put(RequestStatus.SENT, findAllByFromUserNotAccepted(user));
         return map;
     }
 
