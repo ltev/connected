@@ -60,9 +60,6 @@ public class GroupServiceImpl implements GroupService {
         Authentication authentication = AuthenticationUtils.checkAuthenticationOrThrow();
 
         User loggedUser = userDao.findByUsername(authentication.getName()).get();
-        GroupRequest.Id requestId = new GroupRequest.Id(groupId, loggedUser.getId());
-        GroupRequest groupRequest = new GroupRequest();
-        groupRequest.setId(requestId);
-        groupDao.saveGroupRequest(groupRequest);
+        groupDao.saveGroupRequest(new GroupRequest(new GroupRequest.Id(new Group(groupId), loggedUser)));
     }
 }

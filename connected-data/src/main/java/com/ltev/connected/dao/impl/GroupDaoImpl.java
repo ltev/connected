@@ -5,6 +5,7 @@ import com.ltev.connected.domain.Group;
 import com.ltev.connected.domain.GroupRequest;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.dto.GroupInfo;
+import com.ltev.connected.dto.GroupManagerInfo;
 import com.ltev.connected.repository.GroupRepository;
 import com.ltev.connected.repository.GroupRequestRepository;
 import lombok.AllArgsConstructor;
@@ -54,8 +55,8 @@ public class GroupDaoImpl implements GroupDao {
             // if request exists
             if (userId > 0) {
                 groupRequest.setId(new GroupRequest.Id(
-                        groupInfo.getGroup().getId(),
-                        userId
+                        groupInfo.getGroup(),
+                        new User(userId, rs.getString("user_username"))
                 ));
                 groupRequest.setSent(rs.getDate("request_sent").toLocalDate());
                 Date requestAccepted = rs.getDate("request_accepted");
@@ -110,12 +111,13 @@ public class GroupDaoImpl implements GroupDao {
         String sql = """
                 select g.id as id, g.created as created, g.name as name, g.description as description,
                     (select count(*) from groups_users where group_id = g.id and request_accepted is not null) as num_members,
-                    gu.user_id as user_id, gu.request_sent, gu.request_accepted, gu.is_admin
+                    gu.user_id as user_id, ? as user_username, gu.request_sent, gu.request_accepted, gu.is_admin
                 from api_groups g
                 left join groups_users gu on gu.group_id = g.id and gu.user_id = (select id from users where username = ?)
                 where g.id = ?""";
         try {
-            return Optional.of(jdbcTemplate.queryForObject(sql, new GroupInfoRowMapper(), loggedUsername, groupId));
+            return Optional.of(jdbcTemplate.queryForObject(sql, new GroupInfoRowMapper(),
+                    loggedUsername, loggedUsername, groupId));
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
@@ -142,5 +144,22 @@ public class GroupDaoImpl implements GroupDao {
     @Override
     public void saveGroupRequest(GroupRequest groupRequest) {
         groupRequestRepository.save(groupRequest);
+    }
+
+    @Override
+    public List<GroupManagerInfo> findGroupsManagerInfoForAdmin(String adminName) {
+        String sql = """
+                select g.id, g.name,
+                    (select count(*) from groups_users where group_id = g.id and request_accepted is null)
+                    as num_requests_to_accept
+                from api_groups g
+                left join groups_users gu on g.id = gu.group_id
+                where gu.is_admin = 1 and gu.user_id = (select id from users where username = ?)""";
+        return jdbcTemplate.query(sql,
+                (rs, rowNum) -> new GroupManagerInfo(
+                        rs.getLong("id"),
+                        rs.getString("name"),
+                        rs.getInt("num_requests_to_accept")
+                ), adminName);
     }
 }

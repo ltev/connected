@@ -2,6 +2,7 @@ package com.ltev.connected.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "api_groups")
+@NoArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -32,4 +34,8 @@ public class Group {
 
     @Transient
     private List<User> members;
+
+    public Group(Long id) {
+        this.id = id;
+    }
 }

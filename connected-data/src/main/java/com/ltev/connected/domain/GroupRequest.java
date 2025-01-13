@@ -9,6 +9,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "groups_users")
+@NoArgsConstructor
 @Getter
 @Setter
 @ToString
@@ -17,11 +18,18 @@ public class GroupRequest {
     @NoArgsConstructor
     @AllArgsConstructor
     @EqualsAndHashCode
+    @Getter
+    @Setter
     @ToString
     public static class Id {
 
-        private Long groupId;
-        private Long userId;
+        @ManyToOne
+        @JoinColumn(name = "group_id")
+        private Group group;
+
+        @ManyToOne
+        @JoinColumn(name = "user_id")
+        private User user;
     }
 
     @EmbeddedId
@@ -34,10 +42,14 @@ public class GroupRequest {
     @Column(name = "request_accepted")
     private LocalDate accepted;
 
-    private byte isAdmin;
+    public GroupRequest(Id id) {
+        this.id = id;
+    }
+
+    private Byte isAdmin;
 
     public boolean isAdmin() {
-        return isAdmin == 1;
+        return (isAdmin != null) && (isAdmin == 1);
     }
 
     public boolean isMember() {

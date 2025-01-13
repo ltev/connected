@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.Optional;
+import static com.ltev.connected.utils.ApiUtils.isNumber;
 
 @Controller
 @RequestMapping({"group", "groups"})
@@ -49,9 +50,8 @@ public class GroupController {
     public String showGroup(@PathVariable("id") String strId, Model model) {
         Optional<GroupInfo> groupInfoOptional;
 
-        Long aLong = Long.valueOf(strId);
         if (isNumber(strId)
-                && (groupInfoOptional = groupService.getGroupInfo(aLong)).isPresent()) {
+                && (groupInfoOptional = groupService.getGroupInfo(Long.valueOf(strId))).isPresent()) {
             model.addAttribute("groupInfo", groupInfoOptional.get());
             return "group/show-group";
         }
@@ -62,16 +62,5 @@ public class GroupController {
     public String joinGroup(@PathVariable("id") Long groupId) {
         groupService.sendGroupRequest(groupId);
         return "redirect:" + groupId;
-    }
-
-    // == PRIVATE HELPER METHODS ==
-
-    private boolean isNumber(String str) {
-        try {
-            long l = Long.parseLong(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
     }
 }

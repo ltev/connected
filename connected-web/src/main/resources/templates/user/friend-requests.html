@@ -58,30 +58,26 @@
                         </tbody>
                     </table>
 
-
                     <h4>Friendship requests sent:</h4>
 
                     <div th:if="${sentFriendRequests.size} == 0">
                         All requests that you have sent have been accepted
                     </div>
 
-                    <table class="table">
-                        <tbody>
-                        <tr th:each="request : ${sentFriendRequests}">
-                            <td class="col-4">
-                                <p th:text="${request.sent}"></p>
-                            </td>
-                            <td class="col-4">
-                                <span th:replace="~{fragments/fragments :: linkedUsername(${request.toUser.username})}"></span>
-                            </td>
-                            <td>
-                                <a href="#" th:href="'/accept-' + ${request.id}">
-                                    <button class="btn btn-primary">Accept</button>
-                                </a>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <div class="col-8">
+                        <table class="table">
+                            <tbody class="">
+                            <tr th:each="request : ${sentFriendRequests}">
+                                <td class="col-4">
+                                    <p th:text="${request.sent}"></p>
+                                </td>
+                                <td class="col-4">
+                                    <span th:replace="~{fragments/fragments :: linkedUsername(${request.toUser.username})}"></span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>          <!-- main content END -->
 
