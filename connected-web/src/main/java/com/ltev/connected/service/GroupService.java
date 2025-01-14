@@ -22,4 +22,6 @@ public interface GroupService {
     GroupsRequestInfo getGroupsRequest();
 
     void leaveGroup(Long groupId);
+
+    Optional<GroupInfo> getGroupInfoWithMembers(Long groupId);
 }

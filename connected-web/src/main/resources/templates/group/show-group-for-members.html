@@ -34,7 +34,7 @@
                 </div>
                 <div th:if="*{status.name() == 'ACCEPTED'}">
                     <button type="submit" disabled name="action" value="#" class="btn btn-primary">
-                        You are a member
+                        <span th:text="*{isAdmin()} ? 'You are an admin' : 'You are a member'">admin / member</span>
                     </button>
                     <button type="submit" name="action" value="leave-group" class="btn btn-danger btn-sm"
                             th:if="*{isAdmin()} == false">
@@ -78,7 +78,7 @@
                         </div>
                     </div>
 
-                    <a href="#" th:href="@{''} + '/members'">
+                    <a href="#" th:href="@{${'/group/' + id + '/members'}}">
                         See all members
                     </a>
 

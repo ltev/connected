@@ -6,6 +6,8 @@ import com.ltev.connected.domain.Group;
 import com.ltev.connected.domain.GroupRequest;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.dto.GroupInfo;
+import com.ltev.connected.exception.AccessDeniedException;
+import com.ltev.connected.repository.GroupRequestRepository;
 import com.ltev.connected.service.GroupService;
 import com.ltev.connected.service.support.GroupsRequestInfo;
 import com.ltev.connected.utils.AuthenticationUtils;
@@ -22,6 +24,7 @@ public class GroupServiceImpl implements GroupService {
 
     private final GroupDao groupDao;
     private final UserDao userDao;
+    private final GroupRequestRepository groupRequestRepository;
 
     @Override
     public void createGroup(Group group) {
@@ -87,5 +90,27 @@ public class GroupServiceImpl implements GroupService {
         String username = AuthenticationUtils.checkAuthenticationOrThrow().getName();
 
         groupDao.deleteGroupRequest(groupId, username);
+    }
+
+    /**
+     * @return groupInfo with members (id, username) when logged users is a member of that group
+     */
+    @Override
+    public Optional<GroupInfo> getGroupInfoWithMembers(Long groupId) {
+        assertLoggedUserIsGroupMember(groupId);
+
+        return groupDao.findGroupInfoWithMembers(groupId);
+    }
+
+    // == PRIVATE HELPER METHODS ==
+
+    private void assertLoggedUserIsGroupMember(Long groupId) {
+        String username = AuthenticationUtils.checkAuthenticationOrThrow().getName();
+
+        Optional<GroupRequest> groupRequestOptional =
+                groupRequestRepository.findByIdGroupIdAndIdUserUsername(groupId, username);
+        if (groupRequestOptional.isEmpty() || !groupRequestOptional.get().isMember()) {
+            throw new AccessDeniedException("Not a group member.");
+        }
     }
 }

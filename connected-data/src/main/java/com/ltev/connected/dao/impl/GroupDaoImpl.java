@@ -9,8 +9,10 @@ import com.ltev.connected.dto.GroupManagerInfo;
 import com.ltev.connected.repository.GroupRepository;
 import com.ltev.connected.repository.GroupRequestRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +21,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,6 +73,51 @@ public class GroupDaoImpl implements GroupDao {
         }
     }
 
+    private static class GroupInfoExtractor implements ResultSetExtractor<GroupInfo> {
+
+        private GroupRowMapper groupRowMapper = new GroupRowMapper();
+
+        @Override
+        public GroupInfo extractData(ResultSet rs) throws SQLException, DataAccessException {
+            if (rs.next() == false) {
+                return null;
+            }
+            ArrayList<User> members = new ArrayList<>();
+            ArrayList<User> admins = new ArrayList<>();
+
+            Group group = groupRowMapper.mapRow(rs, -1);
+            group.setMembers(members);
+            group.setAdmins(admins);
+
+            GroupInfo groupInfo = new GroupInfo();
+            groupInfo.setGroup(group);
+            groupInfo.setNumMembers(rs.getInt("num_members"));
+
+            Object userId = rs.getObject("user_id");
+            if (userId == null) {
+                return groupInfo;
+            }
+
+            do {
+                User user = extractUser(rs);
+                Boolean isAdmin = rs.getBoolean("is_admin");
+                if (isAdmin) {
+                    admins.add(user);
+                } else {
+                    members.add(user);
+                }
+            } while (rs.next());
+            return groupInfo;
+        }
+
+        private User extractUser(ResultSet rs) throws SQLException {
+            User user = new User();
+            user.setId(rs.getLong("user_id"));
+            user.setUsername(rs.getString("user_username"));
+            return user;
+        }
+    }
+
     private static final String FIND_GROUP_REQUEST_SQL = """
             select u.id as user_id, u.username as user_username
             from api_groups g
@@ -111,6 +159,9 @@ public class GroupDaoImpl implements GroupDao {
         return jdbcTemplate.query(sql, new GroupRowMapper(), username);
     }
 
+    /**
+     * @return GroupInfo with basic Group information (name, description), num_members and GroupRequest for logged user
+     */
     @Override
     public Optional<GroupInfo> findGroupInfo(Long groupId, String loggedUsername) {
         String sql = """
@@ -126,6 +177,22 @@ public class GroupDaoImpl implements GroupDao {
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
+    }
+
+    /**
+     * @return GroupInfo with basic Group information (name, description) + list of members and admins, num_members
+     */
+    @Override
+    public Optional<GroupInfo> findGroupInfoWithMembers(Long groupId) {
+        String sql = """
+                select g.id as id, g.created as created, g.name as name, g.description as description,
+                    (select count(*) from groups_users where group_id = g.id and request_accepted is not null) as num_members,
+                    gu.user_id as user_id, u.username as user_username, gu.is_admin
+                from api_groups g
+                left join groups_users gu on gu.group_id = g.id and gu.request_accepted is not null
+                left join users u on u.id = gu.user_id
+                where g.id = ?""";
+        return Optional.of(jdbcTemplate.query(sql, new GroupInfoExtractor(), groupId));
     }
 
     @Override

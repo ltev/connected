@@ -66,4 +66,14 @@ public class GroupManagerController {
             return "redirect:/";
         }
     }
+
+    @GetMapping("members/{groupId}")
+    public String showMembers(@PathVariable("groupId") String strGroupId) {
+        try {
+            groupManagerService.deleteGroup(Long.valueOf(strGroupId));
+            return "redirect:/group-manager";
+        } catch (AccessDeniedException | NumberFormatException e) {
+            return "redirect:/";
+        }
+    }
 }

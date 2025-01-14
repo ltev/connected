@@ -21,6 +21,8 @@ public interface GroupDao {
 
     Optional<GroupInfo> findGroupInfo(Long groupId, String loggedUsername);
 
+    Optional<GroupInfo> findGroupInfoWithMembers(Long groupId);
+
     List<User> findAdmins(Long groupId);
 
     List<User> findMembers(Long groupId, int limit);

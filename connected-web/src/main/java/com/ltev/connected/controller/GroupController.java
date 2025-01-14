@@ -2,6 +2,7 @@ package com.ltev.connected.controller;
 
 import com.ltev.connected.domain.Group;
 import com.ltev.connected.dto.GroupInfo;
+import com.ltev.connected.exception.AccessDeniedException;
 import com.ltev.connected.service.GroupService;
 import com.ltev.connected.service.support.GroupsRequestInfo;
 import lombok.AllArgsConstructor;
@@ -71,5 +72,18 @@ public class GroupController {
     public String leaveGroup(@PathVariable("id") Long groupId) {
         groupService.leaveGroup(groupId);
         return "redirect:" + groupId;
+    }
+
+    @GetMapping("{id}/members")
+    public String showMembers(@PathVariable("id") String strGroupId, Model model) {
+        try {
+            Optional<GroupInfo> groupOptional = groupService.getGroupInfoWithMembers(Long.valueOf(strGroupId));
+            if (groupOptional.isPresent()) {
+                model.addAttribute("groupInfo", groupOptional.get());
+                return "group/show-members";
+            }
+        } catch (NumberFormatException | AccessDeniedException e) {
+        }
+        return "redirect:/";
     }
 }
