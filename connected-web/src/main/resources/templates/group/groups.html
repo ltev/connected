@@ -21,9 +21,9 @@
 
         </div>  <!-- left menu END -->
 
-        <div class="col">                               <!-- main content -->
+        <div class="col" th:object="${groupsRequestInfo}">                               <!-- main content -->
 
-            <a th:if="${isAdmin}" href="#" th:href="@{/group-manager}">
+            <a th:if="*{isAdmin}" href="#" th:href="@{/group-manager}">
                 <button type="submit" name="action" value="post-form" class="btn btn-primary mb-2">
                     Manage groups where you have an admin role
                 </button>
@@ -39,13 +39,32 @@
                 New group has been created
             </div>
 
-            <h4>Groups:</h4>
-            <ol>
-                <li th:each="group : ${groups}">
-                    <a href="#" th:href="@{/group/} + ${group.id}" th:text="${group.name}">
-                </a>
-                </li>
-            </ol>
+            <h4>Groups (<span th:text="*{numGroups}">num</span>):</h4>
+            <div th:if="*{numGroups} == 0">
+                You haven't joined any group yet
+            </div>
+            <div th:if="*{numGroups} > 0">
+                <ol>
+                    <li th:each="groupRequest : *{requests}" th:if="${groupRequest.isMember}">
+                        <a href="#"
+                           th:href="@{/group/} + ${groupRequest.id.group.id}" th:text="${groupRequest.id.group.name}">group link</a>
+                    </li>
+                </ol>
+            </div>
+            <hr>
+
+            <h4>Waiting for accepting (<span th:text="*{numAwaiting}">num</span>):</h4>
+            <div th:if="*{numAwaiting} == 0">
+                All requests have been accepted
+            </div>
+            <div th:if="*{numAwaiting} > 0">
+                <ol>
+                    <li th:each="groupRequest : *{requests}" th:if="${!groupRequest.isMember}">
+                        <a href="#"
+                           th:href="@{/group/} + ${groupRequest.id.group.id}" th:text="${groupRequest.id.group.name}">group link</a>
+                    </li>
+                </ol>
+            </div>
         </div>          <!-- main content END -->
 
     </div>  <!-- row END -->

@@ -17,6 +17,8 @@ public interface GroupRequestRepository extends JpaRepository<GroupRequest, Grou
 
     Optional<GroupRequest> findByIdGroupIdAndIdUserUsername(Long groupId, String username);
 
+    List<GroupRequest> findByIdUserUsername(String username);
+
     @Transactional
     @Modifying
     @Query("update GroupRequest r set r.accepted = current_date"

@@ -3,6 +3,7 @@ package com.ltev.connected.controller;
 import com.ltev.connected.domain.Group;
 import com.ltev.connected.dto.GroupInfo;
 import com.ltev.connected.service.GroupService;
+import com.ltev.connected.service.support.GroupsRequestInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
@@ -12,8 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
 import java.util.Optional;
+
 import static com.ltev.connected.utils.ApiUtils.isNumber;
 
 @Controller
@@ -25,11 +26,8 @@ public class GroupController {
 
     @GetMapping
     public String showGroupsPage(Model model) {
-        List<Group> groups = groupService.getUserGroups();
-        model.addAttribute("groups", groups);
-        if (groupService.isAdminInAnyGroup()) {
-            model.addAttribute("isAdmin", true);
-        }
+        GroupsRequestInfo groupsRequest = groupService.getGroupsRequest();
+        model.addAttribute("groupsRequestInfo", groupsRequest);
         return "group/groups";
     }
 
@@ -56,7 +54,9 @@ public class GroupController {
         if (isNumber(strId)
                 && (groupInfoOptional = groupService.getGroupInfo(Long.valueOf(strId))).isPresent()) {
             model.addAttribute("groupInfo", groupInfoOptional.get());
-            return "group/show-group";
+            return groupInfoOptional.get().getGroupRequest().isMember()
+                    ? "group/show-group-for-members"
+                    : "group/show-group";
         }
         return "redirect:/";
     }

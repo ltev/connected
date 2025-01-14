@@ -25,7 +25,7 @@
 
             <div class="col-10">                               <!-- main content -->
 
-                <h4>All requests for group: <span th:text="${groupName}">group name</span></h4>
+                <h4>All requests for group: <a href="#" th:href="@{/group/} + ${groupId}" th:text="${groupName}">group name</a></h4>
 
                 <table class="table">
                     <tbody>

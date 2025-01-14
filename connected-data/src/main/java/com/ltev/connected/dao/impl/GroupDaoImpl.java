@@ -171,4 +171,9 @@ public class GroupDaoImpl implements GroupDao {
                 where user_id = (select id from users where username = ?) and is_admin = 1""";
         return jdbcTemplate.queryForObject(sql, Integer.class, username);
     }
+
+    @Override
+    public List<GroupRequest> findGroupRequestsByUsername(String username) {
+        return groupRequestRepository.findByIdUserUsername(username);
+    }
 }

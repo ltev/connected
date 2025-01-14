@@ -21,7 +21,9 @@
 
         <div class="col" th:object="${groupInfo}">                       <!-- main content column -->
 
-            <form th:object="${groupInfo.groupRequest}" action="#" th:action="@{''}" method="post">  <!-- group request button -->
+            <form th:object="${groupInfo.groupRequest}" action="#" th:action="@{''}" method="post">
+                <!-- group request buttons -->
+
                 <div th:if="*{status.name() == 'NOT_SENT'}">
                     <button type="submit" name="action" value="send-group-request" class="btn btn-primary">Join
                         group
@@ -32,7 +34,15 @@
                         sent
                     </button>
                 </div>
-            </form> <!-- group request button END -->
+
+                <div th:if="*{status.name() == 'ACCEPTED'}">
+                    <button type="submit" disabled name="action" value="#" class="btn btn-primary">You are a
+                        member
+                    </button>
+                </div>
+
+            </form> <!-- group request buttons END -->
+
 
             <div class="row text-center">
                 <div class="col-8">                                     <!-- group info -->
@@ -40,14 +50,45 @@
                     <h5 th:text="*{group.description}">description</h5>
                 </div>                                                  <!-- group info END-->
 
-                <div class="container text-center col-4">               <!-- admins -->
+                <div class="container text-center col-4">               <!-- show admin and members sample -->
+
                     <h6>Admins:</h6>
                     <div th:each="admin : *{group.admins}">
                         <div th:replace="~{fragments/fragments :: linkedUsername(${admin.username})}"></div>
                     </div>
                     <hr>
-                </div>  <!-- admins END -->
+
+                    <h6>Members (<span th:text="*{numMembers}"></span>):</h6>
+
+                    <div class="row justify-content-around" th:if="*{group.members.size} >= 2">
+                        <h6>Members:</h6>
+
+                        <div class="col-4">
+                            <div th:replace="~{fragments/fragments :: linkedUsername(*{group.members.get(0).username})}"></div>
+                        </div>
+                        <div class="col-4">
+                            <div th:replace="~{fragments/fragments :: linkedUsername(*{group.members.get(1).username})}"></div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between" th:if="*{group.members.size} >= 4">
+                        <div class="col-4">
+                            <div th:replace="~{fragments/fragments :: linkedUsername(*{group.members.get(2).username})}"></div>
+                        </div>
+                        <div class="col-4">
+                            <div th:replace="~{fragments/fragments :: linkedUsername(*{group.members.get(3).username})}"></div>
+                        </div>
+                    </div>
+
+                    <a href="#" th:href="@{''} + '/members'">
+                        See all members
+                    </a>
+
+                </div>  <!-- members sample END -->
             </div>
+
+            <hr>
+
+            <h4>Posts:</h4>
 
         </div>                                  <!-- main content column END -->
 

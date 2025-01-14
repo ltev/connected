@@ -25,14 +25,18 @@ public class GroupManagerController {
     @GetMapping
     public String showGroupsManagerPage(Model model) {
         List<GroupManagerInfo> groupsManagerInfo = groupManagerService.findGroupsManagerInfoForAdmin();
-        model.addAttribute("groupsManagerInfo", groupsManagerInfo);
-        return "group-manager/show-groups-info";
+        if (groupsManagerInfo.size() > 0) {
+            model.addAttribute("groupsManagerInfo", groupsManagerInfo);
+            return "group-manager/show-groups-info";
+        }
+        return "redirect:/";
     }
 
     @GetMapping("{groupId}")
     public String showGroupManagerPage(@PathVariable("groupId") String strGroupId, Model model) {
         try {
             List<GroupRequest> groupRequests = groupManagerService.getSentGroupRequests(Long.valueOf(strGroupId));
+            model.addAttribute("groupId", strGroupId);
             model.addAttribute("groupName", groupRequests.size() > 0
                     ? groupRequests.get(0).getId().getGroup().getName()
                     : "group id: " + strGroupId);

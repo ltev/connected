@@ -7,6 +7,7 @@ import com.ltev.connected.domain.GroupRequest;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.dto.GroupInfo;
 import com.ltev.connected.service.GroupService;
+import com.ltev.connected.service.support.GroupsRequestInfo;
 import com.ltev.connected.utils.AuthenticationUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -68,5 +69,16 @@ public class GroupServiceImpl implements GroupService {
         String username = AuthenticationUtils.checkAuthenticationOrThrow().getName();
 
         return groupDao.findCountByUsernameAndIsAdmin(username) > 0;
+    }
+
+    /**
+     * @return info with all send and accepted groups requests for logged user
+     */
+    @Override
+    public GroupsRequestInfo getGroupsRequest() {
+        String username = AuthenticationUtils.checkAuthenticationOrThrow().getName();
+
+        List<GroupRequest> groupsRequest = groupDao.findGroupRequestsByUsername(username);
+        return new GroupsRequestInfo(groupsRequest);
     }
 }

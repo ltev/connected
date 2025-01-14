@@ -28,4 +28,6 @@ public interface GroupDao {
     List<GroupManagerInfo> findGroupsManagerInfoForAdmin(String adminName);
 
     int findCountByUsernameAndIsAdmin(String username);
+
+    List<GroupRequest> findGroupRequestsByUsername(String username);
 }
