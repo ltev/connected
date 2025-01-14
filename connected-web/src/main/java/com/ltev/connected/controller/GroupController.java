@@ -66,4 +66,10 @@ public class GroupController {
         groupService.sendGroupRequest(groupId);
         return "redirect:" + groupId;
     }
+
+    @PostMapping(path = "{id}", params = "action=leave-group")
+    public String leaveGroup(@PathVariable("id") Long groupId) {
+        groupService.leaveGroup(groupId);
+        return "redirect:" + groupId;
+    }
 }

@@ -81,4 +81,11 @@ public class GroupServiceImpl implements GroupService {
         List<GroupRequest> groupsRequest = groupDao.findGroupRequestsByUsername(username);
         return new GroupsRequestInfo(groupsRequest);
     }
+
+    @Override
+    public void leaveGroup(Long groupId) {
+        String username = AuthenticationUtils.checkAuthenticationOrThrow().getName();
+
+        groupDao.deleteGroupRequest(groupId, username);
+    }
 }

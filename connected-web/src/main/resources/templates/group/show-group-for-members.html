@@ -22,27 +22,26 @@
         <div class="col" th:object="${groupInfo}">                       <!-- main content column -->
 
             <form th:object="${groupInfo.groupRequest}" action="#" th:action="@{''}" method="post">
-                <!-- group request buttons -->
-
                 <div th:if="*{status.name() == 'NOT_SENT'}">
-                    <button type="submit" name="action" value="send-group-request" class="btn btn-primary">Join
-                        group
+                    <button type="submit" name="action" value="send-group-request" class="btn btn-primary">
+                        Join group
                     </button>
                 </div>
                 <div th:if="*{status.name() == 'SENT'}">
-                    <button type="submit" disabled name="action" value="#" class="btn btn-primary">Request has been
-                        sent
+                    <button type="submit" disabled name="action" value="#" class="btn btn-primary">
+                        Request has been sent
                     </button>
                 </div>
-
                 <div th:if="*{status.name() == 'ACCEPTED'}">
-                    <button type="submit" disabled name="action" value="#" class="btn btn-primary">You are a
-                        member
+                    <button type="submit" disabled name="action" value="#" class="btn btn-primary">
+                        You are a member
+                    </button>
+                    <button type="submit" name="action" value="leave-group" class="btn btn-danger btn-sm"
+                            th:if="*{isAdmin()} == false">
+                        Leave the group
                     </button>
                 </div>
-
-            </form> <!-- group request buttons END -->
-
+            </form>
 
             <div class="row text-center">
                 <div class="col-8">                                     <!-- group info -->

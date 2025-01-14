@@ -20,4 +20,6 @@ public interface GroupService {
     boolean isAdminInAnyGroup();
 
     GroupsRequestInfo getGroupsRequest();
+
+    void leaveGroup(Long groupId);
 }
