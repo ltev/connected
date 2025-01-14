@@ -33,26 +33,29 @@
                         <th>Group:</th>
                         <th>Requests to accept:</th>
                         <th>Manage requests:</th>
+                        <th>Delete:</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="groupInfo : ${groupsManagerInfo}">
-                        <td class="col-4">
+                        <td class="col-3">
                             <a href="#" th:href="@{/group/} + ${groupInfo.groupId}">
                                 <p th:text="${groupInfo.groupName}"></p>
                             </a>
                         </td>
-                        <td class="col-4">
+                        <td class="col-3">
                             <p th:text="${groupInfo.numRequestsToAccept}">Num request</p>
                         </td>
-                        <td class="col-4">
+                        <td class="col-3">
                             <a href="#" th:href="@{'/group-manager/'} + *{groupInfo.groupId}"
                                th:if="${groupInfo.numRequestsToAccept} > 0">
                                 <button class="btn btn-primary">View requests</button>
                             </a>
                         </td>
-                        <td>
-
+                        <td class="col-3">
+                            <a href="#" th:href="@{'/group-manager/delete/'} + *{groupInfo.groupId}">
+                                <button class="btn btn-danger">Delete</button>
+                            </a>
                         </td>
                     </tr>
                     </tbody>

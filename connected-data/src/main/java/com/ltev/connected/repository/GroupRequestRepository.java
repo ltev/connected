@@ -24,4 +24,10 @@ public interface GroupRequestRepository extends JpaRepository<GroupRequest, Grou
     @Query("update GroupRequest r set r.accepted = current_date"
             + " where r.accepted is null and r.id.group.id = ?1 and r.id.user.id = ?2")
     void acceptGroupRequest(Long groupId, Long userId);
+
+    @Transactional
+    void deleteAllByIdGroupId(Long groupId);
+
+    @Transactional
+    void deleteByIdGroupIdAndIdUserUsername(Long groupId, String username);
 }

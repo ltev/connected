@@ -87,6 +87,11 @@ public class GroupDaoImpl implements GroupDao {
     }
 
     @Override
+    public void deleteById(Long groupId) {
+        groupRepository.deleteById(groupId);
+    }
+
+    @Override
     public void saveGroupAdmin(Long id, String username) {
         String sql = """
         insert into groups_users (group_id, user_id, request_sent, request_accepted, is_admin)
@@ -175,5 +180,10 @@ public class GroupDaoImpl implements GroupDao {
     @Override
     public List<GroupRequest> findGroupRequestsByUsername(String username) {
         return groupRequestRepository.findByIdUserUsername(username);
+    }
+
+    @Override
+    public void deleteGroupRequest(Long groupId, String username) {
+        groupRequestRepository.deleteByIdGroupIdAndIdUserUsername(groupId, username);
     }
 }

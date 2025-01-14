@@ -12,4 +12,6 @@ public interface GroupManagerService {
     List<GroupRequest> getSentGroupRequests(Long groupId);
 
     void acceptGroupRequest(Long groupId, Long userId);
+
+    void deleteGroup(Long valueOf);
 }

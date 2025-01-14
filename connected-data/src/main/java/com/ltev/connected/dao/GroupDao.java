@@ -13,6 +13,8 @@ public interface GroupDao {
 
     void save(Group group);
 
+    void deleteById(Long groupId);
+
     void saveGroupAdmin(Long id, String username);
 
     List<Group> findGroupsByUsername(String username);
@@ -30,4 +32,6 @@ public interface GroupDao {
     int findCountByUsernameAndIsAdmin(String username);
 
     List<GroupRequest> findGroupRequestsByUsername(String username);
+
+    void deleteGroupRequest(Long groupId, String username);
 }

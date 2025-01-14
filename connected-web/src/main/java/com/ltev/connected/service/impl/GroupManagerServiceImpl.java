@@ -34,17 +34,33 @@ public class GroupManagerServiceImpl implements GroupManagerService {
      */
     @Override
     public List<GroupRequest> getSentGroupRequests(Long groupId) {
-        String username = AuthenticationUtils.checkAuthenticationOrThrow().getName();
+        assertLoggedUserIsGroupAdmin(groupId);
 
-        Optional<GroupRequest> loggedUserRequest = groupRequestRepository.findByIdGroupIdAndIdUserUsername(groupId, username);
-        if (loggedUserRequest.isEmpty() || loggedUserRequest.get().isAdmin() == false) {
-            throw new AccessDeniedException("Logged user has no admin role for groupId: " + groupId);
-        }
         return groupRequestRepository.findByIdGroupAndAccepted(new Group(groupId), null);
     }
 
     @Override
     public void acceptGroupRequest(Long groupId, Long userId) {
         groupRequestRepository.acceptGroupRequest(groupId, userId);
+    }
+
+    @Override
+    public void deleteGroup(Long groupId) {
+        assertLoggedUserIsGroupAdmin(groupId);
+
+        groupRequestRepository.deleteAllByIdGroupId(groupId);
+        groupDao.deleteById(groupId);
+    }
+
+    // == PRIVATE HELPER METHODS ==
+
+    private void assertLoggedUserIsGroupAdmin(Long groupId) {
+        String username = AuthenticationUtils.checkAuthenticationOrThrow().getName();
+
+        Optional<GroupRequest> loggedUserRequest = groupRequestRepository.findByIdGroupIdAndIdUserUsername(groupId, username);
+        if (loggedUserRequest.isEmpty() || loggedUserRequest.get().isAdmin() == false) {
+            throw new AccessDeniedException(
+                    String.format("Logged user: %s, has no admin role for groupId: %d", username, groupId));
+        }
     }
 }
