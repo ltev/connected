@@ -8,42 +8,55 @@
 </head>
 <body>
 
-    <div class="container">
-        <h3 class="mt-5">Log in</h3>
-        <hr style="width: 300px">
+<div class="container">
 
-        <div th:if="${param.error}" class="alert alert-danger" style="width: 300px" role="alert">
-            Invalid username / password
-        </div>
+    <div th:insert="~{fragments/fragments :: login-header}"></div>        <!-- Login header -->
 
-        <div th:if="${param.logout}" class="alert alert-success" style="width: 300px" role="alert">
-            You have been logged out
-        </div>
+    <div class="container">                      <!-- main container -->
+        <div class="row">
 
-        <div th:if="${param.created}" class="alert alert-success" style="width: 300px" role="alert">
-            Your account has been created. <br>
-            Log in to continue
-        </div>
+            <div class="col-12">                               <!-- main content -->
 
-        <form action="#" th:action="@{${actionUrl}}" method="POST">
+                <h3 class="mt-5">Log in</h3>
+                <hr style="width: 300px">
 
-            <div class="form-group mt-2" style="width: 300px">
-                <label for="username">Username</label>
-                <input type="text" name="username" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="username or email">
-            </div>
-            <div class="form-group mt-2" style="width: 300px">
-                <label for="password">Password</label>
-                <input type="password" name="password" class="form-control" id="password" aria-describedby="passwordHelp" placeholder="password">
-            </div>
-            <button type="submit" value="login" class="btn btn-primary mt-2">Log in</button>
+                <div th:if="${param.error}" class="alert alert-danger" style="width: 300px" role="alert">
+                    Invalid username / password
+                </div>
 
-        </form>
+                <div th:if="${param.logout}" class="alert alert-success" style="width: 300px" role="alert">
+                    You have been logged out
+                </div>
 
-        <hr style="width: 300px">
-        <a href="#" th:href="@{/}">Back to Home Page</a>
+                <div th:if="${param.created}" class="alert alert-success" style="width: 300px" role="alert">
+                    Your account has been created. <br>
+                    Log in to continue
+                </div>
 
-    </div>
-    
+                <form action="#" th:action="@{${actionUrl}}" method="POST">
+
+                    <div class="form-group mt-2" style="width: 300px">
+                        <label for="username">Username</label>
+                        <input type="text" name="username" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="username or email">
+                    </div>
+                    <div class="form-group mt-2" style="width: 300px">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" class="form-control" id="password" aria-describedby="passwordHelp" placeholder="password">
+                    </div>
+                    <button type="submit" value="login" class="btn btn-primary mt-2">Log in</button>
+
+                </form>
+
+                <hr style="width: 300px">
+                <a href="#" th:href="@{/}">Back to Home Page</a>
+
+            </div>          <!-- main content END -->
+
+        </div>  <!-- row END -->
+    </div>  <!-- main container END -->
+
+</div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
