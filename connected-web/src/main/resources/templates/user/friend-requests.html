@@ -37,7 +37,6 @@
 
                     <div th:if="${receivedFriendRequests.size} == 0">
                         All requests that you have received have been accepted
-                        <hr>
                     </div>
 
                     <table class="table">
@@ -58,6 +57,7 @@
                         </tbody>
                     </table>
 
+                    <hr>
                     <h4>Friendship requests sent:</h4>
 
                     <div th:if="${sentFriendRequests.size} == 0">

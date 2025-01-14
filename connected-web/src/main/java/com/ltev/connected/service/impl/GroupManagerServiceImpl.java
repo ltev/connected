@@ -41,6 +41,8 @@ public class GroupManagerServiceImpl implements GroupManagerService {
 
     @Override
     public void acceptGroupRequest(Long groupId, Long userId) {
+        assertLoggedUserIsGroupAdmin(groupId);
+
         groupRequestRepository.acceptGroupRequest(groupId, userId);
     }
 

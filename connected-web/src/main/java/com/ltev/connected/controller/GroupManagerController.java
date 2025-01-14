@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-import static com.ltev.connected.utils.ApiUtils.isNumber;
-
 @Controller
 @RequestMapping("group-manager")
 @AllArgsConstructor
@@ -43,34 +41,34 @@ public class GroupManagerController {
             model.addAttribute("groupRequests", groupRequests);
             return "group-manager/show-group-info";
         } catch (AccessDeniedException | NumberFormatException e) {
-            return "redirect:/";
+            return "redirect:/group-manager";
         }
     }
 
     @GetMapping("accept/{groupId}-{userId}")
     public String acceptGroupRequest(@PathVariable("groupId") String strGroupId,
                                      @PathVariable("userId") String strUserId) {
-        if (isNumber(strGroupId) && isNumber(strUserId)) {
+        try {
             groupManagerService.acceptGroupRequest(Long.valueOf(strGroupId), Long.valueOf(strUserId));
             return "redirect:/group-manager/" + strGroupId;
+        } catch (AccessDeniedException | NumberFormatException e) {
+            return "redirect:/";
         }
-        return "redirect:/";
     }
 
     @GetMapping("delete/{groupId}")
     public String deleteGroup(@PathVariable("groupId") String strGroupId) {
         try {
             groupManagerService.deleteGroup(Long.valueOf(strGroupId));
-            return "redirect:/group-manager";
+            return "redirect:/group-manager?deleted";
         } catch (AccessDeniedException | NumberFormatException e) {
-            return "redirect:/";
         }
+        return "redirect:/group-manager";
     }
 
     @GetMapping("members/{groupId}")
     public String showMembers(@PathVariable("groupId") String strGroupId) {
         try {
-            groupManagerService.deleteGroup(Long.valueOf(strGroupId));
             return "redirect:/group-manager";
         } catch (AccessDeniedException | NumberFormatException e) {
             return "redirect:/";
