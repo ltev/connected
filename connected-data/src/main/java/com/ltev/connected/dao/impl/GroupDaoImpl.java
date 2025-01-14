@@ -162,4 +162,13 @@ public class GroupDaoImpl implements GroupDao {
                         rs.getInt("num_requests_to_accept")
                 ), adminName);
     }
+
+    @Override
+    public int findCountByUsernameAndIsAdmin(String username) {
+        String sql = """
+                select count(*)
+                from groups_users
+                where user_id = (select id from users where username = ?) and is_admin = 1""";
+        return jdbcTemplate.queryForObject(sql, Integer.class, username);
+    }
 }

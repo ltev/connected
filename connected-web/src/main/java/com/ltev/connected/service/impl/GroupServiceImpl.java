@@ -62,4 +62,11 @@ public class GroupServiceImpl implements GroupService {
         User loggedUser = userDao.findByUsername(authentication.getName()).get();
         groupDao.saveGroupRequest(new GroupRequest(new GroupRequest.Id(new Group(groupId), loggedUser)));
     }
+
+    @Override
+    public boolean isAdminInAnyGroup() {
+        String username = AuthenticationUtils.checkAuthenticationOrThrow().getName();
+
+        return groupDao.findCountByUsernameAndIsAdmin(username) > 0;
+    }
 }

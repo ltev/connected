@@ -27,6 +27,9 @@ public class GroupController {
     public String showGroupsPage(Model model) {
         List<Group> groups = groupService.getUserGroups();
         model.addAttribute("groups", groups);
+        if (groupService.isAdminInAnyGroup()) {
+            model.addAttribute("isAdmin", true);
+        }
         return "group/groups";
     }
 

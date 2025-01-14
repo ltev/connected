@@ -23,6 +23,13 @@
 
         <div class="col">                               <!-- main content -->
 
+            <a th:if="${isAdmin}" href="#" th:href="@{/group-manager}">
+                <button type="submit" name="action" value="post-form" class="btn btn-primary mb-2">
+                    Manage groups where you have an admin role
+                </button>
+                <br>
+            </a>
+
             <a href="#" th:href="@{/group/new}">
                 <button type="submit" name="action" value="post-form" class="btn btn-primary mb-2">Create new group
                 </button>

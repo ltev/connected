@@ -26,4 +26,6 @@ public interface GroupDao {
     void saveGroupRequest(GroupRequest groupRequest);
 
     List<GroupManagerInfo> findGroupsManagerInfoForAdmin(String adminName);
+
+    int findCountByUsernameAndIsAdmin(String username);
 }

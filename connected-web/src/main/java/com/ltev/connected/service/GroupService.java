@@ -15,4 +15,6 @@ public interface GroupService {
     Optional<GroupInfo> getGroupInfo(Long groupId);
 
     void sendGroupRequest(Long groupId);
+
+    boolean isAdminInAnyGroup();
 }
