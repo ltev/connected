@@ -1,6 +1,7 @@
 package com.ltev.connected.controller;
 
 import com.ltev.connected.domain.Group;
+import com.ltev.connected.domain.Post;
 import com.ltev.connected.dto.GroupInfo;
 import com.ltev.connected.exception.AccessDeniedException;
 import com.ltev.connected.exception.PageOutOfBoundsException;
@@ -71,6 +72,21 @@ public class GroupController {
             }
         }
         return"redirect:/";
+    }
+
+    @PostMapping(path = "{id}", params = "action=post-form")
+    public String showPostForm(@PathVariable("id") Long groupId, @RequestParam String groupName, Model model) {
+        Post post = new Post();
+        post.setGroup(new Group(groupId, groupName));
+
+        model.addAttribute("post", post);
+        return "group/group-post-form";
+    }
+
+    @PostMapping(path = "{groupId}", params = "action=new-post")
+    public String createNewPost(@PathVariable("groupId") Long groupId, Post post) {
+        groupService.saveGroupPost(post);
+        return "redirect:/group/" + groupId;
     }
 
     @PostMapping(path = "{id}", params = "action=send-group-request")

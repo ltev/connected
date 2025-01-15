@@ -85,6 +85,11 @@
                 </div>  <!-- members sample END -->
             </div>
 
+            <form action="#" th:action="@{''}" method="post">
+                <input hidden name="groupName" th:value="${groupInfo.group.name}">
+                <button type="submit" name="action" value="post-form" class="btn btn-primary mb-2">Create new post</button>
+            </form>
+
             <h4>Posts (<span th:text="${groupInfo.getNumPosts()}">num posts</span>):</h4>
 
             <div th:if="${groupInfo.getNumPosts()} == 0">

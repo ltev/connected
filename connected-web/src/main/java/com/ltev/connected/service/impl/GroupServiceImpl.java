@@ -5,13 +5,16 @@ import com.ltev.connected.dao.PostDao;
 import com.ltev.connected.dao.UserDao;
 import com.ltev.connected.domain.Group;
 import com.ltev.connected.domain.GroupRequest;
+import com.ltev.connected.domain.Post;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.dto.GroupInfo;
 import com.ltev.connected.dto.PostInfo;
 import com.ltev.connected.exception.AccessDeniedException;
 import com.ltev.connected.exception.PageOutOfBoundsException;
+import com.ltev.connected.exception.VisibilityException;
 import com.ltev.connected.repository.GroupRequestRepository;
 import com.ltev.connected.service.GroupService;
+import com.ltev.connected.service.PostService;
 import com.ltev.connected.service.support.GroupsRequestInfo;
 import com.ltev.connected.utils.AuthenticationUtils;
 import lombok.AllArgsConstructor;
@@ -30,6 +33,7 @@ public class GroupServiceImpl implements GroupService {
     private final GroupDao groupDao;
     private final UserDao userDao;
     private final PostDao postDao;
+    private final PostService postService;
     private final GroupRequestRepository groupRequestRepository;
 
     @Override
@@ -120,6 +124,19 @@ public class GroupServiceImpl implements GroupService {
         assertLoggedUserIsGroupMember(groupId);
 
         return groupDao.findGroupInfoWithMembers(groupId);
+    }
+
+    @Override
+    public void saveGroupPost(Post post) {
+        if (post.getVisibility() == null) {
+            post.setVisibility(Post.Visibility.GROUP_PRIVATE);
+        } else if (post.getVisibility() != Post.Visibility.GROUP_PRIVATE) {
+           throw new VisibilityException("Group post's visibility must be GROUP_PRIVATE");
+        }
+        if (post.getGroup() == null || post.getGroup().getId() == null) {
+            throw new IllegalArgumentException("Must have group id");
+        }
+        postService.savePost(post);
     }
 
     // == PRIVATE HELPER METHODS ==

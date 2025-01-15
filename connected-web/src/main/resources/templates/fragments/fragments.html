@@ -19,6 +19,12 @@
     <a href="#" th:href="@{/profile/} + ${username}" th:text="${username}">username</a>
 </span>
 
+<!-- LINKED GROUP -->
+
+<span th:fragment="linkedGroup(group)">
+    <a href="#" th:href="@{/group/} + ${group.id}" th:text="${group.name}">group name</a>
+</span>
+
 <!-- HEADER -->
 
 <div class="row mt-3" th:fragment="login-header">
