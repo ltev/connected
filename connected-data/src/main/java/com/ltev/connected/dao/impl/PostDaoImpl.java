@@ -1,6 +1,7 @@
 package com.ltev.connected.dao.impl;
 
 import com.ltev.connected.dao.PostDao;
+import com.ltev.connected.dao.impl.helper.GroupPostInfoRowMapper;
 import com.ltev.connected.dao.impl.helper.PostInfoRowMapper;
 import com.ltev.connected.domain.Comment;
 import com.ltev.connected.domain.Post;
@@ -27,7 +28,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class PostDaoImpl implements PostDao {
 
-    public static final String FIND_FRIENDS_IDS_BY_USERNAME_SQL = """
+    private static final String FIND_FRIENDS_IDS_BY_USERNAME_SQL = """
             select to_user_id
             from friend_requests
             Where from_user_id = (select id from users where username = ?) and accepted is not null
@@ -36,7 +37,7 @@ public class PostDaoImpl implements PostDao {
             from friend_requests
             Where to_user_id = (select id from users where username = ?) and accepted is not null""";
 
-    public static final String FIND_FRIENDS_POSTS_BY_USERNAME_AND_VISIBILITY_SQL = """
+    private static final String FIND_FRIENDS_POSTS_BY_USERNAME_AND_VISIBILITY_SQL = """
             select p.id as post_id, p.created, p.visibility, p.title, p.text, p.num_comments, u.id as user_id, u.username
             from posts p
             join users u on u.id = user_id
@@ -54,6 +55,7 @@ public class PostDaoImpl implements PostDao {
                 from posts p
                 join users u on u.id = p.user_id
                 left join likes l on l.post_id = p.id and l.user_id = (select id from users where username = ?)""";
+
     private final PostRepository postRepository;
     private final EntityManagerFactory emf;
     private final JdbcTemplate jdbcTemplate;
@@ -194,9 +196,9 @@ public class PostDaoImpl implements PostDao {
 
     @Override
     public void increaseNumCommentsByOne(Long postId) {
-//        String sql = "update posts set num_comments = num_comments + 1 where id = ?";
-//        jdbcTemplate.update(sql, postId);
-        postRepository.increaseNumCommentsByOne(postId);
+        String sql = "update posts set num_comments = num_comments + 1 where id = ?";
+        jdbcTemplate.update(sql, postId);
+        //postRepository.increaseNumCommentsByOne(postId);  //java.sql.SQLSyntaxErrorException: Table 'connected.ht_posts' doesn't exist
     }
 
     @Override
@@ -230,6 +232,35 @@ public class PostDaoImpl implements PostDao {
         List<PostInfo> sliceContent = jdbcTemplate.query(sqlBuilder.toString(), rowMapper,
                 groupId, userId, groupId, limit, offset);
         return new PageImpl<>(sliceContent, pageable, rowMapper.getNumPosts());
+    }
+
+    @Override
+    public Optional<PostInfo> findPostInfoForGroupPost(Long postId, String loggedUsername) {
+        String sql = """
+                select p.id as post_id, p.created, p.visibility, p.title, p.text, p.num_comments,
+                	u.id as post_user_id, u.username as post_user_username,
+                    (select id from users where username = ?) as user_id, u2.username as username, l.value as like_value,
+                	(select count(*) from likes where post_id = p.id and value = 0) as num_dislike,
+                	(select count(*) from likes where post_id = p.id and value = 1) as num_indifference,
+                	(select count(*) from likes where post_id = p.id and value = 2) as num_like,
+                    g.id as group_id, g.name as group_name,
+                    gu.is_admin as is_admin, (gu.request_accepted is not null) as is_member
+                from posts p
+                join users u on u.id = p.user_id
+                left join likes l on l.post_id = p.id and l.user_id = (select id from users where username = ?)
+                left join groups_posts gp on gp.post_id = p.id
+                left join api_groups g on g.id = gp.group_id
+                left join groups_users gu on gu.group_id = gp.group_id and gu.user_id = (select id from users where username = ?) 
+                    and gu.request_accepted is not null
+                left join users u2 on u2.id = gu.user_id
+                where p.id = ?""";
+
+        try {
+            return Optional.of(jdbcTemplate.queryForObject(sql, new GroupPostInfoRowMapper(),
+                    loggedUsername, loggedUsername, loggedUsername, postId));
+        } catch (EmptyResultDataAccessException ex) {
+            return Optional.empty();
+        }
     }
 
     // == PRIVATE HELPER METHODS
