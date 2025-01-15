@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-import static com.ltev.connected.controller.support.ControllerSupport.redirectToLastUrlWithoutParameters;
+import static com.ltev.connected.controller.support.ControllerSupport.*;
 
 @Controller
 @RequestMapping("/")
@@ -61,6 +61,10 @@ public class PostController {
         if (isFromSelfAccordion) {
             return "redirect:/?self";
         }
-        return redirectToLastUrlWithoutParameters(request);
+        if (getLastUrl(request).equals("http://localhost:8080/?self")) {
+            return "redirect:/";
+        }
+        // coming from group with page parameters - keep the ?page=x
+        return redirectToLastUrl(request);
     }
 }

@@ -4,6 +4,7 @@ import com.ltev.connected.domain.Like;
 import com.ltev.connected.domain.Post;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.dto.PostInfo;
+import lombok.Getter;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -13,11 +14,21 @@ import java.time.ZoneId;
 public class PostInfoRowMapper implements RowMapper<PostInfo> {
 
     private boolean withLoggedUser;
+    private boolean storeNumPosts;
+    @Getter
+    private int numPosts = 0;
+
     public PostInfoRowMapper(boolean withLoggedUser) {
         this.withLoggedUser = withLoggedUser;
     }
 
+    public PostInfoRowMapper(boolean withLoggedUser, boolean storeNumPosts) {
+        this.withLoggedUser = withLoggedUser;
+        this.storeNumPosts = storeNumPosts;
+    }
+
     /**
+     *     optional -> num_posts
      *
      *     p.id as post_id,
      *     p.created,
@@ -36,6 +47,10 @@ public class PostInfoRowMapper implements RowMapper<PostInfo> {
      */
     @Override
     public PostInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
+        if (storeNumPosts && numPosts == 0) {
+            numPosts = (int) rs.getLong("num_posts");
+        }
+
         User postUser = new User();
         postUser.setId(rs.getLong("post_user_id"));
         postUser.setUsername(rs.getString("post_user_username"));

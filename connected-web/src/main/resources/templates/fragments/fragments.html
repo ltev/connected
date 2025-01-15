@@ -87,7 +87,7 @@
 </div>
 
 <!-- POST
-postInfo object must be of type PostInfo
+th:object="${postInfo}" - must be of type PostInfo
 -->
 
 <div class="card" th:fragment="post(includeCommentsLink, isFromSelfAccordion)" th:object="${postInfo}">
@@ -95,7 +95,7 @@ postInfo object must be of type PostInfo
 
         <h5 class="card-title" th:text="*{post.title}">Post title</h5>
         <h6 class="card-subtitle mb-2 text-body-secondary">
-            <span th:replace="fragments/fragments :: dateTimeDisplay(*{post.created})">Date time</span>
+            <span th:replace="~{fragments/fragments :: dateTimeDisplay(*{post.created})}">Date time</span>
             <span th:replace="~{fragments/fragments :: linkedUsername(*{post.user.username})}"></span>
             <span th:text="' (' + *{post.visibility.displayName()} + ')'"></span>
         </h6>
@@ -138,9 +138,9 @@ postInfo object must be of type PostInfo
 
 <div class="card" th:fragment="post-without-comments-link" th:replace="fragments/fragments :: post(false, false)"></div>
 
-<div class="card" th:fragment="post-with-comments-link" th:replace="fragments/fragments :: post(true, false)"></div>
+<div class="card" th:fragment="post-with-comments-link" th:replace="~{fragments/fragments :: post(true, false)}"></div>
 
-<div class="card" th:fragment="post-with-comments-link-inside-self-accordion" th:replace="fragments/fragments :: post(true, true)"></div>
+<div class="card" th:fragment="post-with-comments-link-inside-self-accordion" th:replace="~{fragments/fragments :: post(true, true)}"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

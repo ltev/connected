@@ -2,10 +2,7 @@ package com.ltev.connected.service.impl;
 
 import com.ltev.connected.dao.PostDao;
 import com.ltev.connected.dao.UserDao;
-import com.ltev.connected.domain.Comment;
-import com.ltev.connected.domain.Like;
-import com.ltev.connected.domain.Post;
-import com.ltev.connected.domain.User;
+import com.ltev.connected.domain.*;
 import com.ltev.connected.dto.PostInfo;
 import com.ltev.connected.repository.CommentRepository;
 import com.ltev.connected.repository.LikeRepository;

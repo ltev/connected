@@ -12,6 +12,7 @@ import jakarta.persistence.EntityManagerFactory;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -203,6 +204,34 @@ public class PostDaoImpl implements PostDao {
         return commentRepository.findByPost(new Post(postId));
     }
 
+    @Override
+    public Page<PostInfo> findGroupPostsInfo(Long groupId, Long userId, Pageable pageable) {
+        int limit = pageable.getPageSize();
+        int offset = pageable.getPageNumber() * limit;
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("""
+                select p.id as post_id, p.created, p.visibility, p.title, p.text, p.num_comments,
+                u.id as post_user_id, u.username as post_user_username, l.value as like_value,
+                	(select count(*) from groups_posts where group_id = ?) as num_posts,
+                	(select count(*) from likes where post_id = p.id and value = 0) as num_dislike,
+                	(select count(*) from likes where post_id = p.id and value = 1) as num_indifference,
+                	(select count(*) from likes where post_id = p.id and value = 2) as num_like
+                from groups_posts gp
+                join posts p on p.id = gp.post_id
+                join users u on u.id = p.user_id
+                left join likes l on l.post_id = p.id and l.user_id = ?
+                where gp.group_id = ?""");
+        if (pageable.getSort().isSorted()) {
+            sqlBuilder.append(" order by ");
+            sqlBuilder.append(sortToSql(pageable.getSort()));
+        }
+        sqlBuilder.append(" limit ? offset ?");
+        PostInfoRowMapper rowMapper = new PostInfoRowMapper(false, true);
+        List<PostInfo> sliceContent = jdbcTemplate.query(sqlBuilder.toString(), rowMapper,
+                groupId, userId, groupId, limit, offset);
+        return new PageImpl<>(sliceContent, pageable, rowMapper.getNumPosts());
+    }
+
     // == PRIVATE HELPER METHODS
 
     private List<Long> findFriends(Long userId) {
@@ -212,5 +241,11 @@ public class PostDaoImpl implements PostDao {
                     .setParameter(1, userId)
                     .getResultList();
         }
+    }
+
+    private String sortToSql(Sort sort) {
+        StringBuilder sb = new StringBuilder();
+        sort.get().forEach(o -> sb.append(", ").append(o.getProperty()).append(" ").append(o.getDirection()));
+        return sb.substring(2);
     }
 }

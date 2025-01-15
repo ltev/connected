@@ -7,12 +7,12 @@ import com.ltev.connected.service.GroupService;
 import com.ltev.connected.service.support.GroupsRequestInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -49,15 +49,25 @@ public class GroupController {
     }
 
     @GetMapping("{id}")
-    public String showGroup(@PathVariable("id") String strId, Model model) {
+    public String showGroup(@PathVariable("id") String strId,
+                            @RequestParam(name = "page", required = false, defaultValue = "1") String strPageNumber,
+                            Model model) {
         Optional<GroupInfo> groupInfoOptional;
 
-        if (isNumber(strId)
-                && (groupInfoOptional = groupService.getGroupInfo(Long.valueOf(strId))).isPresent()) {
-            model.addAttribute("groupInfo", groupInfoOptional.get());
-            return groupInfoOptional.get().getGroupRequest().isMember()
-                    ? "group/show-group-for-members"
-                    : "group/show-group";
+        if (isNumber(strId)) {
+            if (isNumber(strPageNumber)) {
+                Pageable pageable = PageRequest.of(Integer.parseInt(strPageNumber) - 1, 3,
+                        Sort.by(Sort.Order.desc("created")));
+
+                if ((groupInfoOptional = groupService.getGroupInfo(Long.valueOf(strId), pageable)).isPresent()) {
+                    model.addAttribute("groupInfo", groupInfoOptional.get());
+                    return groupInfoOptional.get().getGroupRequest().isMember()
+                            ? "group/show-group-for-members"
+                            : "group/show-group";
+                }
+            } else {
+                return "redirect:/group/" + strId;
+            }
         }
         return "redirect:/";
     }

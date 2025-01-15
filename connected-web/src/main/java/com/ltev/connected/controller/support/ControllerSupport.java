@@ -4,6 +4,10 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public class ControllerSupport {
 
+    public static String getLastUrl(HttpServletRequest request) {
+        return request.getHeader("Referer");
+    }
+
     public static String redirectToLastUrl(HttpServletRequest request) {
         return "redirect:" + request.getHeader("Referer");
     }

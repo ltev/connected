@@ -1,6 +1,7 @@
 package com.ltev.connected.controller;
 
 import com.ltev.connected.dto.PostInfo;
+import com.ltev.connected.repository.PostRepository;
 import com.ltev.connected.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -15,10 +16,10 @@ import java.util.List;
 public class IndexController {
 
     private final PostService postService;
+    PostRepository postRepository;
 
     @GetMapping("/")
     public String index(Model model, Authentication authentication) {
-
         if (authentication != null) {
             List<PostInfo> ownPostsInfo = postService.findPostsInfo();
             model.addAttribute("ownPostsInfo", ownPostsInfo);

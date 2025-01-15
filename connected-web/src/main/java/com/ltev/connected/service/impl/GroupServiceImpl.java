@@ -1,17 +1,21 @@
 package com.ltev.connected.service.impl;
 
 import com.ltev.connected.dao.GroupDao;
+import com.ltev.connected.dao.PostDao;
 import com.ltev.connected.dao.UserDao;
 import com.ltev.connected.domain.Group;
 import com.ltev.connected.domain.GroupRequest;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.dto.GroupInfo;
+import com.ltev.connected.dto.PostInfo;
 import com.ltev.connected.exception.AccessDeniedException;
 import com.ltev.connected.repository.GroupRequestRepository;
 import com.ltev.connected.service.GroupService;
 import com.ltev.connected.service.support.GroupsRequestInfo;
 import com.ltev.connected.utils.AuthenticationUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +28,7 @@ public class GroupServiceImpl implements GroupService {
 
     private final GroupDao groupDao;
     private final UserDao userDao;
+    private final PostDao postDao;
     private final GroupRequestRepository groupRequestRepository;
 
     @Override
@@ -38,7 +43,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    public Optional<GroupInfo> getGroupInfo(Long groupId) {
+    public Optional<GroupInfo> getGroupInfo(Long groupId, Pageable pageable) {
         Optional<GroupInfo> groupInfoOptional = groupDao.findGroupInfo(groupId, AuthenticationUtils.getUsername());
 
         if (groupInfoOptional.isEmpty()) {
@@ -55,6 +60,11 @@ public class GroupServiceImpl implements GroupService {
             // get 4 members
             int limit = 4;
             groupInfo.getGroup().setMembers(groupDao.findMembers(groupId, limit));
+
+            // get list of postInfo
+            Page<PostInfo> postInfoPage = postDao.findGroupPostsInfo(
+                    groupId, groupInfo.getGroupRequest().getId().getUser().getId(), pageable);
+            groupInfo.setPostInfoPage(postInfoPage);
         }
         return groupInfoOptional;
     }

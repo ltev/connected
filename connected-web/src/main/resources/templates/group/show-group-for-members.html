@@ -85,9 +85,40 @@
                 </div>  <!-- members sample END -->
             </div>
 
-            <hr>
-
             <h4>Posts:</h4>
+
+            <div class="accordion-body d-grid gap-2">
+
+                <div th:each="postInfo : *{postInfoPage.getContent()}"
+                     th:insert="~{fragments/fragments :: post-with-comments-link}">post</div>  <!-- post fragment -->
+
+                <nav aria-label="Page navigation example" th:with="page = *{postInfoPage}">
+                    <ul class="pagination">
+                        <li class="page-item " th:classappend="${!page.hasPrevious()} ? disabled">
+                            <a class="page-link" href="#" th:href="@{''} + '?page=' + ${page.getNumber()}">Previous</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#" th:href="@{''} + '?page=1'">1</a></li>
+                        <li disabled class="page-item page-link">...</li>
+
+                        <li th:each="i : ${#numbers.sequence(page.getNumber() - 2, page.getNumber() + 4)}"
+                            th:if="${i > 0 && i <= page.getTotalPages()}"
+                            class="page-item"
+                            th:classappend="${i == page.getNumber() + 1} ? active">
+                            <a class="page-link" href="#"
+                               th:text="${i}" th:href="@{''} + '?page=' + ${i}">1</a></li>
+
+                        <li disabled class="page-item page-link">...</li>
+                        <li class="page-item">
+                            <a class="page-link" href="#"
+                               th:text="${page.getTotalPages()}" th:href="@{''} + '?page=' + ${page.getTotalPages()}">last page
+                            </a>
+                        </li>
+                        <li class="page-item" th:classappend="${!page.hasNext()} ? disabled">
+                            <a class="page-link" href="#" th:href="@{''} + '?page=' + ${page.getNumber() + 2}">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+
 
         </div>                                  <!-- main content column END -->
 

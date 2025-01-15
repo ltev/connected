@@ -4,6 +4,8 @@ import com.ltev.connected.domain.Comment;
 import com.ltev.connected.domain.Post;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.dto.PostInfo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,4 +33,6 @@ public interface PostDao {
     void increaseNumCommentsByOne(Long postId);
 
     List<Comment> findCommentsByPost(Long postId);
+
+    Page<PostInfo> findGroupPostsInfo(Long groupId, Long userId, Pageable pageable);
 }
