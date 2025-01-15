@@ -85,6 +85,12 @@ public class Post {
 
     private long numComments;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinTable(name = "groups_posts",
+        joinColumns = @JoinColumn(name = "post_id"),
+        inverseJoinColumns = @JoinColumn(name = "group_id"))
+    private Group group;
+
     @Override
     public String toString() {
         return "Post{" +
@@ -94,6 +100,7 @@ public class Post {
                 ", visibility=" + visibility +
                 ", title=" + title +
                 ", text='" + text + '\'' +
+                ", group=" + group +
                 '}';
     }
 }
