@@ -9,6 +9,7 @@ import com.ltev.connected.domain.User;
 import com.ltev.connected.dto.GroupInfo;
 import com.ltev.connected.dto.PostInfo;
 import com.ltev.connected.exception.AccessDeniedException;
+import com.ltev.connected.exception.PageOutOfBoundsException;
 import com.ltev.connected.repository.GroupRequestRepository;
 import com.ltev.connected.service.GroupService;
 import com.ltev.connected.service.support.GroupsRequestInfo;
@@ -64,6 +65,15 @@ public class GroupServiceImpl implements GroupService {
             // get list of postInfo
             Page<PostInfo> postInfoPage = postDao.findGroupPostsInfo(
                     groupId, groupInfo.getGroupRequest().getId().getUser().getId(), pageable);
+
+            // page number too outside range
+            if (! postInfoPage.isFirst() && postInfoPage.getTotalElements() == 0) {
+                throw new PageOutOfBoundsException("Out of range page: " + pageable.getPageNumber());
+//                  read first page
+//                pageable = pageable.withPage(0);
+//                postInfoPage = postDao.findGroupPostsInfo(
+//                        groupId, groupInfo.getGroupRequest().getId().getUser().getId(), pageable);
+            }
             groupInfo.setPostInfoPage(postInfoPage);
         }
         return groupInfoOptional;

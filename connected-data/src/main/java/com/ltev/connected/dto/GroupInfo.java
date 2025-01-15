@@ -16,4 +16,12 @@ public class GroupInfo {
     private int numMembers;
     private GroupRequest groupRequest;
     private Page<PostInfo> postInfoPage;
+
+    public boolean hasPosts() {
+        return getNumPosts() > 0;
+    }
+
+    public long getNumPosts() {
+        return postInfoPage.getTotalElements();
+    }
 }

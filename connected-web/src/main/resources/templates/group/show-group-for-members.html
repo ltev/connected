@@ -85,12 +85,18 @@
                 </div>  <!-- members sample END -->
             </div>
 
-            <h4>Posts:</h4>
+            <h4>Posts (<span th:text="${groupInfo.getNumPosts()}">num posts</span>):</h4>
 
-            <div class="accordion-body d-grid gap-2">
+            <div th:if="${groupInfo.getNumPosts()} == 0">
+                This group has currently no no posts.
+            </div>
+
+            <div th:if="${groupInfo.hasPosts()}" class="d-grid gap-2">
 
                 <div th:each="postInfo : *{postInfoPage.getContent()}"
-                     th:insert="~{fragments/fragments :: post-with-comments-link}">post</div>  <!-- post fragment -->
+                     th:insert="~{fragments/fragments :: post-with-comments-link}"> <!-- post fragment -->
+                    post
+                </div>
 
                 <nav aria-label="Page navigation example" th:with="page = *{postInfoPage}">
                     <ul class="pagination">
@@ -118,7 +124,6 @@
                     </ul>
                 </nav>
             </div>
-
 
         </div>                                  <!-- main content column END -->
 

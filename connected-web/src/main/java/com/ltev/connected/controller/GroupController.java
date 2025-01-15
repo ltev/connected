@@ -3,6 +3,7 @@ package com.ltev.connected.controller;
 import com.ltev.connected.domain.Group;
 import com.ltev.connected.dto.GroupInfo;
 import com.ltev.connected.exception.AccessDeniedException;
+import com.ltev.connected.exception.PageOutOfBoundsException;
 import com.ltev.connected.service.GroupService;
 import com.ltev.connected.service.support.GroupsRequestInfo;
 import lombok.AllArgsConstructor;
@@ -55,7 +56,7 @@ public class GroupController {
         Optional<GroupInfo> groupInfoOptional;
 
         if (isNumber(strId)) {
-            if (isNumber(strPageNumber)) {
+            try {
                 Pageable pageable = PageRequest.of(Integer.parseInt(strPageNumber) - 1, 3,
                         Sort.by(Sort.Order.desc("created")));
 
@@ -65,11 +66,11 @@ public class GroupController {
                             ? "group/show-group-for-members"
                             : "group/show-group";
                 }
-            } else {
+            } catch (IllegalArgumentException | PageOutOfBoundsException e) {
                 return "redirect:/group/" + strId;
             }
         }
-        return "redirect:/";
+        return"redirect:/";
     }
 
     @PostMapping(path = "{id}", params = "action=send-group-request")
