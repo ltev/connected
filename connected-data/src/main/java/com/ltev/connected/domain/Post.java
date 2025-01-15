@@ -23,10 +23,11 @@ public class Post {
      * ORDER should not be changed! Ordinals are used in for storing in DB
      */
     public enum Visibility {
-        MYSELF,
+        PRIVATE,
+        GROUP_PRIVATE,
         FRIENDS,
         LOGGED_USERS,
-        EVERYONE;
+        PUBLIC;
 
         private static int TOTAL_SIZE = 4;
 

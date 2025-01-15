@@ -67,7 +67,7 @@ public class PostServiceImpl implements PostService {
 
         if (postInfoOptional.isEmpty()
                 || (!AuthenticationUtils.isAuthenticated()
-                && postInfoOptional.get().getPost().getVisibility() != Post.Visibility.EVERYONE)) {
+                && postInfoOptional.get().getPost().getVisibility() != Post.Visibility.PUBLIC)) {
             return Optional.empty();
         }
 

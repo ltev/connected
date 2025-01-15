@@ -110,7 +110,7 @@ public class UserServiceImpl implements UserService {
         ProfileInfo profileInfo = new ProfileInfo(profileUser);
 
         List<Post.Visibility> visibilities = new ArrayList<>();
-        visibilities.add(Post.Visibility.EVERYONE);
+        visibilities.add(Post.Visibility.PUBLIC);
 
         List<PostInfo> postsInfo;
 
@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService {
 
         if (AuthenticationUtils.isAuthenticated()) {
             List<Post.Visibility> acceptedVisibilities = new ArrayList<>();
-            acceptedVisibilities.add(Post.Visibility.EVERYONE);
+            acceptedVisibilities.add(Post.Visibility.PUBLIC);
             acceptedVisibilities.add(Post.Visibility.LOGGED_USERS);
 
             User loggedUser = userDao.findByUsername(AuthenticationUtils.getAuthentication().getName()).get();
@@ -175,7 +175,7 @@ public class UserServiceImpl implements UserService {
             // User endProfileUser = userDao.findByUsernameAndVisibility(profileUsername, acceptedVisibilities).get();
             // profileInfo.setProfileUser(endProfileUser);
         } else {
-            foundPosts = postDao.findPosts(profileUser.get().getId(), Post.Visibility.EVERYONE);
+            foundPosts = postDao.findPosts(profileUser.get().getId(), Post.Visibility.PUBLIC);
         }
 
         profileInfo.getProfileUser().setPosts(foundPosts);
