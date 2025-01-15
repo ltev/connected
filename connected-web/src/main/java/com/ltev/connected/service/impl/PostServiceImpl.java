@@ -2,7 +2,10 @@ package com.ltev.connected.service.impl;
 
 import com.ltev.connected.dao.PostDao;
 import com.ltev.connected.dao.UserDao;
-import com.ltev.connected.domain.*;
+import com.ltev.connected.domain.Comment;
+import com.ltev.connected.domain.Like;
+import com.ltev.connected.domain.Post;
+import com.ltev.connected.domain.User;
 import com.ltev.connected.dto.PostInfo;
 import com.ltev.connected.repository.CommentRepository;
 import com.ltev.connected.repository.LikeRepository;
@@ -61,8 +64,11 @@ public class PostServiceImpl implements PostService {
         return postDao.findFriendsPostsInfo(AuthenticationUtils.getUsername());
     }
 
+    /**
+     * Service for all post but GROUP_PRIVATE
+     */
     @Override
-    public Optional<PostInfo> getPostInfo(Long postId) {
+    public Optional<PostInfo> getPostInfoForPersonPost(Long postId) {
         Optional<PostInfo> postInfoOptional = postDao.findPostInfo(postId, AuthenticationUtils.getUsername());
 
         if (postInfoOptional.isEmpty()
@@ -117,6 +123,34 @@ public class PostServiceImpl implements PostService {
 //            }
 //        }
 //        return postInfo;
+    }
+
+    /**
+     * Service for group's posts, only GROUP_PRIVATE visibility
+     */
+    @Override
+    public Optional<PostInfo> getPostInfoForGroupPost(Long postId) {
+        if (! AuthenticationUtils.isAuthenticated()) {
+            return Optional.empty();
+        }
+
+        // part for authenticated only
+        Optional<PostInfo> postInfoOptional = postDao.findPostInfoForGroupPost(postId, AuthenticationUtils.getUsername());
+
+        if (postInfoOptional.isEmpty()) {
+            return Optional.empty();
+        }
+
+        PostInfo postInfo = postInfoOptional.get();
+
+        if (postInfo.isSelfPost() || postInfo.isGroupMember()) {
+            // find comments
+            List<Comment> comments = postDao.findCommentsByPost(postId);
+            postInfo.getPost().setComments(comments);
+
+            return postInfoOptional;
+        }
+        return Optional.empty();
     }
 
     @Override

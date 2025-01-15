@@ -33,7 +33,7 @@
                             <tr th:each="comment : ${postInfo.post.comments}">
                                 <td class="col-2 text-center">
                                     <div th:insert="~{fragments/fragments :: linkedUsername(${comment.user.username})}"></div>
-                                    <div th:replace="fragments/fragments :: dateTimeDisplay(${comment.created})">Date time</div>
+                                    <div th:replace="~{fragments/fragments :: dateTimeDisplay(${comment.created})}">Date time</div>
                                 </td>
                                 <td th:text="${comment.text}">
                                     Text

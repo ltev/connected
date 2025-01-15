@@ -18,6 +18,8 @@ public class PostInfo {
     private int numLikes;
     private int numDislikes;
     private int numIndifferences;
+    private boolean isGroupMember;
+    private boolean isGroupAdmin;
 
     public boolean isUserLogged() {
         return loggedUser != null;

@@ -3,9 +3,11 @@ package com.ltev.connected.controller;
 import com.ltev.connected.domain.Group;
 import com.ltev.connected.domain.Post;
 import com.ltev.connected.dto.GroupInfo;
+import com.ltev.connected.dto.PostInfo;
 import com.ltev.connected.exception.AccessDeniedException;
 import com.ltev.connected.exception.PageOutOfBoundsException;
 import com.ltev.connected.service.GroupService;
+import com.ltev.connected.service.PostService;
 import com.ltev.connected.service.support.GroupsRequestInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -26,6 +28,7 @@ import static com.ltev.connected.utils.ApiUtils.isNumber;
 public class GroupController {
 
     private GroupService groupService;
+    private PostService postService;
 
     @GetMapping
     public String showGroupsPage(Model model) {
@@ -87,6 +90,20 @@ public class GroupController {
     public String createNewPost(@PathVariable("groupId") Long groupId, Post post) {
         groupService.saveGroupPost(post);
         return "redirect:/group/" + groupId;
+    }
+
+    @GetMapping("{id}/post/{postId}")
+    public String showGroupPost(@PathVariable Long id, @PathVariable Long postId, Model model) {
+        Optional<PostInfo> postInfoOptional = postService.getPostInfoForGroupPost(postId);
+
+        if (postInfoOptional.isPresent()) {
+            model.addAttribute("postInfo", postInfoOptional.get());
+            if (postInfoOptional.get().getLoggedUser() != null) {
+                model.addAttribute("loggedUserId", postInfoOptional.get().getLoggedUser().getId());
+            }
+            return "post/show-post";
+        }
+        return "redirect:/";
     }
 
     @PostMapping(path = "{id}", params = "action=send-group-request")

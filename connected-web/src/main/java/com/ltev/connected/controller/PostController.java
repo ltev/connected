@@ -35,7 +35,7 @@ public class PostController {
 
     @GetMapping("post/{id}")
     public String showPost(@PathVariable Long id, Model model) {
-        Optional<PostInfo> postInfoOptional = postService.getPostInfo(id);
+        Optional<PostInfo> postInfoOptional = postService.getPostInfoForPersonPost(id);
 
         if (postInfoOptional.isPresent()) {
             model.addAttribute("postInfo", postInfoOptional.get());
@@ -47,7 +47,7 @@ public class PostController {
         return "redirect:/";
     }
 
-    @PostMapping("post/{id}")
+    @PostMapping(path = "post/{id}", params = "action=new-comment")
     public String saveComment(@PathVariable("id") Long postId,
                               @RequestParam("loggedUserId") Long loggedUserId,
                               @RequestParam("commentText") String comment) {

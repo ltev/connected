@@ -16,7 +16,9 @@ public interface PostService {
 
     List<PostInfo> findFriendsPostsInfo();
 
-    Optional<PostInfo> getPostInfo(Long postId);
+    Optional<PostInfo> getPostInfoForPersonPost(Long postId);
+
+    Optional<PostInfo> getPostInfoForGroupPost(Long postId);
 
     void saveComment(Long postId, String comment, Long loggedUserId);
 

@@ -35,4 +35,6 @@ public interface PostDao {
     List<Comment> findCommentsByPost(Long postId);
 
     Page<PostInfo> findGroupPostsInfo(Long groupId, Long userId, Pageable pageable);
+
+    Optional<PostInfo> findPostInfoForGroupPost(Long postId, String loggedUsername);
 }
