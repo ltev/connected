@@ -1,5 +1,6 @@
 package com.ltev.connected.service;
 
+import com.ltev.connected.domain.Comment;
 import com.ltev.connected.domain.Like;
 import com.ltev.connected.domain.Post;
 import com.ltev.connected.dto.PostInfo;
@@ -20,7 +21,7 @@ public interface PostService {
 
     Optional<PostInfo> getPostInfoForGroupPost(Long postId);
 
-    void saveComment(Long postId, String comment, Long loggedUserId);
+    void saveComment(Comment comment);
 
     void saveOrRemoveLike(Long postId, Like.Value likeValue);
 }

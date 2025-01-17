@@ -1,5 +1,6 @@
 package com.ltev.connected.controller;
 
+import com.ltev.connected.domain.Comment;
 import com.ltev.connected.domain.Like;
 import com.ltev.connected.domain.Post;
 import com.ltev.connected.dto.PostInfo;
@@ -10,11 +11,15 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Optional;
 
-import static com.ltev.connected.controller.support.ControllerSupport.*;
+import static com.ltev.connected.controller.support.ControllerSupport.getLastUrl;
+import static com.ltev.connected.controller.support.ControllerSupport.redirectToLastUrl;
 
 @Controller
 @RequestMapping("/")
@@ -44,19 +49,25 @@ public class PostController {
 
         if (postInfoOptional.isPresent()) {
             model.addAttribute("postInfo", postInfoOptional.get());
+
             if (postInfoOptional.get().getLoggedUser() != null) {
                 model.addAttribute("loggedUserId", postInfoOptional.get().getLoggedUser().getId());
+                Comment comment = new Comment();
+                comment.setUser(postInfoOptional.get().getLoggedUser());
+                comment.setPost(postInfoOptional.get().getPost());
+                model.addAttribute("comment", comment);
             }
             return "post/show-post";
         }
         return "redirect:/";
     }
 
-    @PostMapping(path = "post/{id}", params = "action=new-comment")
-    public String saveComment(@PathVariable("id") Long postId,
-                              @RequestParam("loggedUserId") Long loggedUserId,
-                              @RequestParam("commentText") String comment) {
-        postService.saveComment(postId, comment, loggedUserId);
+    @PostMapping(path = "post/{postId}", params = "action=new-comment")     // {id} - if 'id' then it's automatically bind as comment.id
+    public String saveComment(@PathVariable("postId") Long postId, @Valid Comment comment, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "redirect:/post/" + postId + "?ics";     // ics = invalid comment size
+        }
+        postService.saveComment(comment);
         return "redirect:/post/" + postId;
     }
 

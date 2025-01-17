@@ -154,20 +154,16 @@ public class PostServiceImpl implements PostService {
         return Optional.empty();
     }
 
+
     @Transactional
     @Override
-    public void saveComment(Long postId, String commentText, Long loggedUserId) {
+    public synchronized void saveComment(Comment comment) {
         AuthenticationUtils.checkAuthenticationOrThrow();
-
-        Comment comment = new Comment();
-        comment.setUser(new User(loggedUserId));
-        comment.setPost(new Post(postId));
-        comment.setText(commentText);
 
         commentRepository.save(comment);
 
         // update comments count
-        postDao.increaseNumCommentsByOne(postId);
+        postDao.increaseNumCommentsByOne(comment.getPost().getId());
     }
 
     @Override
