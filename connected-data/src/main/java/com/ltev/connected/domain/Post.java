@@ -1,6 +1,9 @@
 package com.ltev.connected.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -73,12 +76,15 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @NotNull
     @Enumerated(EnumType.ORDINAL)
     private Visibility visibility;
 
     private String title;
 
     @NonNull
+    @NotBlank
+    @Size(min = 4, max = 1000)
     private String text;
 
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)

@@ -5,9 +5,11 @@ import com.ltev.connected.domain.Post;
 import com.ltev.connected.dto.PostInfo;
 import com.ltev.connected.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -28,7 +30,10 @@ public class PostController {
     }
 
     @PostMapping(params = "action=new-post")
-    public String createNewPost(Post post) {
+    public String createNewPost(@Valid Post post, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "post/post-form";
+        }
         postService.savePost(post);
         return "redirect:/";
     }

@@ -31,12 +31,21 @@
 
             <div class="mb-3">
                 <label for="title" class="form-label">Post title: (optional)</label>
-                <input type="text" class="form-control" id="title" th:field="*{title}">
+                <input type="text" class="form-control" id="title" th:field="*{title}"
+                       th:classappend="${#fields.hasErrors('title')} ? is-invalid">
+                <div class="invalid-feedback">
+                    <span th:errors="*{title}">error</span>
+                </div>
             </div>
 
             <div class="mb-3">
                 <label for="text" class="form-label">Post text:</label>
-                <textarea class="form-control" id="text" th:field="*{text}" rows="10"></textarea>
+                <textarea class="form-control" id="text" th:field="*{text}" rows="10" required
+                    th:classappend="${#fields.hasErrors('text')} ? is-invalid"></textarea>
+
+                <div class="invalid-feedback">
+                    <span th:errors="*{text}">error</span>
+                </div>
             </div>
 
             <button type="submit" name="action" value="new-post" class="btn btn-primary mb-2">Post</button>
