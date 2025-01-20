@@ -14,7 +14,10 @@ import lombok.ToString;
 public class ProfileSettings {
 
     @Id
-    @OneToOne
+    private Long id;
+
+    @MapsId
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "id")
     private User user;
 

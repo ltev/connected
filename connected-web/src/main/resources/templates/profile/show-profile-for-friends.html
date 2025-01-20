@@ -43,6 +43,65 @@
 
                 </form> <!-- friend request buttons END -->
 
+                <!-- profile friends and groups-->
+
+                <div class="row">
+
+                    <div class="col-4 container text-center" th:object="${profileInfo.commonFriends}">
+
+                        <div class="row justify-content-around" th:if="*{size} >= 2">
+                            <h6>Friends (<span th:text="'*{numMembers}'"></span>):</h6>
+
+                            <div class="col-4">
+                                <div th:replace="~{fragments/fragments :: linkedUsername(*{get(0).username})}"></div>
+                            </div>
+                            <div class="col-4">
+                                <div th:replace="~{fragments/fragments :: linkedUsername(*{get(1).username})}"></div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-between" th:if="*{size} >= 4">
+                            <div class="col-4">
+                                <div th:replace="~{fragments/fragments :: linkedUsername(*{get(2).username})}"></div>
+                            </div>
+                            <div class="col-4">
+                                <div th:replace="~{fragments/fragments :: linkedUsername(*{get(3).username})}"></div>
+                            </div>
+                        </div>
+    <!--                    <a href="#" th:href="'@{${'/group/' + id + '/members'}}'">-->
+    <!--                        See all members-->
+    <!--                    </a>-->
+
+                    </div>
+
+                    <!-- profile groups -->
+
+                    <div class="col-4 container text-center" th:object="${profileInfo.commonFriends}">
+
+                        <div class="row justify-content-around" th:if="*{size} >= 2">
+                            <h6>Friends (<span th:text="'*{numMembers}'"></span>):</h6>
+
+                            <div class="col-4">
+                                <div th:replace="~{fragments/fragments :: linkedUsername(*{get(0).username})}"></div>
+                            </div>
+                            <div class="col-4">
+                                <div th:replace="~{fragments/fragments :: linkedUsername(*{get(1).username})}"></div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-between" th:if="*{size} >= 4">
+                            <div class="col-4">
+                                <div th:replace="~{fragments/fragments :: linkedUsername(*{get(2).username})}"></div>
+                            </div>
+                            <div class="col-4">
+                                <div th:replace="~{fragments/fragments :: linkedUsername(*{get(3).username})}"></div>
+                            </div>
+                        </div>
+                        <!--                    <a href="#" th:href="'@{${'/group/' + id + '/members'}}'">-->
+                        <!--                        See all members-->
+                        <!--                    </a>-->
+
+                    </div>
+                </div>
+
                 <div class="accordion mt-2" id="ownPosts">                <!-- profile posts -->
                     <div class="accordion-item">
                         <h2 class="accordion-header">

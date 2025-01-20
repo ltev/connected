@@ -69,7 +69,6 @@ public class UserDaoImpl implements UserDao {
             post.setText(rs.getString(6));
             return post;
         }
-
     }
 
     private static final String INSERT_INTO_USERS_SQL = "insert into users (username, password, enabled) values (?, ?, 1)";
@@ -84,6 +83,20 @@ public class UserDaoImpl implements UserDao {
             	from friend_requests
             	where to_user_id = ? and accepted is not null
             )""";
+
+    private static final String FIND_COMMON_FRIENDS_SQL = """
+            select
+            	u.id, u.username
+            from (
+            	select to_user_id as friend_id from friend_requests where (from_user_id = ? and accepted is not null)
+            	UNION
+            	select from_user_id from friend_requests where (to_user_id = ? and accepted is not null)
+            	INTERSECT
+            	select to_user_id from friend_requests where (from_user_id = ? and accepted is not null)
+            	UNION
+            	select from_user_id from friend_requests where (to_user_id = ? and accepted is not null)
+            ) as friends_ids
+            left join users u on u.id = friends_ids.friend_id""";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -136,5 +149,11 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> findAllFriends(Long userId) {
         return jdbcTemplate.query(FIND_FRIENDS_BY_USER_ID_SQL, new UserRowMapper(), userId, userId);
+    }
+
+    @Override
+    public List<User> findCommonFriends(Long user1Id, Long user2Id) {
+        return jdbcTemplate.query(FIND_COMMON_FRIENDS_SQL, new UserRowMapper(),
+                user1Id, user1Id, user2Id, user2Id);
     }
 }

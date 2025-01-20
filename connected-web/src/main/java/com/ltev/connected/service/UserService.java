@@ -5,7 +5,7 @@ import com.ltev.connected.domain.FriendRequest;
 import com.ltev.connected.domain.RequestStatus;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.domain.UserDetails;
-import com.ltev.connected.service.support.ProfileInfo;
+import com.ltev.connected.dto.ProfileInfo;
 
 import java.util.List;
 import java.util.Map;

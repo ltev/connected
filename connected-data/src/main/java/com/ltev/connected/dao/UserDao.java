@@ -19,4 +19,6 @@ public interface UserDao {
     Optional<User> findById(Long userId);
 
     List<User> findAllFriends(Long userId);
+
+    List<User> findCommonFriends(Long user1Id, Long user2Id);
 }

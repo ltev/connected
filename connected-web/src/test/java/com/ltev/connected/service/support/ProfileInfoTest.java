@@ -3,6 +3,7 @@ package com.ltev.connected.service.support;
 import com.ltev.connected.domain.FriendRequest;
 import com.ltev.connected.domain.RequestStatus;
 import com.ltev.connected.domain.User;
+import com.ltev.connected.dto.ProfileInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

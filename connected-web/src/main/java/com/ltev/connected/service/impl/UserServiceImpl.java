@@ -5,10 +5,11 @@ import com.ltev.connected.dao.PostDao;
 import com.ltev.connected.dao.UserDao;
 import com.ltev.connected.domain.*;
 import com.ltev.connected.dto.PostInfo;
+import com.ltev.connected.dto.ProfileInfo;
+import com.ltev.connected.repository.ProfileSettingsRepository;
 import com.ltev.connected.repository.UserDetailsRepository;
 import com.ltev.connected.service.FriendRequestService;
 import com.ltev.connected.service.UserService;
-import com.ltev.connected.service.support.ProfileInfo;
 import com.ltev.connected.utils.AuthenticationUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -24,6 +25,8 @@ public class UserServiceImpl implements UserService {
     private PostDao postDao;
     private FriendRequestService friendRequestService;
     private UserDetailsRepository userDetailsRepository;
+
+    private ProfileSettingsRepository profileSettingsRepository;
 
     @Override
     public User findByUsernameJoinFetchPosts(String username) {
@@ -100,18 +103,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<ProfileInfo> getInformationForShowingProfile(String profileUsername) {
-        Optional<User> profileUserOptional = userDao.findByUsername(profileUsername);
+        Optional<ProfileSettings> profileSettingsOptional = profileSettingsRepository.findByUserUsername(profileUsername);
 
-        if (profileUserOptional.isEmpty()) {
+        if (profileSettingsOptional.isEmpty()) {
             return Optional.empty();
         }
 
-        User profileUser = profileUserOptional.get();
+        User profileUser = profileSettingsOptional.get().getUser();
         ProfileInfo profileInfo = new ProfileInfo(profileUser);
 
         List<Post.Visibility> visibilities = new ArrayList<>();
         visibilities.add(Post.Visibility.PUBLIC);
 
+        // find posts
         List<PostInfo> postsInfo;
 
         // decide what visibility
@@ -132,10 +136,14 @@ public class UserServiceImpl implements UserService {
                 }
             }
             postsInfo = postDao.findPostsInfo(profileUsername, visibilities, loggedUser.getUsername());
+
+            // find friends sample
+            profileInfo.setCommonFriends(userDao.findCommonFriends(loggedUser.getId(), profileUser.getId()));
+
+            // find groups sample
         } else {
             postsInfo = postDao.findPostsInfo(profileUsername, visibilities, null);
         }
-
         profileInfo.setPostsInfo(postsInfo);
 
         return Optional.of(profileInfo);
