@@ -46,10 +46,6 @@ public class Post {
             return list;
         }
 
-        public String displayName() {
-            return this.toString().toLowerCase();
-        }
-
         public static Visibility ofOrdinal(byte visibility) {
             for (Visibility temp : Visibility.values()) {
                 if (temp.ordinal() == visibility) {
@@ -57,6 +53,22 @@ public class Post {
                 }
             }
             throw new RuntimeException("No visibility of ordinal: " + visibility);
+        }
+
+        public String displayName() {
+            return this.toString().toLowerCase();
+        }
+
+        public boolean isForFriends() {
+            return this.ordinal() >= FRIENDS.ordinal();
+        }
+
+        public boolean isForLoggedUsers() {
+            return this.ordinal() >= LOGGED_USERS.ordinal();
+        }
+
+        public boolean isPublic() {
+            return this.ordinal() == PUBLIC.ordinal();
         }
     }
 

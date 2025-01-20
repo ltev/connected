@@ -35,8 +35,13 @@ public class ProfileController {
             return "redirect:/";
         }
 
-        model.addAttribute("profileInfo", optionalProfileInfo.get());
+        ProfileInfo profileInfo = optionalProfileInfo.get();
+        model.addAttribute("profileInfo", profileInfo);
 
-        return "profile/profile";
+        if (profileInfo.isFriend()) {
+            return "profile/show-profile-for-friends";
+        } else {
+            return "profile/show-profile-for-logged-users";
+        }
     }
 }

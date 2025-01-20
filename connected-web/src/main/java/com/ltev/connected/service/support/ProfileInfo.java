@@ -27,4 +27,12 @@ public class ProfileInfo {
                 ? RequestStatus.NOT_SENT
                 : friendRequest.getStatus(loggedUsername);
     }
+
+    /**
+     *
+     * @return true if logged user and profile user are friends, else false
+     */
+    public boolean isFriend() {
+        return friendRequest != null && friendRequest.isAccepted();
+    }
 }
