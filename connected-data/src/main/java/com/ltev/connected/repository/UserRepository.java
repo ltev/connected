@@ -3,10 +3,14 @@ package com.ltev.connected.repository;
 import com.ltev.connected.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+
+    @Transactional
+    void deleteByUsername(String username);
 
     Optional<User> findByUsername(String username);
 

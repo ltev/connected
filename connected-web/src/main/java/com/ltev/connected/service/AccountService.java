@@ -6,6 +6,8 @@ import java.util.Optional;
 
 public interface AccountService {
 
+    void deleteAccount();
+
     void saveUserInfo(UserDetails userDetails);
 
     Optional<UserDetails> findUserInfo();

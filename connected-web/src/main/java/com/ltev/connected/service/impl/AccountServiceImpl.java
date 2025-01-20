@@ -7,6 +7,7 @@ import com.ltev.connected.repository.UserDetailsRepository;
 import com.ltev.connected.service.AccountService;
 import com.ltev.connected.utils.AuthenticationUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,6 +18,13 @@ public class AccountServiceImpl implements AccountService {
 
     private UserDetailsRepository userDetailsRepository;
     private UserDao userDao;
+
+    @Override
+    public void deleteAccount() {
+        Authentication authentication = AuthenticationUtils.checkAuthenticationOrThrow();
+        userDao.deleteUser(authentication.getName());
+        authentication.setAuthenticated(false);
+    }
 
     // TODO: assert later that details saved only if currently logged user is the same user that open the user-info-form
     @Override

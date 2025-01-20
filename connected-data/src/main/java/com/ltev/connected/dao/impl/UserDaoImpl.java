@@ -105,8 +105,18 @@ public class UserDaoImpl implements UserDao {
     private UserRepository repository;
 
     @Override
+    public void deleteUser(String username) {
+        repository.deleteByUsername(username);
+    }
+
+    @Override
     public void createNewUser(String username, String password) {
         jdbcTemplate.update(INSERT_INTO_USERS_SQL, username, password);
+    }
+
+    @Override
+    public void createNewUser(User user) {
+        repository.save(user);
     }
 
     @Override

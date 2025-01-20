@@ -3,7 +3,7 @@ package com.ltev.connected.controller;
 import com.ltev.connected.security.SecurityConfig;
 import com.ltev.connected.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,7 +38,7 @@ public class LoginController {
         String encodedPassword = "{bcrypt}" + encoder.encode(password);
         try {
             userService.createNewUser(username, encodedPassword);
-        } catch (DuplicateKeyException e) {
+        } catch (DataIntegrityViolationException e) {
             return "redirect:/signup?taken";
         }
         return "redirect:/login?created";

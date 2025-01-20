@@ -100,7 +100,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createNewUser(String username, String password) {
-        userDao.createNewUser(username, password);
+        ProfileSettings profileSettings = new ProfileSettings();
+        profileSettings.setFriendsVisibility(Visibility.PUBLIC);
+        profileSettings.setGroupsVisibility(Visibility.PUBLIC);
+
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setEnabled((byte) 1);
+        user.setProfileSettings(profileSettings);
+
+        userDao.createNewUser(user);
     }
 
     @Override

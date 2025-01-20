@@ -1,7 +1,7 @@
 package com.ltev.connected.controller;
 
-import com.ltev.connected.service.UserService;
 import com.ltev.connected.dto.ProfileInfo;
+import com.ltev.connected.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

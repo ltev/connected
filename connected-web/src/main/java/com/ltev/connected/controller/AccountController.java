@@ -26,9 +26,15 @@ public class AccountController {
         return "account/user-info-form";
     }
 
-    @PostMapping("user-info")
+    @PostMapping(value = "user-info", params = "action=save-details")
     public String processUserInfoForm(UserDetails userDetails) {
         accountService.saveUserInfo(userDetails);
         return "redirect:/account/user-info?success";
+    }
+
+    @PostMapping(value = "user-info", params = "action=delete-account")
+    public String deleteAccount() {
+        accountService.deleteAccount();
+        return "redirect:/";
     }
 }

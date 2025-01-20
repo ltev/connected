@@ -9,7 +9,11 @@ import java.util.Optional;
 
 public interface UserDao {
 
+    void deleteUser(String username);
+
     void createNewUser(String username, String password);
+
+    void createNewUser(User user);
 
     Optional<User> findByUsername(String username);
 

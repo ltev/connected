@@ -17,7 +17,7 @@ public class ProfileSettings {
     private Long id;
 
     @MapsId
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id")
     private User user;
 
@@ -29,4 +29,11 @@ public class ProfileSettings {
 
     @NotNull
     private Visibility groupsVisibility;
+
+    public void setUser(User user) {
+        this.user = user;
+        if (user != null && user.getProfileSettings() != this) {
+            user.setProfileSettings(this);
+        }
+    }
 }

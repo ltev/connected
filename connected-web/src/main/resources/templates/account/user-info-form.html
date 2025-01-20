@@ -38,7 +38,7 @@
 
                 <div class="mb-3">
                     <label for="firstName" class="form-label">First name:</label>
-                    <input type="text" class="form-control" id="firstName" th:field="*{firstName}" />
+                    <input type="text" class="form-control" id="firstName" th:field="*{firstName}"/>
                 </div>
 
                 <div class="mb-3">
@@ -51,8 +51,21 @@
                     <input type="date" class="form-control" id="birthday" th:field="*{birthday}">
                 </div>
 
-                <input hidden th:field="*{id}" />
-                <button type="submit" name="action" value="new-post" class="btn btn-primary mb-2">Submit</button>
+                <input hidden th:field="*{id}"/>
+                <button type="submit" name="action" value="save-details" class="btn btn-primary mb-2">Submit</button>
+
+                <div class="row">
+                <div class="col-6"></div>
+                <div class="col-5 text-center text-danger">
+                    Danger!!!<br>
+                    After clicking all data will be lost forever!!!<br>
+                    <button type="submit" name="action" value="delete-account" class="btn btn-danger btn-sm">Delete
+                        account
+                    </button>
+                </div>
+                </div>
+
+
             </form>
 
         </div>          <!-- main content END -->

@@ -1,6 +1,8 @@
 package com.ltev.connected.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -27,8 +29,20 @@ public class User implements Serializable {
     @Size(min = 3, max = 50, message = "Must have from 3 to 50 characters.")
     private String username;
 
+    @NotNull
+    @NotEmpty
+    @NotBlank
+    private String password;
+
+    @NotNull
+    private Byte enabled;
+
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Post> posts;
+
+    @NotNull
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private ProfileSettings profileSettings;
 
     public User(Long id) {
         this.id = id;
@@ -37,6 +51,13 @@ public class User implements Serializable {
     public User(Long id, String username) {
         this.id = id;
         this.username = username;
+    }
+
+    public void setProfileSettings(ProfileSettings profileSettings) {
+        this.profileSettings = profileSettings;
+        if (profileSettings != null && profileSettings.getUser() != this) {
+            profileSettings.setUser(this);
+        }
     }
 
     @Override
