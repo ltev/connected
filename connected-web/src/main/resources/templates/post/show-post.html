@@ -44,13 +44,19 @@
                 </div>      <!-- show comments END -->
 
                 <div sec:authorize="isAuthenticated()">        <!-- write comment -->   <!-- body for logged users -->
-                    <form action="#" th:action="@{''}" method="post">
+                    <form th:object="${comment}" action="#" th:action="@{''}" method="post">
                         <div class="mb-3">
                             <label for="text" class="form-label h5">Add comment:</label>
-                            <textarea class="form-control" id="text" name="commentText" rows="10"></textarea>
+                            <textarea th:field="*{text}" class="form-control" id="text" name="commentText" rows="10"
+                                th:classappend="${param.ics} ? is-invalid">text</textarea>
+
+                            <div class="invalid-feedback">
+                                Text length must have between 1 - 1000 characters
+                            </div>
                         </div>
 
-                        <input type="hidden" name="loggedUserId" value="#" th:value="${loggedUserId}">
+                        <input hidden th:field="*{user}">
+                        <input hidden th:field="*{post}">
                         <button type="submit" name="action" value="new-comment" class="btn btn-primary mb-2">Add comment</button>
                     </form>
                 </div>      <!-- write comment END -->  <!-- body for logged users END -->

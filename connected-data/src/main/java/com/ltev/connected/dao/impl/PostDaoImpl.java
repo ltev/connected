@@ -13,9 +13,14 @@ import jakarta.persistence.EntityManagerFactory;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.time.ZoneId;
@@ -180,7 +185,7 @@ public class PostDaoImpl implements PostDao {
                 	select from_user_id
                 	from friend_requests
                 	where to_user_id = (select id from users where username = ?) and accepted is not null
-                ) and visibility in (1, 2, 3)""";
+                ) and visibility in (2, 3, 4)""";
         return jdbcTemplate.query(sql, new PostInfoRowMapper(false), username, username, username);
     }
 
@@ -194,6 +199,7 @@ public class PostDaoImpl implements PostDao {
         return postRepository.findAllByUserAndVisibilityIn(user, visibilities);
     }
 
+    @Transactional(propagation = Propagation.MANDATORY, label = "Should be called from saving comment transaction scope")
     @Override
     public void increaseNumCommentsByOne(Long postId) {
         String sql = "update posts set num_comments = num_comments + 1 where id = ?";

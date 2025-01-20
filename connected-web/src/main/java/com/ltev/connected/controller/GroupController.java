@@ -1,7 +1,9 @@
 package com.ltev.connected.controller;
 
+import com.ltev.connected.domain.Comment;
 import com.ltev.connected.domain.Group;
 import com.ltev.connected.domain.Post;
+import com.ltev.connected.domain.User;
 import com.ltev.connected.dto.GroupInfo;
 import com.ltev.connected.dto.PostInfo;
 import com.ltev.connected.exception.AccessDeniedException;
@@ -101,9 +103,23 @@ public class GroupController {
             if (postInfoOptional.get().getLoggedUser() != null) {
                 model.addAttribute("loggedUserId", postInfoOptional.get().getLoggedUser().getId());
             }
-            return "post/show-post";
+            return "group/show-group-post";
         }
         return "redirect:/";
+    }
+
+    @PostMapping(path = "{id}/post/{postId}", params = "action=new-comment")
+    public String saveComment(@PathVariable("id") Long groupId,
+                              @PathVariable("postId") Long postId,
+                              @RequestParam("loggedUserId") Long loggedUserId,
+                              @RequestParam("commentText") String commentText) {
+        Comment comment = new Comment();
+        comment.setPost(new Post(postId));
+        comment.setUser(new User(loggedUserId));
+        comment.setText(commentText);
+
+        postService.saveComment(comment);
+        return "redirect:/group/" + groupId + "/post/" + postId;
     }
 
     @PostMapping(path = "{id}", params = "action=send-group-request")

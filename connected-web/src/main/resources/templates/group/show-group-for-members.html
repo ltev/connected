@@ -99,7 +99,7 @@
             <div th:if="${groupInfo.hasPosts()}" class="d-grid gap-2">
 
                 <div th:each="postInfo : *{postInfoPage.getContent()}"
-                     th:insert="~{fragments/fragments :: post-with-comments-link}"> <!-- post fragment -->
+                     th:insert="~{fragments/fragments :: group-post-with-comments-link(${postInfo})}"> <!-- post fragment -->
                     post
                 </div>
 

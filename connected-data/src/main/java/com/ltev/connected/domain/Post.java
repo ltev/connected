@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SourceType;
-import org.springframework.lang.NonNull;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -82,7 +81,7 @@ public class Post {
 
     private String title;
 
-    @NonNull
+    @NotNull
     @NotBlank
     @Size(min = 4, max = 1000)
     private String text;

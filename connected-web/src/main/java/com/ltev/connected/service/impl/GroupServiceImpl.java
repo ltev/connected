@@ -69,6 +69,8 @@ public class GroupServiceImpl implements GroupService {
             // get list of postInfo
             Page<PostInfo> postInfoPage = postDao.findGroupPostsInfo(
                     groupId, groupInfo.getGroupRequest().getId().getUser().getId(), pageable);
+            // add group
+            postInfoPage.getContent().forEach(pi -> pi.getPost().setGroup(groupInfo.getGroup()));
 
             // page number too outside range
             if (! postInfoPage.isFirst() && postInfoPage.getTotalElements() == 0) {

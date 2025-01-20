@@ -111,7 +111,8 @@ th:object="${postInfo}" - must be of type PostInfo
             <form action="#" th:action="@{/}" method="post">
                 <div class="btn-group" role="group">
 
-                    <input hidden name="isFromSelfAccordion" th:value="${isFromSelfAccordion}">
+                    <input th:if="${isFromSelfAccordion}" hidden type="text"
+                           name="isFromSelfAccordion" th:value="${isFromSelfAccordion}">
 
                     <button type="submit" class="btn btn-outline-primary btn-sm"
                             th:classappend="*{likeValue} and *{likeValue.ordinal == 2} ? 'active btn-success'"
@@ -128,12 +129,16 @@ th:object="${postInfo}" - must be of type PostInfo
                     <button type="submit" class="btn btn-outline-primary btn-sm"
                             name="likeValue" th:value="*{T(com.ltev.connected.domain.Like.Value).DISLIKE}"
                             th:classappend="*{likeValue} and *{likeValue.ordinal == 0} ? 'active btn-success'"
-                            th:text="'+/- (' +  *{numDislikes} + ')'">+/-
+                            th:text="'Dislike (' +  *{numDislikes} + ')'">+/-
                     </button>
+
+
+
                 </div>
 
                 <input type="hidden" name="postId" th:value="*{post.id}">
             </form>
+
         </div>
 
         <a th:if="${includeCommentsLink} == true" href="#"
@@ -147,6 +152,62 @@ th:object="${postInfo}" - must be of type PostInfo
 <div class="card" th:fragment="post-with-comments-link" th:replace="~{fragments/fragments :: post(true, false)}"></div>
 
 <div class="card" th:fragment="post-with-comments-link-inside-self-accordion" th:replace="~{fragments/fragments :: post(true, true)}"></div>
+
+<!-- GROUP POST
+th:object="${postInfo}" - must be of type PostInfo
+-->
+
+<div class="card" th:fragment="groupPost(postInfo, includeCommentsLink)" th:object="${postInfo}">
+    <div class="card-body">
+
+        <span th:text="*{post.group} ? *{post.group.name} : 'no group info'">group info</span>
+
+        <h5 class="card-title" th:text="*{post.title}">Post title</h5>
+        <h6 class="card-subtitle mb-2 text-body-secondary">
+            <span th:replace="~{fragments/fragments :: dateTimeDisplay(*{post.created})}">Date time</span>
+            <span th:replace="~{fragments/fragments :: linkedUsername(*{post.user.username})}"></span>
+            <span th:text="' (' + *{post.visibility.displayName()} + ')'"></span>
+        </h6>
+        <p class="card-text" th:text="*{post.text}">Text</p>
+
+        <div sec:authorize="isAuthenticated()">
+            <form action="#" th:action="@{/}" method="post">
+                <div class="btn-group" role="group">
+
+                    <input th:if="${isFromSelfAccordion}" hidden type="text"
+                           name="isFromSelfAccordion" th:value="${isFromSelfAccordion}">
+
+                    <button type="submit" class="btn btn-outline-primary btn-sm"
+                            th:classappend="*{likeValue} and *{likeValue.ordinal == 2} ? 'active btn-success'"
+                            name="likeValue" th:value="*{T(com.ltev.connected.domain.Like.Value).LIKE}"
+                            th:text="'Like (' + *{numLikes} + ')'">Like
+                    </button>
+
+                    <button type="submit" class="btn btn-outline-primary btn-sm"
+                            name="likeValue" th:value="*{T(com.ltev.connected.domain.Like.Value).INDIFFERENCE}"
+                            th:classappend="*{likeValue} and *{likeValue.ordinal == 1} ? 'active btn-success'"
+                            th:text="'+/- (' +  *{numIndifferences} + ')'">+/-
+                    </button>
+
+                    <button type="submit" class="btn btn-outline-primary btn-sm"
+                            name="likeValue" th:value="*{T(com.ltev.connected.domain.Like.Value).DISLIKE}"
+                            th:classappend="*{likeValue} and *{likeValue.ordinal == 0} ? 'active btn-success'"
+                            th:text="'Dislike (' +  *{numDislikes} + ')'">+/-
+                    </button>
+                </div>
+
+                <input type="hidden" name="postId" th:value="*{post.id}">
+            </form>
+        </div>
+
+        <a th:if="${includeCommentsLink} == true" href="#"
+           th:href="@{/group/} + *{post.group.id} + '/post/' + *{post.id}" class="card-link"
+           th:text="'Comments (' + *{post.numComments} + ')'">Comments</a>
+    </div>
+</div>
+
+
+<div class="card" th:fragment="group-post-with-comments-link(postInfo)" th:replace="~{fragments/fragments :: groupPost(${postInfo}, true)}"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
