@@ -49,13 +49,13 @@
 
                     <div class="col-4 container text-center" th:object="${profileInfo.commonFriends}">
 
-                        <div class="row justify-content-around" th:if="*{size} >= 2">
-                            <h6>Friends (<span th:text="'*{numMembers}'"></span>):</h6>
+                        <div class="row justify-content-around">
+                            <h6>Friends (<span th:text="${profileInfo.numFriends}"></span>):</h6>
 
-                            <div class="col-4">
+                            <div th:if="*{size} >= 1" class="col-4">
                                 <div th:replace="~{fragments/fragments :: linkedUsername(*{get(0).username})}"></div>
                             </div>
-                            <div class="col-4">
+                            <div th:if="*{size} >= 2" class="col-4">
                                 <div th:replace="~{fragments/fragments :: linkedUsername(*{get(1).username})}"></div>
                             </div>
                         </div>
@@ -77,22 +77,14 @@
 
                     <div class="col-4 container text-center" th:object="${profileInfo.commonFriends}">
 
-                        <div class="row justify-content-around" th:if="*{size} >= 2">
-                            <h6>Friends (<span th:text="'*{numMembers}'"></span>):</h6>
+                        <div class="row justify-content-around">
+                            <h6>Groups (<span th:text="${profileInfo.numGroups}"></span>):</h6>
 
-                            <div class="col-4">
+                            <div th:if="*{size} >= 1" class="col-4">
                                 <div th:replace="~{fragments/fragments :: linkedUsername(*{get(0).username})}"></div>
                             </div>
-                            <div class="col-4">
+                            <div th:if="*{size} >= 2" class="col-4">
                                 <div th:replace="~{fragments/fragments :: linkedUsername(*{get(1).username})}"></div>
-                            </div>
-                        </div>
-                        <div class="row justify-content-between" th:if="*{size} >= 4">
-                            <div class="col-4">
-                                <div th:replace="~{fragments/fragments :: linkedUsername(*{get(2).username})}"></div>
-                            </div>
-                            <div class="col-4">
-                                <div th:replace="~{fragments/fragments :: linkedUsername(*{get(3).username})}"></div>
                             </div>
                         </div>
                         <!--                    <a href="#" th:href="'@{${'/group/' + id + '/members'}}'">-->

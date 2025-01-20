@@ -1,8 +1,10 @@
 package com.ltev.connected.dao.impl;
 
 import com.ltev.connected.dao.UserDao;
+import com.ltev.connected.dao.impl.helper.ProfileInfoRowMapper;
 import com.ltev.connected.domain.Post;
 import com.ltev.connected.domain.User;
+import com.ltev.connected.dto.ProfileInfo;
 import com.ltev.connected.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataAccessException;
@@ -155,5 +157,18 @@ public class UserDaoImpl implements UserDao {
     public List<User> findCommonFriends(Long user1Id, Long user2Id) {
         return jdbcTemplate.query(FIND_COMMON_FRIENDS_SQL, new UserRowMapper(),
                 user1Id, user1Id, user2Id, user2Id);
+    }
+
+    /**
+     * Add num_friends and num_groups to profileInfo
+     */
+    @Override
+    public ProfileInfo updateNumFriendsAndNumGroups(ProfileInfo profileInfo, Long userId) {
+        String sql = """
+                select
+                	(select count(*) from friend_requests where (from_user_id = ? and accepted is not null)
+                	    or (to_user_id = ? and accepted is not null)) as num_friends,
+                	(select count(*) from groups_users where user_id = ? and request_accepted is not null) as num_groups""";
+        return jdbcTemplate.queryForObject(sql, new ProfileInfoRowMapper(profileInfo), userId, userId, userId);
     }
 }

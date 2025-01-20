@@ -137,10 +137,11 @@ public class UserServiceImpl implements UserService {
             }
             postsInfo = postDao.findPostsInfo(profileUsername, visibilities, loggedUser.getUsername());
 
-            // find friends sample
-            profileInfo.setCommonFriends(userDao.findCommonFriends(loggedUser.getId(), profileUser.getId()));
+            // get numFriends and numGroups
+            userDao.updateNumFriendsAndNumGroups(profileInfo, profileUser.getId());
 
-            // find groups sample
+            // find common friends sample
+            profileInfo.setCommonFriends(userDao.findCommonFriends(loggedUser.getId(), profileUser.getId()));
         } else {
             postsInfo = postDao.findPostsInfo(profileUsername, visibilities, null);
         }
