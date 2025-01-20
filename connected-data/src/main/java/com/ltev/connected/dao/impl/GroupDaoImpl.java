@@ -148,12 +148,29 @@ public class GroupDaoImpl implements GroupDao {
                 id, username, LocalDate.now(), LocalDate.now(), 1);
     }
 
+    /**
+     *
+     * @return List with Groups where userId is a member
+     */
+    @Override
+    public List<Group> findGroupsByUserId(Long userId, Integer limit) {
+        StringBuilder sqlBuilder = new StringBuilder("""
+                select g.id, g.created, g.name, g.description
+                from api_groups g
+                left join groups_users gu on g.id = gu.group_id and gu.request_accepted is not null
+                where gu.user_id = ?""");
+        if (limit != null) {
+            sqlBuilder.append(" limit " + limit);
+        }
+        return jdbcTemplate.query(sqlBuilder.toString(), new GroupRowMapper(), userId);
+    }
+
     @Override
     public List<Group> findGroupsByUsername(String username) {
         String sql = """
             select g.id, g.created, g.name, g.description
             from api_groups g
-            left join groups_users gu on g.id = gu.group_id
+            left join groups_users gu on g.id = gu.group_id and gu.request_accepted is not null
             left join users u on u.id = gu.user_id
             where u.username = ?""";
         return jdbcTemplate.query(sql, new GroupRowMapper(), username);

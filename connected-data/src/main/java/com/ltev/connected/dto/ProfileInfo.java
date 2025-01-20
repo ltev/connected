@@ -1,9 +1,9 @@
-package com.ltev.connected.service.support;
+package com.ltev.connected.dto;
 
 import com.ltev.connected.domain.FriendRequest;
+import com.ltev.connected.domain.Group;
 import com.ltev.connected.domain.RequestStatus;
 import com.ltev.connected.domain.User;
-import com.ltev.connected.dto.PostInfo;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +17,11 @@ public class ProfileInfo {
     private User profileUser;
     private FriendRequest friendRequest;
     private List<PostInfo> postsInfo;
+    private Integer numFriends;
+    private Integer numGroups;
+    private List<User> commonFriends;
+    private List<Group> groups;
+
 
     public ProfileInfo(User profileUser) {
         this.profileUser = profileUser;

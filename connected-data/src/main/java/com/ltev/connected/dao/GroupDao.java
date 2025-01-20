@@ -17,6 +17,8 @@ public interface GroupDao {
 
     void saveGroupAdmin(Long id, String username);
 
+    List<Group> findGroupsByUserId(Long userId, Integer limit);
+
     List<Group> findGroupsByUsername(String username);
 
     Optional<GroupInfo> findGroupInfo(Long groupId, String loggedUsername);

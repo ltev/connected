@@ -1,6 +1,7 @@
 package com.ltev.connected.service.impl;
 
 import com.ltev.connected.controller.support.SearchInfo;
+import com.ltev.connected.dao.GroupDao;
 import com.ltev.connected.dao.PostDao;
 import com.ltev.connected.dao.UserDao;
 import com.ltev.connected.domain.*;
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
 
     private UserDao userDao;
     private PostDao postDao;
+    private GroupDao groupDao;
     private FriendRequestService friendRequestService;
     private UserDetailsRepository userDetailsRepository;
 
@@ -142,6 +144,9 @@ public class UserServiceImpl implements UserService {
 
             // find common friends sample
             profileInfo.setCommonFriends(userDao.findCommonFriends(loggedUser.getId(), profileUser.getId()));
+
+            // find groups
+            profileInfo.setGroups(groupDao.findGroupsByUserId(profileUser.getId(), 2));
         } else {
             postsInfo = postDao.findPostsInfo(profileUsername, visibilities, null);
         }
