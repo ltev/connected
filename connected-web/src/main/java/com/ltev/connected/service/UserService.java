@@ -6,6 +6,7 @@ import com.ltev.connected.domain.RequestStatus;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.domain.UserDetails;
 import com.ltev.connected.dto.ProfileInfo;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 import java.util.Map;
@@ -31,7 +32,7 @@ public interface UserService {
 
     Map<RequestStatus, List<FriendRequest>> findAllReceivedAndSentNotAcceptedFriendshipRequests();
 
-    void createNewUser(String username, String password);
+    void createNewUser(String username, String password, BCryptPasswordEncoder encoder);
 
     Optional<ProfileInfo> getInformationForShowingProfile(String username);
 

@@ -35,9 +35,8 @@ public class LoginController {
 
     @PostMapping("signup")
     public String createNewUser(String username, String password, BCryptPasswordEncoder encoder) {
-        String encodedPassword = "{bcrypt}" + encoder.encode(password);
         try {
-            userService.createNewUser(username, encodedPassword);
+            userService.createNewUser(username, password, encoder);
         } catch (DataIntegrityViolationException e) {
             return "redirect:/signup?taken";
         }

@@ -60,6 +60,14 @@ public class User implements Serializable {
         }
     }
 
+    @PrePersist
+    @PreUpdate
+    void prePersist() {
+        if (!password.startsWith("{bcrypt}")) {
+            throw new RuntimeException("Password not encrypted.");
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

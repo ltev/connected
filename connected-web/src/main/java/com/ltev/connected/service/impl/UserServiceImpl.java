@@ -14,6 +14,7 @@ import com.ltev.connected.service.UserService;
 import com.ltev.connected.utils.AuthenticationUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -99,14 +100,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createNewUser(String username, String password) {
+    public void createNewUser(String username, String password, BCryptPasswordEncoder encoder) {
         ProfileSettings profileSettings = new ProfileSettings();
         profileSettings.setFriendsVisibility(Visibility.PUBLIC);
         profileSettings.setGroupsVisibility(Visibility.PUBLIC);
 
         User user = new User();
         user.setUsername(username);
-        user.setPassword(password);
+        user.setPassword("{bcrypt}" + encoder.encode(password));
         user.setEnabled((byte) 1);
         user.setProfileSettings(profileSettings);
 
