@@ -36,4 +36,15 @@ public class ProfileSettings {
             user.setProfileSettings(this);
         }
     }
+
+    @Override
+    public String toString() {
+        return "ProfileSettings{" +
+                "id=" + id +
+                ", userId=" + (user == null ? null : user.getId()) +
+                ", version=" + version +
+                ", friendsVisibility=" + friendsVisibility +
+                ", groupsVisibility=" + groupsVisibility +
+                '}';
+    }
 }

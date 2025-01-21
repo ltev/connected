@@ -1,5 +1,6 @@
 package com.ltev.connected.domain;
 
+import com.ltev.connected.domain.callback.UserJpaCallback;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
+@EntityListeners(UserJpaCallback.class)
 @Table(name = "users")
 @NoArgsConstructor
 @Getter
@@ -32,6 +34,7 @@ public class User implements Serializable {
     @NotNull
     @NotEmpty
     @NotBlank
+    // @Convert(converter = PasswordConverter.class)
     private String password;
 
     @NotNull
@@ -57,14 +60,6 @@ public class User implements Serializable {
         this.profileSettings = profileSettings;
         if (profileSettings != null && profileSettings.getUser() != this) {
             profileSettings.setUser(this);
-        }
-    }
-
-    @PrePersist
-    @PreUpdate
-    void prePersist() {
-        if (!password.startsWith("{bcrypt}")) {
-            throw new RuntimeException("Password not encrypted.");
         }
     }
 
