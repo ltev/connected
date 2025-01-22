@@ -3,7 +3,7 @@ package com.ltev.connected.service.impl;
 import com.ltev.connected.dao.UserDao;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.domain.UserDetails;
-import com.ltev.connected.repository.UserDetailsRepository;
+import com.ltev.connected.repository.userData.UserDetailsRepository;
 import com.ltev.connected.service.AccountService;
 import com.ltev.connected.utils.AuthenticationUtils;
 import lombok.AllArgsConstructor;

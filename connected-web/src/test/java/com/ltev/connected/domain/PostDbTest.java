@@ -1,6 +1,6 @@
 package com.ltev.connected.domain;
 
-import com.ltev.connected.repository.PostRepository;
+import com.ltev.connected.repository.main.PostRepository;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

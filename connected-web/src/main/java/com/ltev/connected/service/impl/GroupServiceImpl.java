@@ -12,7 +12,7 @@ import com.ltev.connected.dto.PostInfo;
 import com.ltev.connected.exception.AccessDeniedException;
 import com.ltev.connected.exception.PageOutOfBoundsException;
 import com.ltev.connected.exception.VisibilityException;
-import com.ltev.connected.repository.GroupRequestRepository;
+import com.ltev.connected.repository.main.GroupRequestRepository;
 import com.ltev.connected.service.GroupService;
 import com.ltev.connected.service.PostService;
 import com.ltev.connected.service.support.GroupsRequestInfo;

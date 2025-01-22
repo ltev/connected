@@ -1,7 +1,7 @@
 package com.ltev.connected.domain;
 
 import com.ltev.connected.converter.PasswordConverter;
-import com.ltev.connected.repository.UserRepository;
+import com.ltev.connected.repository.main.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

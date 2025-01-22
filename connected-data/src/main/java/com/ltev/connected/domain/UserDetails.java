@@ -1,5 +1,6 @@
 package com.ltev.connected.domain;
 
+import com.ltev.connected.domain.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

@@ -5,7 +5,7 @@ import com.ltev.connected.domain.Group;
 import com.ltev.connected.domain.GroupRequest;
 import com.ltev.connected.dto.GroupManagerInfo;
 import com.ltev.connected.exception.AccessDeniedException;
-import com.ltev.connected.repository.GroupRequestRepository;
+import com.ltev.connected.repository.main.GroupRequestRepository;
 import com.ltev.connected.service.GroupManagerService;
 import com.ltev.connected.utils.AuthenticationUtils;
 import lombok.AllArgsConstructor;

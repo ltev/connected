@@ -1,7 +1,7 @@
 package com.ltev.connected.controller;
 
 import com.ltev.connected.dto.PostInfo;
-import com.ltev.connected.repository.PostRepository;
+import com.ltev.connected.repository.main.PostRepository;
 import com.ltev.connected.service.PostService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;

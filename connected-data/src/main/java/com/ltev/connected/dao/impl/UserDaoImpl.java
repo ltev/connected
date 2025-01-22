@@ -5,7 +5,7 @@ import com.ltev.connected.dao.impl.helper.ProfileInfoRowMapper;
 import com.ltev.connected.domain.Post;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.dto.ProfileInfo;
-import com.ltev.connected.repository.UserRepository;
+import com.ltev.connected.repository.main.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;

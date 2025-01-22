@@ -1,4 +1,4 @@
-package com.ltev.connected.repository;
+package com.ltev.connected.repository.main;
 
 import com.ltev.connected.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,9 +1,8 @@
-package com.ltev.connected.repository;
+package com.ltev.connected.repository.main;
 
 import com.ltev.connected.domain.FriendRequest;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
