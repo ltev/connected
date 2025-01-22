@@ -1,7 +1,7 @@
 package com.ltev.connected.controller;
 
 import com.ltev.connected.controller.support.ControllerSupport;
-import com.ltev.connected.controller.support.SearchInfo;
+import com.ltev.connected.dto.SearchInfo;
 import com.ltev.connected.domain.FriendRequest;
 import com.ltev.connected.domain.RequestStatus;
 import com.ltev.connected.domain.UserDetails;

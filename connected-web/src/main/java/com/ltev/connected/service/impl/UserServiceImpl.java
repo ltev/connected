@@ -1,15 +1,14 @@
 package com.ltev.connected.service.impl;
 
-import com.ltev.connected.controller.support.SearchInfo;
 import com.ltev.connected.dao.GroupDao;
 import com.ltev.connected.dao.PostDao;
 import com.ltev.connected.dao.UserDao;
+import com.ltev.connected.dao.UserDetailsDao;
 import com.ltev.connected.domain.*;
-import com.ltev.connected.domain.UserDetails;
 import com.ltev.connected.dto.PostInfo;
 import com.ltev.connected.dto.ProfileInfo;
+import com.ltev.connected.dto.SearchInfo;
 import com.ltev.connected.repository.main.ProfileSettingsRepository;
-import com.ltev.connected.repository.userData.UserDetailsRepository;
 import com.ltev.connected.service.FriendRequestService;
 import com.ltev.connected.service.UserService;
 import com.ltev.connected.utils.AuthenticationUtils;
@@ -28,7 +27,7 @@ public class UserServiceImpl implements UserService {
     private PostDao postDao;
     private GroupDao groupDao;
     private FriendRequestService friendRequestService;
-    private UserDetailsRepository userDetailsRepository;
+    private UserDetailsDao userDetailsDao;
 
     private ProfileSettingsRepository profileSettingsRepository;
 
@@ -212,21 +211,23 @@ public class UserServiceImpl implements UserService {
     public List<UserDetails> searchForPeople(SearchInfo searchInfo) {
         AuthenticationUtils.checkAuthenticationOrThrow();
 
-        return switch (searchInfo.searchBy()) {
-            case "-firstName" -> userDetailsRepository.findByFirstName(searchInfo.getFirstName());
-            case "-lastName" -> userDetailsRepository.findByLastName(searchInfo.getLastName());
-            case "-age" -> userDetailsRepository.findByBirthdayBetween(
-                    searchInfo.fromDate(), searchInfo.toDate());
-            case "-firstName-lastName" -> userDetailsRepository.findByFirstNameAndLastName(
-                    searchInfo.getFirstName(), searchInfo.getLastName());
-            case "-firstName-age" -> userDetailsRepository.findByFirstNameAndBirthdayBetween(
-                    searchInfo.getFirstName(), searchInfo.fromDate(), searchInfo.toDate());
-            case "-lastName-age" -> userDetailsRepository.findByLastNameAndBirthdayBetween(
-                    searchInfo.getLastName(), searchInfo.fromDate(), searchInfo.toDate());
-            case "-firstName-lastName-age" -> userDetailsRepository.findByFirstNameAndLastNameAndBirthdayBetween(
-                    searchInfo.getFirstName(), searchInfo.getLastName(), searchInfo.fromDate(), searchInfo.toDate());
-            case "" -> Collections.emptyList();
-            default -> throw new RuntimeException("Not defined");
-        };
+        // Used before migrating UserDetails into different db
+//        List<UserDetails> userDetails = switch (searchInfo.searchBy()) {
+//            case "-firstName" -> userDetailsRepository.findByFirstName(searchInfo.getFirstName());
+//            case "-lastName" -> userDetailsRepository.findByLastName(searchInfo.getLastName());
+//            case "-age" -> userDetailsRepository.findByBirthdayBetween(
+//                    searchInfo.fromDate(), searchInfo.toDate());
+//            case "-firstName-lastName" -> userDetailsRepository.findByFirstNameAndLastName(
+//                    searchInfo.getFirstName(), searchInfo.getLastName());
+//            case "-firstName-age" -> userDetailsRepository.findByFirstNameAndBirthdayBetween(
+//                    searchInfo.getFirstName(), searchInfo.fromDate(), searchInfo.toDate());
+//            case "-lastName-age" -> userDetailsRepository.findByLastNameAndBirthdayBetween(
+//                    searchInfo.getLastName(), searchInfo.fromDate(), searchInfo.toDate());
+//            case "-firstName-lastName-age" -> userDetailsRepository.findByFirstNameAndLastNameAndBirthdayBetween(
+//                    searchInfo.getFirstName(), searchInfo.getLastName(), searchInfo.fromDate(), searchInfo.toDate());
+//            case "" -> Collections.emptyList();
+//            default -> throw new RuntimeException("Not defined");
+//        };
+        return userDetailsDao.findBySearchInfo(searchInfo);
     }
 }

@@ -1,9 +1,11 @@
-package com.ltev.connected.controller.support;
+package com.ltev.connected.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,6 +29,35 @@ public class SearchInfo {
             sb.append("-age");
         }
         return sb.toString();
+    }
+
+    public String[] getSearchByProperties() {
+        List<String> properties = new ArrayList<>(3);
+        if (hasFirstName()) {
+            properties.add("first_name");
+        }
+        if (hasLastName()) {
+            properties.add("last_name");
+        }
+        if (hasAge()) {
+            properties.add("age");
+        }
+        return properties.toArray(String[]::new);
+    }
+
+    public Object[] getSearchByValues() {
+        List<Object> properties = new ArrayList<>(3);
+        if (hasFirstName()) {
+            properties.add(firstName);
+        }
+        if (hasLastName()) {
+            properties.add(lastName);
+        }
+        if (hasAge()) {
+            properties.add(fromDate());
+            properties.add(toDate());
+        }
+        return properties.toArray(Object[]::new);
     }
 
     public boolean hasAge() {

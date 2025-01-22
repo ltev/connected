@@ -1,6 +1,6 @@
 package com.ltev.connected.service;
 
-import com.ltev.connected.controller.support.SearchInfo;
+import com.ltev.connected.dto.SearchInfo;
 import com.ltev.connected.domain.FriendRequest;
 import com.ltev.connected.domain.RequestStatus;
 import com.ltev.connected.domain.User;
