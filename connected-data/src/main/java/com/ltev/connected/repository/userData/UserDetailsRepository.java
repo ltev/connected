@@ -9,7 +9,8 @@ import java.util.Optional;
 
 public interface UserDetailsRepository extends JpaRepository<UserDetails, Long> {
 
-    Optional<UserDetails> findByUserUsername(String username);
+    // entities UserDetails and User are stored in different databases
+    //Optional<UserDetails> findByUserUsername(String username);
 
     List<UserDetails> findByFirstName(String firstName);
 

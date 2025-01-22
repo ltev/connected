@@ -40,8 +40,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Optional<UserDetails> findUserInfo() {
-        AuthenticationUtils.checkAuthenticationOrThrow();
+        String username = AuthenticationUtils.checkAuthenticationOrThrow().getName();
 
-        return userDetailsRepository.findByUserUsername(AuthenticationUtils.getUsername());
+        return userDetailsRepository.findById(userDao.findByUsername(username).get().getId());
     }
 }
