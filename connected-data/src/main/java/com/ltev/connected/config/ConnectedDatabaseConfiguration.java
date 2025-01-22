@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -26,25 +27,32 @@ public class ConnectedDatabaseConfiguration {
     }
 
     @Bean
-    public DataSource connectedDataSource(@Qualifier("connectedDataSourceProperties") DataSourceProperties connectedDataSourceProperties) {
+    @Primary
+    public DataSource connectedDataSource(
+            @Qualifier("connectedDataSourceProperties") DataSourceProperties connectedDataSourceProperties) {
+
         return connectedDataSourceProperties.initializeDataSourceBuilder()
                 .type(HikariDataSource.class)
                 .build();
     }
 
     @Bean//("entityManagerFactory")
+    @Primary
     public LocalContainerEntityManagerFactoryBean connectedEntityManagerFactory(
-            @Qualifier("connectedDataSource") DataSource userDataDataSource,
+            @Qualifier("connectedDataSource") DataSource connectedDataSource,
             EntityManagerFactoryBuilder builder) {
-        return builder.dataSource(userDataDataSource)
+
+        return builder.dataSource(connectedDataSource)
                 .packages("com.ltev.connected.domain")
                 .persistenceUnit("connected")
                 .build();
     }
 
     @Bean//("transactionManager")
+    @Primary
     public PlatformTransactionManager connectedTransactionManager(
-            LocalContainerEntityManagerFactoryBean connectedEntityManagerFactoryBean) {
+            @Qualifier("connectedEntityManagerFactory") LocalContainerEntityManagerFactoryBean connectedEntityManagerFactoryBean) {
+
         return new JpaTransactionManager(connectedEntityManagerFactoryBean.getObject());
     }
 }
