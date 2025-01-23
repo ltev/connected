@@ -69,15 +69,15 @@
                 <div th:if="${! foundPeople.isEmpty()}">
                     <h5>Found people:</h5>
 
-                    <div th:each="userDetails : ${foundPeople}">
+                    <div th:each="userDetailsView : ${foundPeople}">
                         <table class="table">
                             <tbody>
                             <tr>
                                 <td class="col-4">
-                                    <div th:replace="~{fragments/fragments :: linkedUsername(${userDetails.user.username})}"></div>
+                                    <div th:replace="~{fragments/fragments :: linkedUsername(${userDetailsView.username})}"></div>
                                 </td>
                                 <td class="col-4">
-                                    <p th:text="${userDetails.firstName + ' ' + userDetails.lastName}"></p>
+                                    <p th:text="${userDetailsView.firstName + ' ' + userDetailsView.lastName}"></p>
                                 </td>
                             </tr>
                             </tbody>
