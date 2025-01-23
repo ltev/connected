@@ -1,11 +1,11 @@
 package com.ltev.connected.service;
 
-import com.ltev.connected.dto.SearchInfo;
 import com.ltev.connected.domain.FriendRequest;
 import com.ltev.connected.domain.RequestStatus;
 import com.ltev.connected.domain.User;
-import com.ltev.connected.domain.UserDetails;
+import com.ltev.connected.domain.UserDetailsView;
 import com.ltev.connected.dto.ProfileInfo;
+import com.ltev.connected.dto.SearchInfo;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
@@ -36,5 +36,5 @@ public interface UserService {
 
     Optional<ProfileInfo> getInformationForShowingProfile(String username);
 
-    List<UserDetails> searchForPeople(SearchInfo searchInfo);
+    List<UserDetailsView> searchForPeople(SearchInfo searchInfo);
 }

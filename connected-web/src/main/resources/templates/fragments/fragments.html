@@ -34,7 +34,7 @@
     </div>
 
     <div class="col" style="text-align: right">
-        <div sec:authorize="isAnonymous()">     <!-- anonymous -->
+        <div sec:authorize="isAuthenticated() == false">     <!-- anonymous -->
             <a href="#" th:href="@{/login}">
                 <button type="button" class="btn btn-primary">Log in</button>
             </a>

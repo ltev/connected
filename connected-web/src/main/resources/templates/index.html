@@ -10,10 +10,9 @@
 <body>
 
     <div class="container">
-
         <div th:replace="~{fragments/fragments :: login-header}"></div>        <!-- Login header -->
 
-        <div sec:authorize="isAnonymous()">                         <!-- body for not logged users -->
+        <div sec:authorize="isAnonymous() or isAuthenticated() == false">                         <!-- body for not logged users -->
             <div class="mt-2">
                 <p th:text="#{home.welcome}">Welcome</p>
             </div>

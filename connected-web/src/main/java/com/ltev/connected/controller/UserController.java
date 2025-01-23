@@ -1,10 +1,10 @@
 package com.ltev.connected.controller;
 
 import com.ltev.connected.controller.support.ControllerSupport;
-import com.ltev.connected.dto.SearchInfo;
 import com.ltev.connected.domain.FriendRequest;
 import com.ltev.connected.domain.RequestStatus;
-import com.ltev.connected.domain.UserDetails;
+import com.ltev.connected.domain.UserDetailsView;
+import com.ltev.connected.dto.SearchInfo;
 import com.ltev.connected.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -66,7 +66,7 @@ public class UserController {
 
     @PostMapping("/search")
     public String processSearch(SearchInfo searchInfo, Model model) {
-        List<UserDetails> foundPeople = userService.searchForPeople(searchInfo);
+        List<UserDetailsView> foundPeople = userService.searchForPeople(searchInfo);
         model.addAttribute("foundPeople", foundPeople);
         return "/user/search";
     }

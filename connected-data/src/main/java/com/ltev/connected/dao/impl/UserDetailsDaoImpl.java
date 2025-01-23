@@ -44,7 +44,7 @@ public class UserDetailsDaoImpl implements UserDetailsDao {
 
     @Override
     public List<UserDetails> findBySearchInfo(SearchInfo searchInfo) {
-        StringBuilder sqlBuilder = new StringBuilder("select * from user_personal_data_view where ");
+        StringBuilder sqlBuilder = new StringBuilder("select * from user_data_view where ");
         String[] properties = searchInfo.getSearchByProperties();
         if (properties.length == 0) {
             return Collections.emptyList();
