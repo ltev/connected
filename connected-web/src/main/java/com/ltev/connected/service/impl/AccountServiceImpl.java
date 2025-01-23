@@ -1,14 +1,15 @@
 package com.ltev.connected.service.impl;
 
-import com.ltev.connected.dao.UserDao;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.domain.UserDetails;
+import com.ltev.connected.repository.main.UserRepository;
 import com.ltev.connected.repository.userData.UserDetailsRepository;
 import com.ltev.connected.service.AccountService;
 import com.ltev.connected.utils.AuthenticationUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -16,13 +17,18 @@ import java.util.Optional;
 @AllArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
+    private final UserRepository userRepository;
     private UserDetailsRepository userDetailsRepository;
-    private UserDao userDao;
+
 
     @Override
+    @Transactional
     public void deleteAccount() {
         Authentication authentication = AuthenticationUtils.checkAuthenticationOrThrow();
-        userDao.deleteUser(authentication.getName());
+
+        User user = userRepository.findByUsername(authentication.getName()).get();
+        userDetailsRepository.deleteById(user.getId());
+        userRepository.delete(user);
         authentication.setAuthenticated(false);
     }
 
@@ -32,8 +38,9 @@ public class AccountServiceImpl implements AccountService {
         AuthenticationUtils.checkAuthenticationOrThrow();
 
         if (userDetails.getId() == null) {
-            User user = userDao.findByUsername(AuthenticationUtils.getUsername()).get();
-            userDetails.setUser(user);
+            User user = userRepository.findByUsername(AuthenticationUtils.getUsername()).get();
+            // userDetails.setUser(user);
+            userDetails.setId(user.getId());
         }
         userDetailsRepository.save(userDetails);
     }
@@ -42,6 +49,6 @@ public class AccountServiceImpl implements AccountService {
     public Optional<UserDetails> findUserInfo() {
         String username = AuthenticationUtils.checkAuthenticationOrThrow().getName();
 
-        return userDetailsRepository.findById(userDao.findByUsername(username).get().getId());
+        return userDetailsRepository.findById(userRepository.findByUsername(username).get().getId());
     }
 }
