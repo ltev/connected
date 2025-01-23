@@ -19,6 +19,8 @@ public interface GroupRequestRepository extends JpaRepository<GroupRequest, Grou
 
     List<GroupRequest> findByIdUserUsername(String username);
 
+    List<GroupRequest> findByIdUserIdAndIsAdmin(Long userId, Byte adminRole);
+
     @Transactional
     @Modifying
     @Query("update GroupRequest r set r.accepted = current_date"
@@ -30,4 +32,7 @@ public interface GroupRequestRepository extends JpaRepository<GroupRequest, Grou
 
     @Transactional
     void deleteByIdGroupIdAndIdUserUsername(Long groupId, String username);
+
+    @Transactional
+    void deleteByIdUserId(Long userId);
 }

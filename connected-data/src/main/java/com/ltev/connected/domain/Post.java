@@ -72,10 +72,6 @@ public class Post {
         }
     }
 
-    public Post(Long id) {
-        this.id = id;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -108,6 +104,10 @@ public class Post {
         joinColumns = @JoinColumn(name = "post_id"),
         inverseJoinColumns = @JoinColumn(name = "group_id"))
     private Group group;
+
+    public Post(Long id) {
+        this.id = id;
+    }
 
     @Override
     public String toString() {

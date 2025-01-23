@@ -20,4 +20,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Modifying
     @Query("update Post p set p.numComments = p.numComments + 1 where p.id = ?1")
     void increaseNumCommentsByOne(Long postId);
+
+    @Transactional
+    void deleteByUserId(Long userId);
 }

@@ -33,8 +33,12 @@ public class AccountController {
     }
 
     @PostMapping(value = "user-info", params = "action=delete-account")
-    public String deleteAccount() {
-        accountService.deleteAccount();
+    public String deleteAccount(Model model) {
+        String deleteFailedMessage = accountService.deleteAccount();
+        if (deleteFailedMessage != null) {
+            model.addAttribute("deleteFailedMessage", deleteFailedMessage);
+            return "redirect:user-info?deleteFailedMessage=" + deleteFailedMessage;
+        }
         return "redirect:/";
     }
 }

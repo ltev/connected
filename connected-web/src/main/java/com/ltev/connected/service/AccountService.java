@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface AccountService {
 
-    void deleteAccount();
+    String deleteAccount();
 
     void saveUserInfo(UserDetails userDetails);
 

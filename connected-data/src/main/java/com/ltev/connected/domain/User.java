@@ -44,7 +44,7 @@ public class User implements Serializable {
     private List<Post> posts;
 
     @NotNull
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private ProfileSettings profileSettings;
 
     public User(Long id) {

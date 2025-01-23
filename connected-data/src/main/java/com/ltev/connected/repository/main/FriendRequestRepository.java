@@ -24,4 +24,7 @@ public interface FriendRequestRepository extends JpaRepository<FriendRequest, Lo
     List<FriendRequest> findByToUserAndAccepted(User toUsers, LocalDate accepted);
 
     List<FriendRequest> findByFromUserAndAccepted(User fromUser, LocalDate accepted);
+
+    @Transactional
+    void deleteByFromUserIdOrToUserId(Long fromUserId, Long toUserId);
 }
