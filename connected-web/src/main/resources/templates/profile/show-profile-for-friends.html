@@ -42,6 +42,12 @@
                             </button>
                         </div>
                     </form> <!-- friend request buttons END -->
+
+                    <a href="#" th:href="@{/messages/} + ${profileInfo.profileUser.username}">
+                        <button class="btn btn-primary">
+                            Send message
+                        </button>
+                    </a>
                 </div>
                 <!-- profile friends and groups-->
 
