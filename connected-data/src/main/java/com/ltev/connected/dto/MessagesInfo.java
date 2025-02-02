@@ -12,7 +12,7 @@ public class MessagesInfo {
 
     private User loggedUser;
     private User profileUser;
-    Page<Message> messages;
+    Page<Message> page;
 
     public boolean profileExist() {
         return profileUser != null;

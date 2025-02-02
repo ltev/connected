@@ -29,9 +29,8 @@ public class MessagesController {
             return "redirect:/messages";
         }
 
-        Message message = new Message();
-        model.addAttribute("message", message);
-        model.addAttribute("profileId", messagesInfo.getProfileUser().getId());
+        model.addAttribute("messagesInfo", messagesInfo);
+        model.addAttribute("message", new Message());
         return "messages/message-form";
     }
 

@@ -23,11 +23,29 @@
             </div>  <!-- left menu END -->
 
             <div class="col">                               <!-- main content -->
+                <div th:each="message : ${messagesInfo.page.getContent()}">
+
+                    <div th:if="${message.id.fromUser.username == messagesInfo.profileUser.username}" class="d-flex align-items-center">
+
+                        <div th:text="${message.id.fromUser.username}" class="text-center" style="width: 50px; float: left">profile user</div>
+                        <div class="card mt-2 border-primary d-inline-flex">
+                            <div class="card-body" th:text="${message.text}">message</div>
+                        </div>
+
+                    </div>
+
+                    <div th:if="${message.id.fromUser.username == messagesInfo.loggedUser.username}" class="d-flex justify-content-end align-items-center">
+
+                        <div class="card mt-2 border-secondary d-inline-flex">
+                            <div class="card-body" th:text="${message.text}">message</div>
+                        </div>
+                        <div th:text="${message.id.fromUser.username}" class="text-center" style="width: 50px">logged user</div>
+
+                    </div>
+
+                </div>
 
                 <form th:object="${message}" action="#" th:action="@{''}" method="post">
-                    <h4>New Message:</h4>
-                    <br>
-
                     <div class="mb-3">
                         <label for="text" class="form-label">Message text:</label>
                         <textarea class="form-control" id="text" th:field="*{text}" rows="10" required
@@ -38,7 +56,7 @@
                         </div>
                     </div>
 
-                    <input type="text" name="profileId" value="#" th:value="${profileId}">
+                    <input type="text" name="profileId" value="#" th:value="${messagesInfo.profileUser.id}">
                     <button type="submit" name="action" value="new-message" class="btn btn-primary mb-2">Send message
                     </button>
                 </form>
