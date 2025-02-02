@@ -65,7 +65,11 @@
                 th:text="#{menu.mainPage}">Main Page
         </button>
     </a>
-    <a href="#" th:href="@{'/search'}">
+    <a href="#" th:href="@{/messages}">
+        <button type="button" class="btn" th:classappend="${activeButton} == 'messages' ? 'active'"
+                th:text="#{menu.messages}">Messages</button>
+    </a>
+    <a href="#" th:href="@{/search}">
         <button type="button" class="btn" th:classappend="${activeButton} == 'search' ? 'active'"
                 th:text="#{menu.search}">Search
         </button>
