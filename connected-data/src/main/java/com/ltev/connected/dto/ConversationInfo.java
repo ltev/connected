@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 
 @Getter
 @Setter
-public class MessagesInfo {
+public class ConversationInfo {
 
     private User loggedUser;
     private User profileUser;

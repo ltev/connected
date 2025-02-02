@@ -2,7 +2,7 @@ package com.ltev.connected.service.impl;
 
 import com.ltev.connected.domain.Message;
 import com.ltev.connected.domain.User;
-import com.ltev.connected.dto.MessagesInfo;
+import com.ltev.connected.dto.ConversationInfo;
 import com.ltev.connected.repository.main.MessageRepository;
 import com.ltev.connected.repository.main.UserRepository;
 import com.ltev.connected.service.MessageService;
@@ -46,8 +46,8 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public MessagesInfo getMessagesInfo(String profileUsername) {
-        MessagesInfo messagesInfo = new MessagesInfo();
+    public ConversationInfo getMessagesInfo(String profileUsername) {
+        ConversationInfo messagesInfo = new ConversationInfo();
 
         Optional<User> profileUser = userRepository.findByUsername(profileUsername);
         if (profileUser.isEmpty()) {

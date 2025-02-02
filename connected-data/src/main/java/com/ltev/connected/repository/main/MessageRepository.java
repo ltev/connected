@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface MessageRepository extends JpaRepository<Message, Message.Id> {
 
+    void deleteByIdFromUserOrIdToUser(User fromUser, User toUser);
+
     @Query("select m from Message m where (m.id.fromUser = ?1 and m.id.toUser = ?2) or (m.id.fromUser = ?2 and m.id.toUser = ?1)")
     Page<Message> findByUsers(User u1, User u2, Pageable pageable);
 }

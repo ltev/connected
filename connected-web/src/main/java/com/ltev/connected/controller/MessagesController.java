@@ -1,7 +1,7 @@
 package com.ltev.connected.controller;
 
 import com.ltev.connected.domain.Message;
-import com.ltev.connected.dto.MessagesInfo;
+import com.ltev.connected.dto.ConversationInfo;
 import com.ltev.connected.service.MessageService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -24,12 +24,12 @@ public class MessagesController {
 
     @GetMapping("/{username}")
     public String showMessages(@PathVariable String username, Model model) {
-        MessagesInfo messagesInfo = messageService.getMessagesInfo(username);
+        ConversationInfo messagesInfo = messageService.getMessagesInfo(username);
         if (! messagesInfo.profileExist()) {
             return "redirect:/messages";
         }
 
-        model.addAttribute("messagesInfo", messagesInfo);
+        model.addAttribute("conversationInfo", messagesInfo);
         model.addAttribute("message", new Message());
         return "messages/message-form";
     }

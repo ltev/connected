@@ -27,6 +27,7 @@ public class AccountServiceImpl implements AccountService {
     private final PostRepository postRepository;
     private final FriendRequestRepository friendRequestRepository;
     private final GroupRequestRepository groupRequestRepository;
+    private final MessageRepository messageRepository;
 
     @Transactional
     @Override
@@ -70,6 +71,9 @@ public class AccountServiceImpl implements AccountService {
 
         // delete user data
         userDetailsRepository.deleteById(user.getId());
+
+        // delete all messages
+        messageRepository.deleteByIdFromUserOrIdToUser(user, user);
 
         // delete user, and cascade / orphan removal for profileSettings
         userRepository.delete(user);
