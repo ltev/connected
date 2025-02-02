@@ -29,28 +29,28 @@
 
                     <h4>Messages:</h4>
 
-                    <div th:if="true">
+                    <div th:if="${messagesInfo.messages.size() == 0}">
                         No messages
-                        <hr>
                     </div>
 
-<!--                    <table class="table">-->
-<!--                        <tbody>-->
-<!--                        <tr th:each="request : ${receivedFriendRequests}">-->
-<!--                            <td class="col-4">-->
-<!--                                <p th:text="${request.sent}"></p>-->
-<!--                            </td>-->
-<!--                            <td class="col-4">-->
-<!--                                <span th:replace="~{fragments/fragments :: linkedUsername(${request.fromUser.username})}"></span>-->
-<!--                            </td>-->
-<!--                            <td>-->
-<!--                                <a href="#" th:href="'/accept-' + ${request.id}">-->
-<!--                                    <button class="btn btn-primary">Accept</button>-->
-<!--                                </a>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                        </tbody>-->
-<!--                    </table>-->
+                    <table class="table">
+                        <tbody>
+                        <tr th:each="message : ${messagesInfo.messages}" class="align-middle">
+                            <td class="col-2">
+                                <span th:replace="~{fragments/fragments :: linkedUsername(${messagesInfo.getNotLoggedUser(message).username})}"></span>
+                            </td>
+
+                            <td class="col-10">
+                                <a href="#"
+                                   th:href="@{/messages/} + ${messagesInfo.getNotLoggedUser(message).username}">
+                                    <div class="card mt-2 border-secondary d-inline-flex">
+                                        <div class="card-body" th:text="${message.text}">message</div>
+                                    </div>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
 
                 </div>          <!-- main content END -->
 

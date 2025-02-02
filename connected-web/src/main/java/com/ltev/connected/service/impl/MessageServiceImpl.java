@@ -1,8 +1,10 @@
 package com.ltev.connected.service.impl;
 
+import com.ltev.connected.dao.MessageDao;
 import com.ltev.connected.domain.Message;
 import com.ltev.connected.domain.User;
 import com.ltev.connected.dto.ConversationInfo;
+import com.ltev.connected.dto.MessagesInfo;
 import com.ltev.connected.repository.main.MessageRepository;
 import com.ltev.connected.repository.main.UserRepository;
 import com.ltev.connected.service.MessageService;
@@ -24,6 +26,7 @@ import java.util.function.Function;
 public class MessageServiceImpl implements MessageService {
 
     private MessageRepository messageRepository;
+    private MessageDao messageDao;
     private UserRepository userRepository;
 
     @Override
@@ -46,7 +49,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public ConversationInfo getMessagesInfo(String profileUsername) {
+    public ConversationInfo getConversationInfo(String profileUsername) {
         ConversationInfo messagesInfo = new ConversationInfo();
 
         Optional<User> profileUser = userRepository.findByUsername(profileUsername);
@@ -61,6 +64,18 @@ public class MessageServiceImpl implements MessageService {
         messagesInfo.setLoggedUser(loggedUser);
         messagesInfo.setProfileUser(profileUser.get());
         messagesInfo.setPage(getPageWithReveredContent(messagePage));
+
+        return messagesInfo;
+    }
+
+    @Override
+    public MessagesInfo getMessagesInfo() {
+        User loggedUser = userRepository.findByUsername(AuthenticationUtils.checkAuthenticationOrThrow().getName()).get();
+
+        MessagesInfo messagesInfo = new MessagesInfo();
+        messagesInfo.setLoggedUser(loggedUser);
+        messagesInfo.setMessages(messageDao.getLastMessages(loggedUser));
+        messagesInfo.removeLastPreviousMessage();
 
         return messagesInfo;
     }

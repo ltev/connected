@@ -2,6 +2,7 @@ package com.ltev.connected.controller;
 
 import com.ltev.connected.domain.Message;
 import com.ltev.connected.dto.ConversationInfo;
+import com.ltev.connected.dto.MessagesInfo;
 import com.ltev.connected.service.MessageService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -18,13 +19,15 @@ public class MessagesController {
     private MessageService messageService;
 
     @GetMapping
-    public String showMessagesMainPage() {
+    public String showMessagesMainPage(Model model) {
+        MessagesInfo messagesInfo = messageService.getMessagesInfo();
+        model.addAttribute("messagesInfo", messagesInfo);
         return "messages/show-main";
     }
 
     @GetMapping("/{username}")
-    public String showMessages(@PathVariable String username, Model model) {
-        ConversationInfo messagesInfo = messageService.getMessagesInfo(username);
+    public String showConversationAndMessageForm(@PathVariable String username, Model model) {
+        ConversationInfo messagesInfo = messageService.getConversationInfo(username);
         if (! messagesInfo.profileExist()) {
             return "redirect:/messages";
         }
@@ -35,7 +38,10 @@ public class MessagesController {
     }
 
     @PostMapping(path = "/{username}", params = "action=new-message")
-    public String createNewPost(@PathVariable String username, @RequestParam Long profileId, @Valid Message message, BindingResult bindingResult) {
+    public String createNewMessage(@PathVariable String username,
+                                                 @RequestParam Long profileId,
+                                                 @Valid Message message,
+                                                 BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "messages/message-form";
         }
